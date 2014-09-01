@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html ng-app="mbs">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" /><!--, target-densitydpi=device-dpi" /-->
+        <!--<link rel="stylesheet" type="text/css" href="../css/index.css" />-->
+        <link rel="stylesheet" type="text/css" href="../css/mbs.css">
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../css/mobile-angular-ui-base.min.css">
+        <link rel="stylesheet" href="../css/mobile-angular-ui-desktop.min.css">
+        <link rel="stylesheet" href="../css/topcoat-mobile-dark.min.css">
+        <link rel="stylesheet" href="../css/pnotify.custom.min.css">
+        <link rel="stylesheet" href="../css/bootstrap-tour.min.css">
+        <link rel="stylesheet" href="../css/messenger.css">
+        <link rel="stylesheet" href="../css/messenger-theme-future.css">
+        <title>MyBarberShop</title>
+        <style>
+            #maps {
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                display: none;
+            }
+        </style>
+    </head>
+    <body ng-controller="siteController">
+        <!--<div class="app">
+            <h1>Apache Cordova</h1>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
+                <p class="event received">Device is Ready</p>
+            </div>
+        </div>-->
+
+
+        <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
+            <h1 class="app-name">My App</h1>
+
+            <div class="scrollable">
+                <div class="scrollable-content">
+                    <div class="list-group" toggle="off" bubble target="mainSidebar">
+                        <a class="list-group-item" href="#/" onclick="loadProfile()">Profile <i class="fa fa-chevron-right pull-right"></i></a>
+                        <a class="list-group-item" href="#/" onclick="logOut()">Logout <i class="fa fa-chevron-right pull-right"></i></a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="app">
+
+
+            <!-- Navbars -->
+            <div class="navbar navbar-app navbar-absolute-top" style="background-color: #4b4d4e">
+
+                <div class="navbar-brand navbar-brand-center" ><!--yield-to="title"-->
+                    <img src="../img/default_image.gif" width="40" height="40" style="padding-bottom: 5px"/>
+                    <span ng-model="mbsDisplayName">{{mbsDisplayName}}</span>
+                </div>
+
+                <div class="btn-group pull-left">
+                    <div ng-click="toggle('mainSidebar')" class="btn btn-navbar sidebar-toggle">
+                        <i class="fa fa-bars"></i> Menu
+                    </div>
+                </div>
+
+                <div class="btn-group pull-right" ><!--yield-to="navbarAction"-->
+                    <div class="btn btn-navbar" id="tourSearch">
+                        <a href="search.html" onclick="getPageView('index.html', 'search.html', null)"><span class="glyphicon glyphicon-search"></span> Search</a>                        
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="navbar navbar-app navbar-absolute-bottom" style="display:none">
+                <div class="btn-group justified">
+                    <a href="#/route1" class="btn btn-navbar btn-icon-only"><i class="fa fa-home fa-navbar"></i></a>
+                    <a href="#/route2" class="btn btn-navbar btn-icon-only"><i class="fa fa-list fa-navbar"></i></a>
+                </div>
+            </div>-->
+
+            <div class="app-body">
+                <ng-view class="app-content">
+
+                </ng-view>
+                <!--<img src="../img/default_image.gif" width="40" height="40" style="padding-bottom: 5px" />
+                <span ng-model="mbsDisplayName">{{mbsDisplayName}}</span>-->
+                <div id="maps"></div>
+                       
+                <!--<div class="container">
+                <ul class="nav nav-tabs"><li><a toggle="on" parent-active-class="active" href="#shopGallery1002" class="active" style="color: black;">Gallery</a></li><li><a toggle="on" parent-active-class="active" href="#shopBarbers1002" class="" style="color: black;">Barbers</a></li><li><a toggle="on" parent-active-class="active" href="#shopCustomers1002" class="" style="color: black;">Customers</a></li></ul><div class="tab-content"><div class="tab-pane" id="shopGallery1002" toggleable="" active-class="active" default="active" exclusion-group="myTabs"><div class="list-group"><div class="list-group-item list-group-item-inverse" style="background-color: rgb(75, 77, 78);"><div class="media" style="background-color: rgb(75, 77, 78);"><a class="pull-left"><img src="../img/default_image.gif" style="width: 100px; height: 100px;"></a><div class="media-body"><h4 class="media-heading" style="color: white;">slim</h4><div><label style="color: white;">Status: false</label></div><label style="color: white;">Accepts Appointments: Yes</label><div><label style="color: white;">Rating: 0.0</label></div><button class="btn">View Profile</button></div></div></div><div class="list-group-item list-group-item-inverse" style="background-color: rgb(75, 77, 78);"><div class="media" style="background-color: rgb(75, 77, 78);"><a class="pull-left"><img src="../img/default_image.gif" style="width: 100px; height: 100px;"></a><div class="media-body"><h4 class="media-heading" style="color: white;">slimthick</h4><div><label style="color: white;">Status: false</label></div><label style="color: white;">Accepts Appointments: No</label><div><label style="color: white;">Rating: 0.0</label></div><button class="btn">View Profile</button></div></div></div></div></div><div class="tab-pane" id="shopBarbers1002" toggleable="" active-class="active" exclusion-group="myTabs">hi</div><div class="tab-pane" id="shopCustomers1002" toggleable="" active-class="active" exclusion-group="myTabs"><div class="list-group"><div class="list-group-item list-group-item-inverse" style="background-color: rgb(75, 77, 78);"><div class="media" style="background-color: rgb(75, 77, 78);"><a class="pull-left"><img src="../img/default_image.gif" style="width: 100px; height: 100px;"></a><div class="media-body"><h4 class="media-heading" style="color: white;">l3gend</h4><label style="color: white;">Customer Since: undefined</label><button class="btn">View Profile</button></div></div></div></div></div></div></div>-->
+                <div class="scrollable">
+                    <div id="conDiv" class="scrollable-content slimScrollIt"></div>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="../scripts/cordova.js"></script>
+        <script type="text/javascript" src="../scripts/index.js"></script>
+        <script type="text/javascript" src="../scripts/modernizr.js"></script>
+
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-resource.js"></script>
+        <script src="../scripts/mobile-angular-ui.min.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBRn4K1hSAsfob8cB064EQLpvk4M4l8x1Q&sensor=true">
+        </script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
+
+        <!--<script src="../scripts/mobile-angular-ui-touch-fastclick.min.js"></script>-->
+        <script type="text/javascript" src="../scripts/mobile-angular-ui-scrollable-overthrow.min.js"></script>
+        <script type="text/javascript" src="../scripts/angular-resource.js"></script>
+        <script type="text/javascript" src="../scripts/pnotify.custom.min.js"></script>
+        <script type="text/javascript" src="../scripts/bootstrap-tour.min.js"></script>
+        <script type="text/javascript" src="../scripts/jquery.slimscroll.min.js"></script>
+        <script type="text/javascript" src="../scripts/messenger.min.js"></script>
+        <script type="text/javascript" src="../scripts/messenger-theme-future.js"></script>
+        <script type="text/javascript" src="../controllers/controller.js"></script>
+        <script type="text/javascript" src="../services/services.js"></script>
+        <script type="text/javascript" src="../modules/app.js"></script>
+        <script type="text/javascript" src="../util/mbsutility.js"></script>
+    </body>
+
+</html>
+

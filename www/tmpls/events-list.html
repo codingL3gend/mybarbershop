@@ -1,0 +1,51 @@
+<span id="cal-slide-tick" style="display: none"></span>
+<div id="cal-slide-content" class="cal-event-list">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-6">
+				<label>Current Appointments</label>
+				<ul class="unstyled list-unstyled media-list list-group" style="width: 100%; height: 20em; overflow: auto; overflow-x: hidden;">
+					<% _.each(events, function(event) { %>
+						<li class="media">
+							<span class="pull-left event <%= event['class'] %> media-object"></span>
+							<a class="pull-left" href="#">
+								<img class="media-object" src="<%= event.image %>" style="height: 50px; width:50px">
+							</a>
+							<div class="media-body">
+								<h4 data-event-id="<%= event.id %>" data-event-class="<%= event['class'] %>" class="event-item media-heading"><%= event.title %></h4>					
+								<label>Time: <%= event.time %></label>
+								<br/>
+								<label>Status: <%= event.status %></label>		
+								<% if(event.profileID == scope.mbsProfileID){%>
+									<br/>
+									<div>
+										<button class="btn btn-inverse" style="color:black" onclick="cancelAppointment('<%= event.id %>')" value="<%= event.id %>">Cancel</button>
+<!-- 										<button class="btn btn-inverse" style="color:black" onclick="">Reschedule</button> -->
+									</div>
+								<%  } %>			
+							</div>
+						</li>
+					<% }) %>
+				</ul>
+	 		</div>
+			<div class="col-md-6">
+				<label>Available Appointment Times</label>
+				<%
+					var times = getAvailableAppointmentTimes(scope, new Date(day), events, slider, calendar);					
+				%>
+				<div id="availableApptTimes">
+					<ul id="barberApptTimes" class="unstyled list-unstyled list-group" style="width: 100%; height: 20em; overflow: auto; overflow-x: hidden;">
+						<% _.each(times, function(appt) { 
+							if(appt != null) {%>
+						<li>
+							<label><%= appt %></label>	 
+							<button class="btn btn-inverse" style="color:black" onclick="scheduleAppointment('<%=new Date(day)%>', '<%=appt%>')" value="<%=appt%>">Schedule</button>
+						</li>
+						<br/>
+					<% } }) %>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

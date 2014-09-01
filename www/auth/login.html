@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html ng-app="mbs">
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+    <!--<link rel="stylesheet" type="text/css" href="../../css/index.css" />-->
+    <link rel="stylesheet" type="text/css" href="../../css/mbs.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/mobile-angular-ui-base.min.css">
+    <link rel="stylesheet" href="../../css/mobile-angular-ui-desktop.min.css">
+    <!--<link rel="stylesheet" href="../../css/mobile-angular-ui-max-width-767px.css">-->
+    <link rel="stylesheet" href="../../css/topcoat-mobile-dark.min.css">
+        <link rel="stylesheet" href="../../css/messenger.css">
+        <link rel="stylesheet" href="../../css/messenger-theme-future.css">
+    <title>MyBarberShop</title>
+
+    
+</head>
+
+<body ng-controller="authController">
+
+
+    <div id="mbslogin" class="mbsouter">
+        <div class="mbsmiddle">
+            <header>
+                <h2 class="mbsheader">Welcome to My Barber Shop</h2>
+            </header>
+            <div class="section mbsinner" style="background: #4b4d4e;">
+                <header>
+                    <h2 class="mbsheader" style="text-align:left">Sign in</h2>
+                </header>
+                <div class="form-group">
+                    <input id="l_email" type="text" class="topcoat-text-input--large ietext form-control" value="" placeholder="Email" ng-model="logUsername">
+                </div>
+                <div class="form-group">
+                    <input id="l_password" type="password" class="topcoat-text-input--large ietext form-control" value="" placeholder="Password" ng-model="logPassword">
+                </div>
+                <br>
+                <div class="pull-right" style="padding-right: 10px">
+                    <input type="button" class="topcoat-button--large" value="Login" ng-click="authUser()">
+                </div>
+                <br>
+                <div style="text-align:center" class="mbsinner">
+                    <p style="text-decoration:underline; text-align:center; color:white" ng-click="toggleLoginRegister()">Don't have an account? Sign Up!</p>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div id="mbsregister" class="mbsouter" style="display:none">
+        <div class="mbsmiddle">
+            <header>
+                <h2 class="mbsheader">Welcome to My Barber Shop</h2>
+            </header>
+            <div class="section mbsinner" style="background: #4b4d4e;">
+                <header>
+                    <h2 class="mbsheader" style="text-align:left">Register</h2>
+                </header>
+                <div id="inputEmailDiv" class="form-group has-feedback">
+                    <label id="inputEmailLabel" class="control-label" for="inputEmail"></label>
+                    <input id="inputEmail" type="text" class="topcoat-text-input--large ietext form-control" value="" placeholder="Email" ng-model="regUsername">
+                    <span id="inputEmailSpan" class="glyphicon form-control-feedback"></span> 
+                </div>
+                <div class="form-group">
+                    <input id="inputPassword" type="password" class="topcoat-text-input--large ietext" value="" placeholder="Password" ng-disabled="passDisabled" ng-model="regPassword">
+                </div>
+                <div id="inputConPasswordDiv" class="form-group has-feedback">
+                    <label id="inputConPasswordLabel" class="control-label" for="inputConPassword"></label>
+                    <input id="inputConPassword" type="password" class="topcoat-text-input--large ietext form-control" value="" placeholder="Verify Password" ng-disabled="passConDisabled" ng-model="regConPassword">
+                    <span id="inputConPasswordSpan" class="glyphicon form-control-feedback"></span>
+                </div>
+                <div class="form-group">
+                    <input id="inputDisplayName" type="text" class="topcoat-text-input--large ietext" value="" placeholder="Display Name" ng-disabled="dispNameDisabled" ng-model="regDisplayName">
+                </div>
+                <div class="form-group">
+                    <input id="inputPassQuest" type="text" class="topcoat-text-input--large ietext" value="" placeholder="Password Question" ng-disabled="passQuestDisabled" ng-model="regPassQuest">
+                </div>
+                <div class="form-group">
+                    <input id="inputPassAns" type="text" class="topcoat-text-input--large ietext" value="" placeholder="Password Answer" ng-disabled="passAnsDisabled" ng-model="regPassAns">
+                </div>                
+                <div id="accountTypeButtons">
+                    <label class="topcoat-radio-button" style="width:80px;">Customer</label>
+                    <input type="radio" name="topcoat" value="Customer" checked>
+                    <div class="topcoat-radio-button__checkmark"></div>   
+                    <label class="topcoat-radio-button" style="width:80px;">Barber</label>
+                    <input type="radio" name="topcoat" value="Barber">
+                    <div class="topcoat-radio-button__checkmark"></div>
+                    
+                </div>
+                <div class="pull-right" style="padding-right: 10px">
+                    <input type="button" class="topcoat-button--large" value="Cancel" ng-click="toggleLoginRegister()">
+                    <input type="button" class="topcoat-button--large" value="Register" ng-click="createUser()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="invalidLogin" class="alert alert-danger alert-dismissable" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times</button>
+        <strong>Invalid username or password! Please try again.</strong>
+    </div>
+
+    <div id="invalidRegistration" class="alert alert-danger alert-dismissable" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times</button>
+        <strong>Some fields are missing! Please try again.</strong>
+    </div>
+
+    <div id="invalidUserCreation" class="alert alert-danger alert-dismissable" style="display:none">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times</button>
+        <strong>Error creating user! Please try again.</strong>
+    </div>
+
+    <div id="loggingIn" class="progress progress-striped active mbsinner" style="width: 90%; bottom: 0px; left: 20px; position: absolute; display:none">
+        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+            <span>Logging in</span>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../scripts/cordova.js"></script>
+    <script type="text/javascript" src="../../scripts/index.js"></script>
+    <script type="text/javascript" src="../../scripts/modernizr.js"></script>
+
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular-resource.js"></script>
+    <script src="../../scripts/mobile-angular-ui.min.js"></script>
+
+    <!--<script src="../scripts/mobile-angular-ui-touch-fastclick.min.js"></script>-->
+    <script src="../../scripts/mobile-angular-ui-scrollable-overthrow.min.js"></script>
+    <script type="text/javascript" src="../../scripts/angular-resource.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery.slimscroll.min.js"></script>
+    <script type="text/javascript" src="../../scripts/messenger.min.js"></script>
+    <script type="text/javascript" src="../../scripts/messenger-theme-future.js"></script>
+    <script type="text/javascript" src="../../controllers/controller.js"></script>
+    <script type="text/javascript" src="../../services/services.js"></script>
+    <script type="text/javascript" src="../../modules/app.js"></script>
+    <script type="text/javascript" src="../../util/mbsutility.js"></script>
+
+    <!--<script type="text/javascript">
+        app.initialize();
+    </script>-->
+
+</body>
+
+</html>
+
