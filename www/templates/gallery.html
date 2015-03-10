@@ -1,0 +1,52 @@
+<ion-view hide-nav-bar="false" view-title="Gallery">
+    <ion-nav-buttons side="left">
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon icon ion-ios-upload-outline" ng-click="uploadImageHandler()" ng-hide="canUpload == false"></button>
+    </ion-nav-buttons>
+    <ion-content id="scrollingContent">
+    	<div id="galleryContainer">
+	        <div id="imageContainer">
+	            <div id="gridMode" class="row gallery" ng-if="showGridMode">
+	                <div class="col col-50" ng-repeat="image in imageInfo">
+	                    <img ng-src="{{image.imageSrc}}" style="height: 100%; width:100%;" ng-click="handleThumbnailClick(image)">
+	                </div>
+	            </div>
+	            <ion-slide-box id="fullScreenMode" style="display:none;" show-pager="false" on-slide-changed="changeImage(index)">
+	                <ion-slide ng-repeat="image in imageInfo">
+	                    <div style="height: 100%; width:100%;">
+	                        <a>
+	                            <div id="closeButton" style="position:absolute; top:0px; left: 5px; width: 100%" class="padding-top" ng-if="wasTapped">
+	                                <button class="button button-assertive button-outline button-large" style="position:absolute; left:5px;" ng-click="goBack()">Back</button>
+	                                <button class="button button-assertive button-clear icon ion-close button-large" style="position:absolute; right:5px;" ng-click="handleExitClick()"></button>
+	                            </div>
+	
+	                            <img ng-src="{{image.imageSrc}}" style="height: 100%; width:100%;" ng-click="handleImageClick()">
+	
+	                            <div style="position:absolute; bottom: 0px; width: 100%; height: 200px;" ng-if="wasTapped">
+	                                <hr style="border-color: red" ng-hide="canModify == false"/>
+                                    <button class="button button-clear icon button-large ion-ios-gear button-assertive" ng-click="imageSettingsHandler()" ng-hide="canModify == false"></button>
+                                    <hr style="border-color: red" />
+	                                <span class="slide-text padding-horizontal" style="color: white; width: 100%">
+	                                    {{image.caption}}
+	                                </span>
+	                            </div>
+	                        </a>
+	                    </div>
+	                </ion-slide>
+	            </ion-slide-box>
+	        </div>
+	        <div id="noImageContainer" style="width:100%; height: 100%; text-align: center; position: absolute;display:none" class="padding-vertical">
+	            <span style="width: 100%; height: 100%; text-align: center; vertical-align: middle; ">Gallery has no images!</span>
+	        </div>
+        </div>
+        <div id="galleryUploadContainer" style="display:none;">
+            <img ng-src="{{selectedImage}}" style="width:100%;" ng-style="{height: imageHeight}" />
+
+            <textarea id="captionText" ng-model="imageCaption" style="resize: none; height: 50px;" maxlength="100" placeholder="Caption" class="padding-horizontal"></textarea>
+            <button class="button button-block button-positive" ng-click="uploadImage()">Upload</button>
+            <button class="button button-block button-assertive" ng-click="cancelImageUpload()">Cancel</button>
+        </div>
+    </ion-content>
+</ion-view>

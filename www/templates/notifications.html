@@ -1,0 +1,18 @@
+﻿<ion-view view-title="Notifications" hide-nav-bar="false">
+    <ion-content>
+        <!--<div class="bar bar-header bar-stable">
+            <h3 id="headerTitle" class="title">Notifications</h3>
+            <button class="button button-clear icon ion-ios-close" ng-click="notificationPopup.close()"></button>
+        </div>
+        <br />
+        <br />-->
+        <div id="notificationsView">
+            <ion-list type="card" class="item-thumbnail-left">
+                <ion-item ng-repeat="notification in notificationInfo" ng-click="handleNotificationClicked(notification)">
+                    <h3>{{notification.title}}</h3>
+                    <textarea style="resize:none" disabled>{{notification.message}}</textarea>
+                </ion-item>
+            </ion-list>
+        </div>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,12 @@
+<ion-view view-title="Select a Shop" hide-nav-bar="false">
+    <ion-nav-buttons side="left">
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <div id="maps"></div>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <ion-list id="conDiv">
+            </ion-list>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

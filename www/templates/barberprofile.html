@@ -1,0 +1,378 @@
+<ion-view view-title="Barber Profile" hide-nav-bar="false">
+    <ion-nav-buttons side="left">
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <div id="barberDiv">
+                <div class="bar bar-header bar-dark">
+                    <h1 class="title">Barber Info</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div id="barberInfoStatic" class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Normal Time In:</span>
+                        <label>{{currentBarber.normalTimeIn}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Years Of Experience:</span>
+                        <label>{{currentBarber.yearsOfExperience}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Avg Cut Time:</span>
+                        <label>{{currentBarber.avgCutTime}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Accepts Appointments?</span>
+                        <label>{{currentBarber.acceptsAppointmentsFlag}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Current Rating:</span>
+                        <label>{{currentBarber.ratingCalc}}%</label>
+                    </label>
+                    <button class="button button-positive button-block" ng-click="editBarberInfo()">Edit</button>
+                </div>
+                <div id="barberInfoEdit" class="list" style="display:none;">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Normal Time In:
+                        </div>
+                        <select class="normalTimeIn"></select>
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Years Of Experience:
+                        </div>
+                        <select class="yearsOfExperience">
+                            <option ng-repeat="years in yearsOfExperience">
+                                {{years}}
+                            </option>
+                        </select>
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Avg Cut Time:
+                        </div>
+                        <select class="avgCutTime">
+                            <option ng-repeat="time in avgCutTime">
+                                {{time}}
+                            </option>
+                        </select>
+                    </label>
+                    <ul class="list">
+                        <li class="item item-checkbox item-checkbox-right">
+                            Accept Appointments?
+                            <label class="checkbox checkbox-balanced">
+                                <input id="acceptAppt" type="checkbox" />
+                            </label>
+                        </li>
+                    </ul>
+                    <div style="float:right;" class="padding-right">
+                        <button class="button button-assertive" ng-click="cancelEditBarberInfo()">Cancel</button>
+                        <button class="button button-balanced" ng-click="updateBarberInfo()">Save</button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div id="barberStatusDiv">
+                <div class="bar bar-sub-header bar-dark">
+                    <h1 class="title">Barber Status</h1>
+                </div>
+                <br />
+                <br />
+                <div id="barberStatusStatic" class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Current Clients:</span>
+                        <label>{{currentBarber.barberStatus.currentClients}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <!--<span class="input-label">Available:</span>-->
+                        <a ng-class="availableClass" ng-style="{color: availableColor}" class="button button-icon icon-right ion-record">Available:</a>
+                    </label>
+                    <label class="item item-input">
+                        <!--<span class="input-label">At Lunch:</span>-->
+                        <a ng-class="lunchClass" ng-style="{color: eatingColor}" class="button button-icon icon-right ion-record">At Lunch:</a>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Time In:</span>
+                        <label>{{currentBarber.barberStatus.timeIn}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Time Out:</span>
+                        <label>{{currentBarber.barberStatus.timeOut}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <!--<span class="input-label">On Vacation:</span>-->
+                        <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Vacation Start:</span>
+                        <label style="resize:none">{{currentBarber.barberStatus.vacationStartDateReadable}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Vacation End:</span>
+                        <label style="resize:none">{{currentBarber.barberStatus.vacationEndDateReadable}}</label>
+                    </label>
+                    <button class="button button-positive button-block" ng-click="editBarberStatus()">Edit</button>
+                </div>
+                <div id="barberStatusEdit" class="list" style="display:none;">
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Current Clients:
+                        </div>
+                        <select class="currentClients">
+                            <option ng-repeat="client in currentClients">
+                                {{client}}
+                            </option>
+                        </select>
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Time In:
+                        </div>
+                        <select class="timeIn normalTimeIn"></select>
+                    </label>
+                    <label class="item item-input item-select">
+                        <div class="input-label">
+                            Time Out:
+                        </div>
+                        <select class="timeOut normalTimeIn"></select>
+                    </label>
+                    <ul>
+                        <li class="item item-checkbox item-checkbox-right">
+                            Available?
+                            <label class="checkbox checkbox-balanced">
+                                <input id="available" type="checkbox" />
+                            </label>
+                        </li>
+                        <li class="item item-checkbox item-checkbox-right">
+                            At Lunch?
+                            <label class="checkbox checkbox-balanced">
+                                <input id="atLunch" type="checkbox" />
+                            </label>
+                        </li>
+                        <li class="item item-checkbox item-checkbox-right">
+                            On Vacation?
+                            <label class="checkbox checkbox-balanced">
+                                <input id="onVacation" type="checkbox" />
+                            </label>
+                        </li>
+                    </ul>
+                    <label class="item item-input">
+                        <div class="input-label">
+                            Vacation Start:
+                        </div>
+                        <input id="vacationStartDateField" type="date" ng-click="selectVacationDate('vacationStartDateField')">
+                    </label>
+                    <label class="item item-input">
+                        <div class="input-label">
+                            Vacation End:
+                        </div>
+                        <input id="vacationEndDateField" type="date" ng-click="selectVacationDate('vacationEndDateField')">
+                    </label>
+                    <br />
+                    <div style="float:right;" class="padding-right">
+                        <button class="button button-assertive" ng-click="cancelEditBarberStatus()">Cancel</button>
+                        <button class="button button-balanced" ng-click="updateBarberStatus()">Save</button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div id="barberScheduleDiv">
+                <div class="bar bar-sub-header bar-dark">
+                    <h1 class="title">Barber Schedule</h1>
+                </div>
+                <br />
+                <br />
+                <div id="barberScheduleStatic" class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Sunday</span>
+                        <label>{{currentBarber.barberSchedule.sunday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Monday</span>
+                        <label>{{currentBarber.barberSchedule.monday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Tuesday</span>
+                        <label>{{currentBarber.barberSchedule.tuesday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Wednesday</span>
+                        <label>{{currentBarber.barberSchedule.wednesday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Thursday</span>
+                        <label>{{currentBarber.barberSchedule.thursday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Friday</span>
+                        <label>{{currentBarber.barberSchedule.friday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Saturday</span>
+                        <label>{{currentBarber.barberSchedule.saturday}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Free Time</span>
+                        <label>{{currentBarber.barberSchedule.blackOutTime}}</label>
+                    </label>
+                    <br />
+                    <button class="button button-positive button-block" ng-click="editBarberSchedule()">Edit</button>
+                </div>
+                <div id="barberScheduleEdit" class="list" style="display:none;">
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Sunday:
+                            </div>
+                            <select class="barberhours sundayIn" value="Sunday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours sundayOut" value="Sunday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Monday:
+                            </div>
+                            <select class="barberhours mondayIn" value="Monday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours mondayOut" value="Monday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Tuesday:
+                            </div>
+                            <select class="barberhours tuesdayIn" value="Tuesday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours tuesdayOut" value="Tuesday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Wednesday:
+                            </div>
+                            <select class="barberhours wednesdayIn" value="Wednesday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours wednesdayOut" value="Wednesday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Thursday:
+                            </div>
+                            <select class="barberhours thursdayIn" value="Thursday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours thursdayOut" value="Thursday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Friday:
+                            </div>
+                            <select class="barberhours fridayIn" value="Friday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours fridayOut" value="Friday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Saturday:
+                            </div>
+                            <select class="barberhours saturdayIn" value="Saturday" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours saturdayOut" value="Saturday" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                Free Time:
+                            </div>
+                            <select class="barberhours freeTimeIn" value="FreeTime" data-type="Time In"></select>
+                        </label>
+                        <label class="item-input item-select">
+                            <div class="input-label">
+                                to:
+                            </div>
+                            <select class="barberhours freeTimeOut" value="FreeTime" data-type="Time Out"></select>
+                        </label>
+                    </div>
+                    <br />
+                    <div style="float:right;" class="padding-right">
+                        <button class="button button-assertive" ng-click="cancelEditBarberSchedule()">Cancel</button>
+                        <button class="button button-balanced" ng-click="saveBarberSchedule()">Save</button>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div id="barberSpecialtiesDivContainer">
+                <div class="bar bar-sub-header bar-dark">
+                    <h1 class="title">Barber Specialties</h1>
+                </div>
+                <br />
+                <br />
+                <div id="barberSpecialtiesStatic">
+                    <div class="list">
+                        <label class="item" ng-repeat="specialty in currentBarber.barberSpecialties">{{specialty.specialty}}</label>
+                    </div>
+                    <button class="button button-positive button-block" ng-click="editBarberSpecialties()">Edit</button>
+                </div>
+                <div id="barberSpecialtiesEdit" style="display:none">
+                    <ul id="barberSpecialtiesDiv" class="list"></ul>
+                    <div style="float:right;" class="padding-right">
+                        <button class="button button-assertive" ng-click="cancelEditBarberSpecialties()">Cancel</button>
+                        <button class="button button-balanced" ng-click="saveBarberSpecialties()">Save</button>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

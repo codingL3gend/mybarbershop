@@ -1,0 +1,29 @@
+<ion-view view-title="" hide-nav-bar="false">
+    <ion-content>
+        <div class="bar bar-header item-input-inset">
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input id="barberName" ng-model="searchName" type="search" placeholder="Search Barbers" ng-keyup="searchBarbers()"/>
+            </label>
+        </div>
+        <label id="searchingText" style="display: none; padding-left:15px;">searching...</label>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <ion-list type="card" ng-hide="barbersSearch.length == 0">
+                <ion-item ng-repeat="barber in barbersSearch" class="item-thumbnail-left" ng-click="loadBarber(barber)">
+                    <img ng-src="{{barber.barberImage}}">
+                    <h2>{{barber.profile.displayName}}</h2>
+                    <label>Appts: {{barber.doesAppointments}}</label>
+                    </br/>
+                    <label>Rating: {{barber.ratingCalc}}</label>
+                    <!--<ion-option-button class="button-balanced" ng-hide="barber.makeAppointment"
+                                       ng-click="deleteAppointment(appointment)">Make Appointment</ion-option-button>-->
+                </ion-item>
+            </ion-list>
+            <ion-list type="card" ng-hide="barbersSearch.length > 0">
+                <ion-item>
+                    <textarea style="resize:none" disabled>No Barbers found.</textarea>
+                </ion-item>
+            </ion-list>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

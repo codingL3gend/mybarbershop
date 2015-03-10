@@ -1,0 +1,80 @@
+<ion-view view-title="" hide-nav-bar="false" hide-back-button="true" cache-view="false" ng-style="{height: viewHeight}">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon" ng-click="toggleLeft()"></button>
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button ng-class="{ionic.Platform.isIOS() ? 'button button-icon icon ion-ios-search' : 'button button-icon icon ion-android-search'}" ng-click="loadSearch()"></button>
+    </ion-nav-buttons>
+    <ion-side-menus>
+        <ion-side-menu-content>
+            <ion-scroll ng-style="{height: appointmentHeight}">
+                <div class=" bar bar-subheader bar-dark">
+                    <h1 class="title">Appointments</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <ion-list type="card">
+                    <ion-item ng-repeat="appointment in currentAppointments" class="item-thumbnail-left" ng-hide="hasAppointments == false">
+                        <img ng-src="{{appointment.appointmentImage}}">
+                        <h2>{{appointment.displayName}}</h2>
+                        <label>Status: {{appointment.appointmentStatus.appointmentStatus}}</label>
+                        <textarea style="resize:none" disabled>Date: {{appointment.aptDate}}</textarea>
+
+                        <ion-option-button class="button-assertive" ng-hide="{{appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'}}"
+                                           ng-click="deleteAppointment(appointment)">Cancel</ion-option-button>
+                    </ion-item>
+                    <ion-item ng-hide="hasAppointments == true">
+                        <textarea style="resize:none" disabled>You have no appointments scheduled for today!</textarea>
+                    </ion-item>
+                </ion-list>
+            </ion-scroll>
+            <br />
+            <ion-scroll ng-style="{height: barberShopHeight}">
+                <div class="bar bar-header bar-dark">
+                    <h1 class="title">Your Barber Shops</h1>
+                </div>
+                <br />
+                <br />
+                <br />
+                <ion-list type="card">
+                    <!--<ion-header-bar align-title="center" class="bar-positive">
+                        <h2 class="title">Your Barber Shops</h2>
+                    </ion-header-bar>-->
+                    <ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left" ng-hide="hasBarberShops == false" ng-click="loadBarberShop(barbershop)">
+                        <img ng-src="{{barbershop.shopImage}}" />
+                        <h3>{{barbershop.shopName}}</h3>
+                        <label>{{barbershop.formattedStreet}}</label>
+                        <br />
+                        <label>{{barbershop.formattedCityState}}</label>
+                        <br />
+                        <label>{{barbershop.phoneNumber}}</label>
+                        <div ng-bind-html="barbershop.hoursOf">
+                        </div>
+                    </ion-item>
+                    <ion-item ng-hide="hasBarberShops == true">
+                        <textarea style="resize:none" disabled>You have no barber shops set!</textarea>
+                    </ion-item>
+                </ion-list>
+            </ion-scroll>
+        </ion-side-menu-content>
+        <ion-side-menu side="left">
+            <br />
+            <br />
+            <br />
+            <ion-content>
+                <div class="list">
+                    <a menu-close class="item" style="text-align:center" ng-click="loadProfile()">Profile</a>
+                    <a menu-close class="item" style="text-align:center" ng-click="loadImages()">Gallery</a>
+                    <a menu-close class="item" style="text-align:center" ng-click="loadBarberSearch()">Search Barbers</a>
+                    <a menu-close class="item" style="text-align:center" ng-click="loadSquarePayment()" ng-hide="isABarber == false">Pay with Square</a>
+                    <a menu-close class="item" style="text-align:center" ng-click="logOut()">Logout</a>
+                </div>
+            </ion-content>
+        </ion-side-menu>
+    </ion-side-menus>
+</ion-view>
+<!--ng-style="{height: getContainerHeight(this)}"-->

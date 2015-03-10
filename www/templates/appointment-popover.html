@@ -1,0 +1,41 @@
+﻿<ion-content> 
+    <div class="bar bar-header bar-stable" ng-style="{width: screenWidth}">
+        <button class="button button-icon icon ion-ios-calendar" ng-click="toggleAppointments()"></button>
+        <h3 id="headerTitle" class="title">{{selectedDateOnly}}</h3>
+        <button class="button button-clear icon ion-ios-close" ng-click="appointmentPopup.close()"></button>
+    </div>
+    <br/>
+    <br />
+    <br />
+    <div id="appointmentsView" ng-style="{width: screenWidth}">
+        <ion-list type="card" class="item-thumbnail-left">
+            <ion-item ng-repeat="appointment in apts" class="item-thumbnail-left" ng-click="loadClient(client)"
+                      ng-style="{color: (appointment.appointmentStatus.appointmentStatus == 'Accepted' ? 'green' : 'red')}" 
+                      ng-hide="apts.length == 0">
+                <img ng-src="{{appointment.appointmentImage}}" />
+                <h3>{{appointment.displayName}}</h3>
+                <label>{{appointment.appointmentStatus.appointmentStatus}}</label>
+                <textarea style="resize:none" disabled>{{appointment.time}}</textarea>
+
+                <ion-option-button class="button-assertive" ng-hide="{{appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'
+                                                                      || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled' && mbsProfileID != appointment.profileID}}"
+                                   ng-click="deleteAppointment(appointment)">Cancel</ion-option-button>
+            </ion-item>
+            <ion-item ng-hide="apts.length > 0">
+                <textarea style="resize:none" disabled>No appointments scheduled!</textarea>
+            </ion-item>
+        </ion-list>
+    </div>
+    <ion-list id="createView" type="card" style="display:none" ng-style="{width: screenWidth, display: 'none'}">
+        <ion-item ng-repeat="apptTime in availableApptTimes | orderBy:appptTime" ng-click="confirmAppointment(apptTime)">
+            <label class="item-radio">
+                <input type="radio" name="group"
+                       ng-disabled="apptTime.indexOf('Taken') > -1" />
+                <div>
+                    {{apptTime}}
+                </div>
+                <i class="radio-icon ion-checkmark"></i>
+            </label>
+        </ion-item>
+    </ion-list>
+</ion-content > 

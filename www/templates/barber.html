@@ -1,0 +1,138 @@
+<ion-view view-title="{{currentBarber.profile.displayName}}" hide-nav-bar="false">
+    <ion-nav-buttons side="left">
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button button-icon icon ion-images" ng-click="loadImages(currentBarber.barberImages)"></button>
+        <button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight()"></button>
+    </ion-nav-buttons>
+    <ion-side-menus>
+        <ion-side-menu-content drag-content="false" scroll="false">
+            <br />
+            <br />
+            <br />
+            <ion-scroll ng-style="{height: screenHeight}">
+                <ion-list>
+                    <ion-item class="item-thumbnail-left">
+                        <img ng-src="{{barberImage}}" />
+                        <h2>{{currentBarber.profile.displayName}}</h2>
+                        <label>Available: {{isAvailable}}</label>
+                        <br />
+                        <label>Accepts Appointments: {{isAppointments}}</label>
+                        <br />
+                        <button class="button button-icon icon ion-calendar" ng-hide="isAppointment" ng-click="loadAppointment(currentBarber)"></button>
+                        <button class="button button-icon icon ion-person-add" ng-hide="isClient" ng-click="createClient()"></button>
+                    </ion-item>
+                    <ion-item>
+                        <div class="bar bar-header bar-dark">
+                            <h2 class="title">Rating</h2>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div id="ratingContainer">
+                            <label>Current Rating: {{currentBarber.ratingCalc}}%</label>
+                            <button class="button button-block button-positive" ng-hide="hideRating" ng-click="rateBarber()">Rate</button>
+                        </div>
+                        <div id="ratingEditContainer" style="display:none;">
+                            <output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>
+                            <div class="range range-positive">
+                                <i class="icon ion-ios-star-outline"></i>
+                                <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
+                                <i class="icon ion-ios-star"></i>
+                            </div>
+                            <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
+                        </div>
+                    </ion-item>
+                    <ion-item>
+                        <div class="bar bar-header bar-dark">
+                            <h2 class="title">Schedule</h2>
+                        </div>
+                        <br />
+                        <br />
+                        <div>
+                            <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
+                        </div>
+                        <hr />
+                        <textarea style="resize:none; font-size: 16px;" ng-hide="isVacationing" ng-cloak class="ng-cloak" disabled>Vacation Period: {{vacationPeriod}}</textarea>
+                        <!--<div ng-bind-html="hoursOf">
+                </div>-->
+                        <div class="list">
+                            <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;">
+                                    {{day.day.substring(0, 2)}}
+                                </button>
+                                {{day.time}}
+                            </div>
+                        </div>
+                    </ion-item>
+                    <ion-item>
+                        <div class="bar bar-header bar-dark">
+                            <h2 class="title">Barber Status</h2>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <label style="font-size: 16px">Current Shop: {{currentBarber.barberShop.shopName}}</label>
+                        <hr style="color: #444;" />
+                        <label style="font-size: 16px">Current Clients: {{currentBarber.barberStatus.currentClients}}</label>
+                        <hr />
+                        <label style="font-size: 16px">Avg. Cut Time: {{currentBarber.avgCutTime}} min</label>
+                        <hr />
+                        <label style="font-size: 16px">Normal Time In: {{currentBarber.normalTimeIn}}</label>
+                    </ion-item>
+                    <ion-item>
+                        <div class="bar bar-header bar-dark">
+                            <h2 class="title">Specialties</h2>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <!--<div ng-bind-html="specialties">
+                </div>-->
+
+                        <div class="list">
+                            <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;">
+                                    {{specialty.specialty.substring(0, 1).toUpperCase()}}
+                                </button>
+                                {{specialty.specialty}}
+                            </div>
+                        </div>
+                    </ion-item>
+                </ion-list>
+                <br />
+                <br />
+                <br />
+                <br />
+            </ion-scroll>
+        </ion-side-menu-content>
+        <ion-side-menu side="right">
+            <div class="list">
+                <ion-scroll ng-style="{height: screenHeight}">
+                    <div class="bar bar-subheader bar-dark">
+                        <h1 class="title">Clients</h1>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <ion-list type="card" ng-hide="currentBarber.barberClients.length == 0">
+                        <ion-item ng-repeat="client in currentBarber.barberClients" class="item-thumbnail-left" ng-click="loadClient(client)">
+                            <img ng-src="{{client.clientImage}}" />
+                            <h3>{{client.profile.displayName}}</h3>
+                            <textarea style="resize:none" disabled>Client Since: {{client.clientSince}}</textarea>
+                        </ion-item>
+                    </ion-list>
+                    <ion-list type="card" ng-hide="currentBarber.barberClients.length > 0">
+                        <ion-item>
+                            <textarea style="resize:none" disabled>No Clients for this barber currently.</textarea>
+                        </ion-item>
+                    </ion-list>
+                </ion-scroll>
+            </div>
+        </ion-side-menu>
+    </ion-side-menus>
+</ion-view>
+<!--ng-style="{height: getContainerHeight(this)}"-->

@@ -1,0 +1,10 @@
+<ion-view view-title="{{currentBarber.profile.displayName}}" hide-nav-bar="false">
+    <ion-nav-buttons side="left">
+        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+    </ion-nav-buttons>
+    <br/>
+    <br />
+    <br />
+    <div id="appointmentCalendar" ui-calendar="calendarConfig.calendar" ng-model="eventSources" calendar="appointmentCalendar" class="padding-bottom"></div>
+</ion-view>
+<!--ng-style="{height: getContainerHeight(this)}"-->

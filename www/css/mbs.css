@@ -1,4 +1,4 @@
-﻿.page-control 
+﻿/*.page-control 
 {
     width: 100%;
     padding-top: 20px;
@@ -10,7 +10,7 @@ nav, section {
     display: block;
 }
 /* Section
-    ------------------------------------------------------*/
+    ------------------------------------------------------
 .section
 {
     display: block;
@@ -65,4 +65,33 @@ nav, section {
     margin-left: auto; 
     margin-right: auto; 
     width: 100%
-}
+}*/
+.popup {
+           height: 450px;
+            width: 120px;
+            /*top: 70px;
+            position: absolute;
+            left: 15px;*/
+        }
+        .slider {
+             width:100%;
+             /*height:500px;*/
+        }
+        .gallery {
+            -webkit-flex-wrap: wrap;
+            flex-wrap: wrap;
+        }
+        .item-checkbox-right .checkbox input,
+        .item-checkbox-right .checkbox-icon {
+          float: right;
+        }
+
+.item-checkbox.item-checkbox-right {
+  /*the default item padding*/
+  padding: 15px;
+}#maps {
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                display: none;
+            }
