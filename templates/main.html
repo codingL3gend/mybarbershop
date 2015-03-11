@@ -4,7 +4,7 @@
         <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="{ionic.Platform.isIOS() ? 'button button-icon icon ion-ios-search' : 'button button-icon icon ion-android-search'}" ng-click="loadSearch()"></button>
+        <button ng-class="'button button-icon' + searchIcon" ng-click="loadSearch()"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content>
@@ -67,11 +67,26 @@
             <br />
             <ion-content>
                 <div class="list">
-                    <a menu-close class="item" style="text-align:center" ng-click="loadProfile()">Profile</a>
-                    <a menu-close class="item" style="text-align:center" ng-click="loadImages()">Gallery</a>
-                    <a menu-close class="item" style="text-align:center" ng-click="loadBarberSearch()">Search Barbers</a>
-                    <a menu-close class="item" style="text-align:center" ng-click="loadSquarePayment()" ng-hide="isABarber == false">Pay with Square</a>
-                    <a menu-close class="item" style="text-align:center" ng-click="logOut()">Logout</a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadProfile()">
+                        <i ng-class="emailIcon"></i>
+                        Profile
+                    </a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadImages()">
+                        <i ng-class="emailIcon"></i>
+                        Gallery
+                    </a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadBarberSearch()">
+                        <i ng-class="emailIcon"></i>
+                        Search Barbers
+                    </a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadSquarePayment()" ng-hide="isABarber == false">
+                        <i ng-class="emailIcon"></i>
+                        Pay with Square
+                    </a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="logOut()">
+                        <i ng-class="emailIcon"></i>
+                        Logout
+                    </a>
                 </div>
             </ion-content>
         </ion-side-menu>
