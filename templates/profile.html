@@ -1,7 +1,7 @@
 <ion-view view-title="Profile" hide-nav-bar="false">
     <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-images" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
-        <button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight()" ng-show="false"></button>
+        <button ng-class="'button button-icon ' + gallryIcon" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
+        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()" ng-show="false"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content drag-content="false" scroll="false">

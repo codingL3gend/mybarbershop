@@ -1,9 +1,9 @@
 <ion-view hide-nav-bar="false" view-title="Gallery">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-ios-upload-outline" ng-click="uploadImageHandler()" ng-hide="canUpload == false"></button>
+        <button ng-class="'button button-icon ' + imageUploadIcon" ng-click="uploadImageHandler()" ng-hide="canUpload == false"></button>
     </ion-nav-buttons>
     <ion-content id="scrollingContent">
     	<div id="galleryContainer">
@@ -19,14 +19,14 @@
 	                        <a>
 	                            <div id="closeButton" style="position:absolute; top:0px; left: 5px; width: 100%" class="padding-top" ng-if="wasTapped">
 	                                <button class="button button-assertive button-outline button-large" style="position:absolute; left:5px;" ng-click="goBack()">Back</button>
-	                                <button class="button button-assertive button-clear icon ion-close button-large" style="position:absolute; right:5px;" ng-click="handleExitClick()"></button>
+                                    <button ng-class="'button button-assertive button-clear button-large ' + closeOutlineIcon" style="position:absolute; right:5px;" ng-click="handleExitClick()"></button>
 	                            </div>
 	
 	                            <img ng-src="{{image.imageSrc}}" style="height: 100%; width:100%;" ng-click="handleImageClick()">
 	
 	                            <div style="position:absolute; bottom: 0px; width: 100%; height: 200px;" ng-if="wasTapped">
 	                                <hr style="border-color: red" ng-hide="canModify == false"/>
-                                    <button class="button button-clear icon button-large ion-ios-gear button-assertive" ng-click="imageSettingsHandler()" ng-hide="canModify == false"></button>
+                                    <button ng-class="'button button-clear button-assertive button-large ' + settingsIcon" ng-click="imageSettingsHandler()" ng-hide="canModify == false"></button>
                                     <hr style="border-color: red" />
 	                                <span class="slide-text padding-horizontal" style="color: white; width: 100%">
 	                                    {{image.caption}}

@@ -374,7 +374,7 @@ function getUserData($scope) {
     {
         $scope.menuIcon = iconPrefix + "ion-navicon";
         $scope.searchIcon = iconPrefix + "ion-ios-search";
-        $scope.emailIcon = iconPrefix + "ion-ios-email";
+        $scope.notificationsIcon = iconPrefix + "ion-ios-email";
         $scope.profileIcon = iconPrefix + "ion-ios-person";
         $scope.galleryIcon = iconPrefix + "ion-ios-film";
         $scope.logOutIcon = iconPrefix + "ion-log-out";
@@ -383,12 +383,13 @@ function getUserData($scope) {
         $scope.barberIcon = iconPrefix + "ion-ios-personadd";
         $scope.appointmentIcon = iconPrefix + "ion-ios-calendar";
         $scope.imageUploadIcon = iconPrefix + "ion-ios-upload-outline";
+        $scope.closeOutlineIcon = iconPrefix + "ion-ios-close-outline";
     }else
-        if(ionic.Platform.isIOS())
+        if(ionic.Platform.isAndroid())
         {
             $scope.menuIcon = iconPrefix + "ion-android-menu";
             $scope.searchIcon = iconPrefix + "ion-android-search";
-            $scope.emailIcon = iconPrefix + "ion-android-mail";
+            $scope.notificationsIcon = iconPrefix + "ion-android-mail";
             $scope.profileIcon = iconPrefix + "ion-anroid-person";
             $scope.galleryIcon = iconPrefix + "ion-android-film";
             $scope.logOutIcon = iconPrefix + "ion-android-exit";
@@ -397,11 +398,12 @@ function getUserData($scope) {
             $scope.barberIcon = iconPrefix + "ion-android-person-add";
             $scope.appointmentIcon = iconPrefix + "ion-android-calendar";
             $scope.imageUploadIcon = iconPrefix + "ion-android-upload";
+            $scope.closeOutlineIcon = iconPrefix + "ion-android-close";
         }else
         {
             $scope.menuIcon = iconPrefix + "ion-navicon";
             $scope.searchIcon = iconPrefix + "ion-search";
-            $scope.emailIcon = iconPrefix + "ion-email-unread";
+            $scope.notificationsIcon = iconPrefix + "ion-email-unread";
             $scope.profileIcon = iconPrefix + "ion-person";
             $scope.galleryIcon = iconPrefix + "ion-images";
             $scope.logOutIcon = iconPrefix + "ion-log-out";
@@ -410,6 +412,7 @@ function getUserData($scope) {
             $scope.barberIcon = iconPrefix + "ion-person-add";
             $scope.appointmentIcon = iconPrefix + "ion-calendar";
             $scope.imageUploadIcon = iconPrefix + "ion-upload";
+            $scope.closeOutlineIcon = iconPrefix + "ion-close";
         }
 }
 

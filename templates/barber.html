@@ -1,10 +1,10 @@
 <ion-view view-title="{{currentBarber.profile.displayName}}" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-images" ng-click="loadImages(currentBarber.barberImages)"></button>
-        <button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight()"></button>
+        <button ng-class="'button button-icon ' + galleryIcon" ng-click="loadImages(currentBarber.barberImages)"></button>
+        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content drag-content="false" scroll="false">
@@ -20,8 +20,8 @@
                         <br />
                         <label>Accepts Appointments: {{isAppointments}}</label>
                         <br />
-                        <button class="button button-icon icon ion-calendar" ng-hide="isAppointment" ng-click="loadAppointment(currentBarber)"></button>
-                        <button class="button button-icon icon ion-person-add" ng-hide="isClient" ng-click="createClient()"></button>
+                        <button ng-class="'button button-icon ' + appointmentIcon" ng-hide="isAppointment" ng-click="loadAppointment(currentBarber)"></button>
+                        <button ng-class="'button button-icon ' + barberIcon" ng-hide="isClient" ng-click="createClient()"></button>
                     </ion-item>
                     <ion-item>
                         <div class="bar bar-header bar-dark">
@@ -37,9 +37,9 @@
                         <div id="ratingEditContainer" style="display:none;">
                             <output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>
                             <div class="range range-positive">
-                                <i class="icon ion-ios-star-outline"></i>
+                                <i class="starOutlineIcon"></i>
                                 <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
-                                <i class="icon ion-ios-star"></i>
+                                <i class="starIcon"></i>
                             </div>
                             <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
                         </div>

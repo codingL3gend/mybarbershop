@@ -1,6 +1,6 @@
 <ion-view view-title="Barber Profile" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-content>
         <ion-scroll ng-style="{height: screenHeight}">

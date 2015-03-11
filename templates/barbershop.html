@@ -1,10 +1,10 @@
 <ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" class="button button-icon icon ion-email-unread" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button button-icon icon ion-images" ng-click="loadImages(currentBarberShops[0].images)"></button>
-        <button menu-toggle="right" class="button button-icon icon ion-navicon" ng-click="toggleRight()"></button>
+        <button ng-class="'button button-icon ' + galleryIcon" ng-click="loadImages(currentBarberShops[0].images)"></button>
+        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content drag-content="false">

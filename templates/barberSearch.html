@@ -2,7 +2,7 @@
     <ion-content>
         <div class="bar bar-header item-input-inset">
             <label class="item-input-wrapper">
-                <i class="icon ion-ios-search placeholder-icon"></i>
+                <i ng-class="searchIcon + ' placeholder-icon'"></i>
                 <input id="barberName" ng-model="searchName" type="search" placeholder="Search Barbers" ng-keyup="searchBarbers()"/>
             </label>
         </div>
