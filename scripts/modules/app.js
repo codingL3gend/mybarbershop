@@ -2,7 +2,7 @@
 
 angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 'ngRoute', 'ngSanitize', 'ui.calendar', /*, 'ui.bootstrap' 'ngTouch', 'mobile-angular-ui', 'mobile-angular-ui.scrollable', 'mobile-angular-ui.directives.toggle', 'mobile-angular-ui.directives.overlay'*/]) //'mobile-angular-ui.touch',
                       //'mobile-angular-ui.scrollable'])//  'mbs.blueimp', ])
-	      .run(function ($ionicPlatform, $rootScope, $state, $stateParams, $cordovaPush, MbsAPI, $cordovaSplashscreen){
+	      .run(function ($ionicPlatform, $rootScope, $state, $stateParams, $cordovaPush, MbsAPI/*, $cordovaSplashscreen*/){
 	          $rootScope.$state = $state;
 	          $rootScope.$stateParams = $stateParams;
 
@@ -38,7 +38,7 @@ angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 
 
                             }
 
-                splashScreen = $cordovaSplashscreen;
+                //splashScreen = $cordovaSplashscreen;
 
                 $cordovaPush.register(config).then(function (result) {
                     if (ionic.Platform.isIOS())

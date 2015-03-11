@@ -172,8 +172,8 @@ function userQuerySuccess(tran, results)
 {
     if (results) {
 
-        if (splashScreen)
-            splashSceen.hide();
+        //if (splashScreen)
+            //splashSceen.hide();
 
         var user = {};
 
@@ -2452,7 +2452,7 @@ function showAdmobAd($cordovaAdMobPro, type)
             adId: options.banner,
             position: AdMob != null ? AdMob.AD_POSITION.BOTTOM_CENTER : 8,
             autoShow: true,
-            isTesting: true,
+            isTesting: false,
             adSize: 'SMART_BANNER'
         });
 

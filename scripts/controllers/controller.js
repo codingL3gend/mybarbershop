@@ -6,7 +6,8 @@ var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
 var iosTok, platformType, navigationData, hasAds = true, splashScreen;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
-
+if (db != null)
+    alert('has db');
 angular.module('mbs.controllers', [])
         .controller('MainCtrl', ['$scope', 'geolocation', function ($scope, geolocation) {
            // app.initialize();
