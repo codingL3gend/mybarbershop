@@ -452,7 +452,7 @@ angular.module('mbs.controllers', [])
 	   .controller('siteController', ['$scope', '$location', 'MbsAPI', '$routeParams', '$ionicLoading', '$filter', '$sce', '$ionicSideMenuDelegate', '$state', '$ionicPopup', '$rootScope', '$cordovaAppAvailability', '$cordovaSpinnerDialog'/*, '$cordovaAdMobPro'*/, function ($scope, $location, MbsAPI, $routeParams, $ionicLoading, $filter, $sce, $ionicSideMenuDelegate, $state, $ionicPopup, $rootScope, $cordovaAppAvailability, $cordovaSpinnerDialog/*, $cordovaAdMobPro*/) {
 	       toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
 	       //showCordovaLoading($cordovaSpinnerDialog, "Loading", "Loading information ...", true, true);
-
+	       getUserData($scope);
 	       $scope.viewHeight = (screen.height - (hasAds ? 50 : 0)) + "px";
            
 	       if($scope.backButtonPressed)
