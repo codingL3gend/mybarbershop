@@ -108,7 +108,7 @@
 	</gap:plugin>
 	<gap:plugin name="org.apache.cordova.console" version="0.2.11" />
 	<gap:plugin name="org.apache.cordova.device-orientation" version="0.3.9" />
-	<gap:plugin name="org.apache.cordova.screenscreen" version="0.3.4" />
+	<gap:plugin name="org.apache.cordova.splashscreen" version="0.3.4" />
 	<gap:plugin name="org.apache.cordova.dialogs" source="plugins.cordova.io" version="0.3.0" />
 	<gap:plugin name="org.apache.cordova.media" version="0.2.13" />
 	<gap:plugin name="org.apache.cordova.globalization" version="0.3.1" />
