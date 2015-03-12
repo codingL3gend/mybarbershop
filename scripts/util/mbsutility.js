@@ -384,6 +384,11 @@ function getUserData($scope) {
         $scope.appointmentIcon = iconPrefix + "ion-ios-calendar";
         $scope.imageUploadIcon = iconPrefix + "ion-ios-upload-outline";
         $scope.closeOutlineIcon = iconPrefix + "ion-ios-close-outline";
+        $scope.closeIcon = iconPrefix + "ion-ios-close";
+        $scope.settingsIcon = iconPrefix + "ion-ios-gear";
+        $scope.checkmarkIcon = iconPrefix + "ion-ios-checkmark-empty";
+        $scope.starOutlineIcon = iconPrefix + "ion-ios-star-outline";
+        $scope.starIcon = iconPrefix + "ion-ios-star";
     }else
         if(ionic.Platform.isAndroid())
         {
@@ -399,6 +404,11 @@ function getUserData($scope) {
             $scope.appointmentIcon = iconPrefix + "ion-android-calendar";
             $scope.imageUploadIcon = iconPrefix + "ion-android-upload";
             $scope.closeOutlineIcon = iconPrefix + "ion-android-close";
+            $scope.closeIcon = iconPrefix + "ion-android-cancel";
+            $scope.settingsIcon = iconPrefix + "ion-android-settings";
+            $scope.checkmarkIcon = iconPrefix + "ion-android-done";
+            $scope.starOutlineIcon = iconPrefix + "ion-android-star-outline";
+            $scope.starIcon = iconPrefix + "ion-android-star";
         }else
         {
             $scope.menuIcon = iconPrefix + "ion-navicon";
@@ -413,6 +423,11 @@ function getUserData($scope) {
             $scope.appointmentIcon = iconPrefix + "ion-calendar";
             $scope.imageUploadIcon = iconPrefix + "ion-upload";
             $scope.closeOutlineIcon = iconPrefix + "ion-close";
+            $scope.closeIcon = iconPrefix + "ion-close-circled";
+            $scope.settingsIcon = iconPrefix + "ion-gear-b";
+            $scope.checkmarkIcon = iconPrefix + "ion-checkmark";
+            $scope.starOutlineIcon = iconPrefix + "ion-ios-checkmark-empty";
+            $scope.starIcon = iconPrefix + "ion-ios-checkmark-empty";
         }
 }
 
