@@ -1075,7 +1075,9 @@ angular.module('mbs.controllers', [])
 		    			   
 		    			   //updateStatusMessage("Barber info saved successfully", "success");
 		    			   toggleIonicLoading($ionicLoading, "Barber shop info saved successfully", true, true, "balanced");
-	                       
+		    			   if (type == "BarberSetup") {
+		    			       $ionicNavBarDelegate.showBackButton(true);
+		    			   }
 	                       //getPageView("search.html", "index.html", null);
 		    			   $state.go('main');
 	    			   }else	    		   
@@ -1100,7 +1102,9 @@ angular.module('mbs.controllers', [])
 		    			   {			    			   
 			    			   //updateStatusMessage("Barber info saved successfully", "success");
 			    			   toggleIonicLoading($ionicLoading, "Barber shop info saved successfully", true, true, "balanced");
-		                       
+			    			   if (type == "BarberSetup") {
+			    			       $ionicNavBarDelegate.showBackButton(true);
+			    			   }
 		                       //getPageView("search.html", "index.html", null);
 			    			   $state.go('main');
 		    			   }else	    		   
@@ -3837,55 +3841,57 @@ angular.module('mbs.controllers', [])
 							mediaType = Camera.MediaType.PICTURE;
             	        }
             	
-            	var targetWidth = screen.width, targetHeight = (screen.height - (hasAds ? 50 : 0)) - 240;
+            	if (index != 4) {
+            	    var targetWidth = screen.width, targetHeight = (screen.height - (hasAds ? 50 : 0)) - 240;
 
-            	var options = {
-	    		    quality : 100,
-	    		    destinationType : Camera.DestinationType.FILE_URI,
-	    		    sourceType : sourceType,
-	    		    allowEdit : true,
-	    		    encodingType: Camera.EncodingType.JPEG,
-	    		    targetWidth: targetWidth,
-	    		    targetHeight: targetHeight,
-	    		    //popoverOptions: CameraPopoverOptions,
-	    		    saveToPhotoAlbum: false,
-	    		    correctOrientation: true
-    		    };
-            	
-            	if(mediaType)
-            		options.mediaType = mediaType;
-	
-            	$cordovaCamera.getPicture(options).then(function(imageData) {
-            	    // Success! Image data is here
-            	    $("#galleryContainer").css("display", "none");
-            	    $("#galleryUploadContainer").css("display", "block");
+            	    var options = {
+            	        quality: 100,
+            	        destinationType: Camera.DestinationType.FILE_URI,
+            	        sourceType: sourceType,
+            	        allowEdit: true,
+            	        encodingType: Camera.EncodingType.JPEG,
+            	        targetWidth: targetWidth,
+            	        targetHeight: targetHeight,
+            	        //popoverOptions: CameraPopoverOptions,
+            	        saveToPhotoAlbum: false,
+            	        correctOrientation: true
+            	    };
 
-            	    $scope.imageHeight = (screen.height - (hasAds ? 50 : 0)) - 240;
-            	    $scope.selectedImage = imageData;//"data:image/jpeg;base64," + imageData;
+            	    if (mediaType)
+            	        options.mediaType = mediaType;
 
-            	}, function(err) {
-            	    // An error occurred. Show a message to the user
-            	    console.log(err);
-            	});
+            	    $cordovaCamera.getPicture(options).then(function (imageData) {
+            	        // Success! Image data is here
+            	        $("#galleryContainer").css("display", "none");
+            	        $("#galleryUploadContainer").css("display", "block");
 
-            	//$cordovaCamera.cleanup().then(function () {
-            	//}); // only for FILE_URI
+            	        $scope.imageHeight = (screen.height - (hasAds ? 50 : 0)) - 240;
+            	        $scope.selectedImage = imageData;//"data:image/jpeg;base64," + imageData;
 
-            	/*camera.getPicture()
-                    .then(function (imageData) {
-                        // imageData is your base64-encoded image
-                        // update some ng-src directive
-                        $("#galleryContainer").css("display", "none");
-                        $("#galleryUploadContainer").css("display", "block");
+            	    }, function (err) {
+            	        // An error occurred. Show a message to the user
+            	        console.log(err);
+            	    });
 
-                        $scope.imageHeight = screen.height / 3;
-                        $scope.selectedImage = "data:image/jpeg;base64," + imageData;
+            	    //$cordovaCamera.cleanup().then(function () {
+            	    //}); // only for FILE_URI
 
-                        //hideSheet();
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });*/
+            	    /*camera.getPicture()
+                        .then(function (imageData) {
+                            // imageData is your base64-encoded image
+                            // update some ng-src directive
+                            $("#galleryContainer").css("display", "none");
+                            $("#galleryUploadContainer").css("display", "block");
+    
+                            $scope.imageHeight = screen.height / 3;
+                            $scope.selectedImage = "data:image/jpeg;base64," + imageData;
+    
+                            //hideSheet();
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });*/
+            	}
 
             	return true;
             }
