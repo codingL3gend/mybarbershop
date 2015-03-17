@@ -625,12 +625,12 @@ angular.module('mbs.controllers', [])
                    });
 		   };
 		   $scope.loadBarberShop = function (barberShop) {
-		       saveViewData();
+		       //saveViewData();
 
 	           $state.go('barbershop', { barberShopID: barberShop.barberShopID });
 	       };
 		   $scope.loadProfile = function () {
-		       saveViewData();
+		       //saveViewData();
 
 	           if (getAccountType($scope.mbsAccountType) == "Customer")
 	               $state.go('user', { profileID: $scope.mbsProfileID });
@@ -638,12 +638,12 @@ angular.module('mbs.controllers', [])
 	               $state.go('barberprofile', { barberID: $scope.currentBarber.barberID });
 	       };
 		   $scope.loadSearch = function () {
-		       saveViewData();
+		       //saveViewData();
 
 		       $state.go("shopsearch", { type: "normal" });
 		   };
 		   $scope.loadBarberSearch = function () {
-		       saveViewData();
+		       //saveViewData();
 
 		       $state.go("barbersearch");
 		   };
@@ -651,7 +651,7 @@ angular.module('mbs.controllers', [])
 		       if ($cordovaAppAvailability) {
 		           $cordovaAppAvailability.check("square-commerce-v1://").then(function () {
 		               $scope.loadSquarePayment = function () {
-		                   saveViewData();
+		                   //saveViewData();
 
 		                   $state.go("squarepayment");
 		               };
@@ -659,7 +659,7 @@ angular.module('mbs.controllers', [])
 		               alert("You must have the Square Register app installed to pay with Square");
 		           });
 		       } else {
-		           saveViewData();
+		           //saveViewData();
 
 		           $state.go("squarepayment");
 		       }
@@ -960,8 +960,6 @@ angular.module('mbs.controllers', [])
                    });
 	       }
 	       $scope.createBarberShop = function (shop) {
-	           alert(formatAddress(shop.formatted_address, "State"));
-	           alert(JSON.stringify(shop));
 	           $scope.shopInfo = MbsAPI.createBarberShop({
 	               call: "barbershop/create", values: $scope.mbsProfileID,
 	               shopName: shop.name, totalBarbers: 0, owner: "", phoneNumber: shop.phoneNumber,
@@ -1010,7 +1008,9 @@ angular.module('mbs.controllers', [])
                                        $scope.currentBarber.yearsOfExperience = $scope.barberInfo.yearsOfExperience;
                                        $scope.currentBarber.acceptsAppointments = $scope.barberInfo.acceptsAppointments;
 
-                                       $scope.barberInfo = null;
+                                       $scope.barberInfo = null; 
+
+                                       $ionicNavBarDelegate.showBackButton(true);                                       
                                    }
 
                                    $scope.currentBarber.barberShopID = userShop.barberShopID
@@ -3823,6 +3823,7 @@ angular.module('mbs.controllers', [])
             
             function uploadButtonHandler(index, clickedButton)
             {
+                alert(index);
             	var sourceType, mediaType; 
             	
             	if(index == 1)// || clickedButton.text == "Take Photo")
