@@ -1,4 +1,4 @@
-<ion-view view-title="Barber Profile" hide-nav-bar="false">
+<ion-view view-title="Profile" hide-nav-bar="false">
     <ion-nav-buttons side="left">
         <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
@@ -12,6 +12,10 @@
                 <br />
                 <br />
                 <div id="barberInfoStatic" class="list">
+                    <label class="item item-input">
+                        <span class="input-label">Display Name:</span>
+                        <label>{{currentBarber.profile.displayName}}</label>
+                    </label>
                     <label class="item item-input">
                         <span class="input-label">Normal Time In:</span>
                         <label>{{currentBarber.normalTimeIn}}</label>
@@ -35,6 +39,10 @@
                     <button class="button button-positive button-block" ng-click="editBarberInfo()">Edit</button>
                 </div>
                 <div id="barberInfoEdit" class="list" style="display:none;">
+                    <label class="item item-input">
+                        <span class="input-label">Display Name:</span>
+                        <input type="text" id="newDisplayName" maxlength="50" ng-value="{{currentBarber.profile.displayName}}">
+                    </label>
                     <label class="item item-input item-select">
                         <div class="input-label">
                             Normal Time In:

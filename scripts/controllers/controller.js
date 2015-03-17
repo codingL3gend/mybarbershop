@@ -962,7 +962,7 @@ angular.module('mbs.controllers', [])
 	       $scope.createBarberShop = function (shop) {
 	           $scope.shopInfo = MbsAPI.createBarberShop({
 	               call: "barbershop/create", values: $scope.mbsProfileID,
-	               shopName: shop.name, totalBarbers: 0, owner: "", phoneNumber: shop.phoneNumber,
+	               shopName: shop.name, totalBarbers: 0, owner: shop.isOwner ? $scope.mbsDisplayName : "", phoneNumber: shop.phoneNumber,
 	               email: "", dateEstablished: "", street: formatAddress(shop.formatted_address, "Street"),
 	               city: formatAddress(shop.formatted_address, "City"), stateProvince: formatAddress(shop.formatted_address, "State"),
 	               addressType: "address_type_barber_shop", latitude: shop.geometry.location.k, longitude: shop.geometry.location.A != null ? shop.geometry.location.A : shop.geometry.location.D,
@@ -1007,6 +1007,7 @@ angular.module('mbs.controllers', [])
                                        $scope.currentBarber.avgCutTime = $scope.barberInfo.avgCutTime;
                                        $scope.currentBarber.yearsOfExperience = $scope.barberInfo.yearsOfExperience;
                                        $scope.currentBarber.acceptsAppointments = $scope.barberInfo.acceptsAppointments;
+                                       $scope.currentBarber.isOwner = shop.isOwner;
 
                                        $scope.barberInfo = null; 
 
@@ -1075,9 +1076,7 @@ angular.module('mbs.controllers', [])
 		    			   
 		    			   //updateStatusMessage("Barber info saved successfully", "success");
 		    			   toggleIonicLoading($ionicLoading, "Barber shop info saved successfully", true, true, "balanced");
-		    			   if (type == "BarberSetup") {
-		    			       $ionicNavBarDelegate.showBackButton(true);
-		    			   }
+		    			   
 	                       //getPageView("search.html", "index.html", null);
 		    			   $state.go('main');
 	    			   }else	    		   
@@ -1102,9 +1101,7 @@ angular.module('mbs.controllers', [])
 		    			   {			    			   
 			    			   //updateStatusMessage("Barber info saved successfully", "success");
 			    			   toggleIonicLoading($ionicLoading, "Barber shop info saved successfully", true, true, "balanced");
-			    			   if (type == "BarberSetup") {
-			    			       $ionicNavBarDelegate.showBackButton(true);
-			    			   }
+			    			   
 		                       //getPageView("search.html", "index.html", null);
 			    			   $state.go('main');
 		    			   }else	    		   
@@ -2267,7 +2264,7 @@ angular.module('mbs.controllers', [])
 	    					   )
 	    				   });
 
-	    				   ionic.EventController.trigger("click", { target: $("#barberSpecialtiesDiv") });
+	    				   ionic.trigger("click", { target: $("#barberSpecialtiesDivContainer") });
     				   }
 	    		   }
 
@@ -2566,6 +2563,8 @@ angular.module('mbs.controllers', [])
 	    		   $("#barberInfoStatic").css("display", "none");
 	    		   $("#barberInfoEdit").css("display", "block");
 	    		   
+	    		   $("#newDisplayName").val($scope.currentBarber.profile.displayName);
+	    		   barberInfo.displayName = $scope.currentBarber.profile.displayName;
 		    	   $(".normalTimeIn").val($scope.currentBarber.normalTimeIn);
 		    	   barberInfo.normalTimeIn = $scope.currentBarber.normalTimeIn;
 		    	   $(".yearsOfExperience option").filter(function() {
@@ -2597,7 +2596,7 @@ angular.module('mbs.controllers', [])
 	    		   normalTimeIn: barberInfo.normalTimeIn, yearsOfExperience: barberInfo.yearsOfExperience,
 	    		   avgCutTime: barberInfo.avgCutTime, acceptsAppointments: $("#acceptAppt").is(":checked"),
 	    		   profileID: $scope.mbsProfileID, barberShopID: $scope.currentBarber.barberShopID, owner: $scope.currentBarber.isOwner,
-	    		   dateCreated: createJavaDate($scope.mbsDateCreated)
+	    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $("#newDisplayName").val() != null ? $("#newDisplayName").val() : barberInfo.displayName
 	    	   }, 
 	    	   	function(data){
 	    		   if(data && data.response.success)
@@ -2605,6 +2604,7 @@ angular.module('mbs.controllers', [])
 	    			   //updateStatusMessage("Barber info saved successfully", "success");
 	    			   toggleIonicLoading($ionicLoading, "Barber info saved successfully", true, true, "balanced");
 	    			   
+	    			   $scope.currentBarber.profile.displayName = $("#newDisplayName").val();
 	    			   $scope.currentBarber.normalTimeIn = barberInfo.normalTimeIn;
 	    			   $scope.currentBarber.yearsOfExperience = barberInfo.yearsOfExperience;
 	    			   $scope.currentBarber.avgCutTime = barberInfo.avgCutTime;
@@ -3823,7 +3823,6 @@ angular.module('mbs.controllers', [])
             
             function uploadButtonHandler(index, clickedButton)
             {
-                alert(index);
             	var sourceType, mediaType; 
             	
             	if(index == 1)// || clickedButton.text == "Take Photo")
@@ -4330,7 +4329,7 @@ angular.module('mbs.controllers', [])
 	               });
 	               ref.addEventListener("exit", function (event) {
 	                   if (event) {
-	                       if (paramMap) {
+	                       if (paramMap && paramMap.access_token) {
 	                           globalScope.squareAccessToken = paramMap.access_token;
 	                           globalScope.squareMerchantID = paramMap.merchant_id;
 	                           globalScope.squareExpiration = paramMap.expires_at;

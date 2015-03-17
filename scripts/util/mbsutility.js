@@ -675,12 +675,36 @@ function renderBarberShops(data, $scope, coords)
                                     }
                                 }
 
-                                if (isBarber($scope.mbsAccountType))
+                                if (isBarber($scope.mbsAccountType)) {
                                     shop.isCustomer = false;
-                                else
-                                    shop.isCustomer = true;
 
-                                $scope.createBarberShop(shop);
+                                    var confirmPopup = $scope.$ionicPopup.confirm({
+                                        title: "Barber Shop Select",
+                                        template: "Do you own this shop?",
+                                        cancelText: "No",
+                                        cancelType: "button-assertive",
+                                        okType: "button-balanced"
+                                    });
+
+                                    confirmPopup.then(function (res) {
+                                        if (res) {
+                                            shop.isOwner = true;
+
+                                            $scope.createBarberShop(shop);
+                                        }
+                                        else {
+                                            shop.isOwner = false;
+
+                                            $scope.createBarberShop(shop);
+                                        }
+                                    });
+                                } else
+                                {
+                                    shop.isCustomer = true;
+                                    shop.isOwner = false;
+
+                                    $scope.createBarberShop(shop);
+                                }
                             });
 
                         }  
