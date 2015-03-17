@@ -22,7 +22,7 @@ angular.module('mbs.controllers', [])
                       'Timestamp: '             + position.timestamp                + '\n');
             });
         }])
-        .controller('authController', ['$scope', 'MbsAPI', '$ionicPopup', '$timeout', '$ionicLoading', '$state', '$rootScope', '$cordovaToast', '$cordovaPush', '$cordovaDevice', '$cordovaSpinnerDialog', function ($scope, MbsAPI, $ionicPopup, $timeout, $ionicLoading, $state, $rootScope, $cordovaToast, $cordovaPush, $cordovaDevice, $cordovaSpinnerDialog) {
+        .controller('authController', ['$scope', 'MbsAPI', '$ionicPopup', '$timeout', '$ionicLoading', '$state', '$rootScope', '$cordovaToast', '$cordovaPush', '$cordovaDevice', '$cordovaSpinnerDialog', '$cordovaDialogs', function ($scope, MbsAPI, $ionicPopup, $timeout, $ionicLoading, $state, $rootScope, $cordovaToast, $cordovaPush, $cordovaDevice, $cordovaSpinnerDialog, $cordovaDialogs) {
             
             var tokenID;
             var user = 0;
@@ -179,7 +179,8 @@ angular.module('mbs.controllers', [])
                         //$("#inputConPasswordLabel").css("display", "inline").text("Passwords do not match!");
                         //$("#inputConPasswordSpan").removeClass("glyphicon-ok").addClass("glyphicon-remove");
 
-                        showIonicAlert($ionicPopup, $timeout, "Invalid Password", "Passwords do not match!", "assertive", "button-assertive");
+                        //showIonicAlert($ionicPopup, $timeout, "Invalid Password", "Passwords do not match!", "assertive", "button-assertive");
+                        showCordovaAlert($cordovaDialogs, "Invalid Password", "Passwords do not match!", "OK");
                         $("#inputConPasswordSpan").addClass("assertive");
                     } else {
                         //$("#inputConPasswordDiv").removeClass("has-error").addClass("has-success");
@@ -202,7 +203,8 @@ angular.module('mbs.controllers', [])
                             //$("#inputEmailLabel").text("Username already taken!").css("display", "inline");
                             //$("#inputEmailSpan").removeClass("glyphicon-ok");
                             //$("#inputEmailSpan").addClass("glyphicon-remove");
-                            showIonicAlert($ionicPopup, $timeout, "Invalid Username", "Username already taken!", "assertive", "button-assertive");
+                            //showIonicAlert($ionicPopup, $timeout, "Invalid Username", "Username already taken!", "assertive", "button-assertive");
+                            showCordovaAlert($cordovaDialogs, "Invalid Username", "Username already taken!", "OK");
                             $("#inputEmailSpan").removeClass("balanced");
                             $("#inputEmailSpan").addClass("assertive");
 
@@ -322,7 +324,8 @@ angular.module('mbs.controllers', [])
                                 toggleIonicLoading($ionicLoading, null, false);
                                 //showCordovaLoading($cordovaSpinnerDialog, null, null, false, false);
 
-                                showIonicAlert($ionicPopup, $timeout, "Registration failed", "Error creating user! Please try again.", "assertive", "button-assertive");
+                                //showIonicAlert($ionicPopup, $timeout, "Registration failed", "Error creating user! Please try again.", "assertive", "button-assertive");
+                                showCordovaAlert($cordovaDialogs, "Registration failed", "Error creating user! Please try again", "OK");
                             }
                         }
                     }, function error(e) {
@@ -402,7 +405,8 @@ angular.module('mbs.controllers', [])
 
                             toggleIonicLoading($ionicLoading, null, false);
                             //showCordovaLoading($cordovaSpinnerDialog, null, null, false, false);
-                            showIonicAlert($ionicPopup, $timeout, "Login failed", "Invalid username or password! Please try again.", "assertive", "button-assertive");
+                            ///showIonicAlert($ionicPopup, $timeout, "Login failed", "Invalid username or password! Please try again.", "assertive", "button-assertive");
+                            showCordovaAlert($cordovaDialogs, "Login failed", "Invalid username or password! Please try again.", "OK");
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
@@ -804,7 +808,7 @@ angular.module('mbs.controllers', [])
 	           });*/
 	       }
 	   }])
-	   .controller('searchController', ['$scope', 'MbsAPI', '$ionicLoading', '$state', '$stateParams', '$ionicPopup', '$ionicNavBarDelegate', '$filter', '$rootScope', '$cordovaGeolocation', function ($scope, MbsAPI, $ionicLoading, $state, $stateParams, $ionicPopup, $ionicNavBarDelegate, $filter, $rootScope, $cordovaGeolocation) {
+	   .controller('searchController', ['$scope', 'MbsAPI', '$ionicLoading', '$state', '$stateParams', '$ionicPopup', '$ionicNavBarDelegate', '$filter', '$rootScope', '$cordovaGeolocation', '$cordovaDialogs', function ($scope, MbsAPI, $ionicLoading, $state, $stateParams, $ionicPopup, $ionicNavBarDelegate, $filter, $rootScope, $cordovaGeolocation, $cordovaDialogs) {
 	       var type = $stateParams.type;
 	       
 	       $scope.screenHeight = (screen.height - (hasAds ? 50 : 0)) + "px";
@@ -914,8 +918,8 @@ angular.module('mbs.controllers', [])
                                     } else
                                         newResults = results;
 
-                                    $scope.$ionicPopup = $ionicPopup;
-
+                                   // $scope.$ionicPopup = $ionicPopup;
+                                    $scope.$cordovaDialogs = $cordovaDialogs;
                                     //$scope.getUser();
 	                           
                                     if (nearbyBarberShops != null && nearbyBarberShops.length > 0)
@@ -1007,7 +1011,7 @@ angular.module('mbs.controllers', [])
                                        $scope.currentBarber.avgCutTime = $scope.barberInfo.avgCutTime;
                                        $scope.currentBarber.yearsOfExperience = $scope.barberInfo.yearsOfExperience;
                                        $scope.currentBarber.acceptsAppointments = $scope.barberInfo.acceptsAppointments;
-                                       $scope.currentBarber.isOwner = shop.isOwner;
+                                       $scope.currentBarber["isOwner"] = shop.isOwner;
 
                                        $scope.barberInfo = null; 
 
@@ -1068,7 +1072,7 @@ angular.module('mbs.controllers', [])
 		    		   normalTimeIn: $scope.barberInfo.normalTimeIn, yearsOfExperience: $scope.barberInfo.yearsOfExperience,
 		    		   avgCutTime: $scope.barberInfo.avgCutTime, acceptsAppointments: $scope.barberInfo.acceptsAppointments,
 		    		   profileID: $scope.mbsProfileID, barberShopID: $scope.currentBarber.barberShopID, owner: $scope.currentBarber.isOwner,
-		    		   dateCreated: createJavaDate($scope.mbsDateCreated)
+		    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $scope.mbsDisplayName
 		    	   }, 
 		    	   	function(data){
 		    		   if(data && data.response.success)
@@ -1094,7 +1098,7 @@ angular.module('mbs.controllers', [])
 			    		   normalTimeIn: $scope.currentBarber.normalTimeIn, yearsOfExperience: $scope.currentBarber.yearsOfExperience,
 			    		   avgCutTime: $scope.currentBarber.avgCutTime, acceptsAppointments: $scope.currentBarber.acceptsAppointments,
 			    		   profileID: $scope.mbsProfileID, barberShopID: $scope.currentBarber.barberShopID, owner: $scope.currentBarber.isOwner,
-			    		   dateCreated: createJavaDate($scope.mbsDateCreated)
+			    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $scope.mbsDisplayName
 			    	   }, 
 			    	   	function(data){
 			    		   if(data && data.response.success)
@@ -1420,7 +1424,7 @@ angular.module('mbs.controllers', [])
 	           });*/
 	       }
 	   }])
-	   .controller('barberController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', '$rootScope', '$ionicSideMenuDelegate', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup, $rootScope, $ionicSideMenuDelegate) {
+	   .controller('barberController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', '$rootScope', '$ionicSideMenuDelegate', '$cordovaDialogs', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup, $rootScope, $ionicSideMenuDelegate, $cordovaDialogs) {
 	       
 	       var searchObject = $location.search();
 	       var barberID = $stateParams.barberID;
@@ -1702,18 +1706,10 @@ angular.module('mbs.controllers', [])
 	       $("#barberRating").change(function(){
 	    	   var sliderValue = $(this).val();
 	    	   
-    	   		var confirmPopup = $ionicPopup.confirm({
-        			title: "Barber Rating",
-        			template: "Are you sure you want to rate your barber at " + $(this).val() + "%?", 
-        			cancelText: "No",
-        			cancelType: "button-assertive",
-        			okText: "Rate",
-        			okType: "button-balanced"
-        		});
-        		
-        		confirmPopup.then(function(res) 
+	    	   var confirmPopup = $cordovaDialogs.confirm("Are you sure you want to rate your barber at " + $(this).val() + "%?",
+        			"Barber Rating", ["Rate", "No"]).then(function(res) 
 				{
-        		     if(res) 
+        		     if(res == 1) 
         		     {
         		    	$scope.createBarberRating(sliderValue);
         		     }
@@ -1966,7 +1962,7 @@ angular.module('mbs.controllers', [])
 	           $scope.hasNotifications = true;
 	       });
 	   }])
-	   .controller('barberSetupController', ['$rootScope', '$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', function ($rootScope, $scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup) {
+	   .controller('barberSetupController', ['$rootScope', '$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', '$cordovaDialogs', function ($rootScope, $scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup, $cordovaDialogs) {
 	       
 		   var searchObject = $location.search();	       
 	       var scheduling = {};
@@ -2079,7 +2075,8 @@ angular.module('mbs.controllers', [])
 	    	   if(hasError)
     		   {
 	    	       //alert(err);
-	    	       showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    	       //showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    	       showCordovaAlert($cordovaDialogs, "Schedule Error", err, "OK");
 	    	       toggleIonicLoading($ionicLoading, null);
 
 	    		   hasError = false;
@@ -2111,15 +2108,18 @@ angular.module('mbs.controllers', [])
     		   {
 	    		   if(hasBlankTime && isTooLarge)
 	    		       //updateStatusMessage(err + "\n" + tooLarge, "error");
-	    		       showIonicAlert($ionicPopup, null, "Schedule Error", err + "\n" + tooLarge, "assertive", "button-assertive");
+	    		       //showIonicAlert($ionicPopup, null, "Schedule Error", err + "\n" + tooLarge, "assertive", "button-assertive");
+	    		       showCordovaAlert($cordovaDialogs, "Schedule Error", err + "\n" + tooLarge, "OK");
 	    		   else
 	    			   if(hasBlankTime)
 	    			       //updateStatusMessage(err, "error");
-	    			       showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    			       //showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    			       showCordovaAlert($cordovaDialogs, "Schedule Error", err, "OK");
 	    			   else
 	    				   if(isTooLarge)
 	    				       //updateStatusMessage(tooLarge, "error");
-	    				       showIonicAlert($ionicPopup, null, "Schedule Error", tooLarge, "assertive", "button-assertive");
+	    				       //showIonicAlert($ionicPopup, null, "Schedule Error", tooLarge, "assertive", "button-assertive");
+	    				       showCordovaAlert($cordovaDialogs, "Schedule Error", tooLarge, "OK");
 
 	    		   toggleIonicLoading($ionicLoading, null);
 
@@ -2227,7 +2227,8 @@ angular.module('mbs.controllers', [])
     		   }else
 			   {
 	    	       //updateStatusMessage("Please select at least one specialty", "error");
-	    	       showIonicAlert($ionicPopup, null, "Specialties Error", "Please select at least one specialty", "assertive", "button-assertive");
+	    	       //showIonicAlert($ionicPopup, null, "Specialties Error", "Please select at least one specialty", "assertive", "button-assertive");
+	    	       showCordovaAlert($cordovaDialogs, "Specialties Error", "Please select at least one specialty", "OK");
 			   }
 	       }
 	       $scope.getSpecialties = function(){
@@ -2475,7 +2476,7 @@ angular.module('mbs.controllers', [])
     	   scheduling["saturday"] = "8:00 AM" + " - " + "8:00 AM";
     	   scheduling["freetime"] = "8:00 AM" + " - " + "8:00 AM";
 	   }])
-	   .controller('barberProfileController', ['$rootScope', '$scope', 'MbsAPI', '$stateParams', '$location', '$ionicLoading', '$ionicPopup', '$state', '$ionicSideMenuDelegate', '$cordovaDatePicker', function ($rootScope, $scope, MbsAPI, $stateParams, $location, $ionicLoading, $ionicPopup, $state, $ionicSideMenuDelegate, $cordovaDatePicker) {
+	   .controller('barberProfileController', ['$rootScope', '$scope', 'MbsAPI', '$stateParams', '$location', '$ionicLoading', '$ionicPopup', '$state', '$ionicSideMenuDelegate', '$cordovaDatePicker', '$cordovaDialogs', function ($rootScope, $scope, MbsAPI, $stateParams, $location, $ionicLoading, $ionicPopup, $state, $ionicSideMenuDelegate, $cordovaDatePicker, $cordovaDialogs) {
 	       
 	       var searchObject = $location.search();	       
 	       var scheduling = {};
@@ -2691,11 +2692,13 @@ angular.module('mbs.controllers', [])
 	           }
 
 	           if (invalid || invalidVacation) {
-                   if(invalid)
-	                    showIonicAlert($ionicPopup, null, "Time Error", "Time Out must be greater than Time In", "assertive", "button-assertive");
-                   else
-                       if(invalidVacation)
-                           showIonicAlert($ionicPopup, null, "Vacation Error", vacationMessage, "assertive", "button-assertive");
+	               if (invalid)
+	                   //showIonicAlert($ionicPopup, null, "Time Error", "Time Out must be greater than Time In", "assertive", "button-assertive");
+	                   showCordovaAlert($cordovaDialogs, "Time Error", "Time Out must be greater than Time In", "OK");
+	               else
+	                   if (invalidVacation)
+	                       //showIonicAlert($ionicPopup, null, "Vacation Error", vacationMessage, "assertive", "button-assertive");
+	                       showCordovaAlert($cordovaDialogs, "Vacation Error", vacationMessage, "OK");
 
 	                toggleIonicLoading($ionicLoading, null);
 	            } else {
@@ -2836,15 +2839,18 @@ angular.module('mbs.controllers', [])
     		   {
 	    		   if(hasBlankTime && isTooLarge)
 	    		       //updateStatusMessage(err + "\n" + tooLarge, "error");
-	    		       showIonicAlert($ionicPopup, null, "Schedule Error", err + "\n" + tooLarge, "assertive", "button-assertive");
+	    		       //showIonicAlert($ionicPopup, null, "Schedule Error", err + "\n" + tooLarge, "assertive", "button-assertive");
+	    		       showCordovaAlert($cordovaDialogs, "Schedule Error", err + "\n" + tooLarge, "OK");
 	    		   else
 	    			   if(hasBlankTime)
 	    			       //updateStatusMessage(err, "error");
-	    			       showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    			       //showIonicAlert($ionicPopup, null, "Schedule Error", err, "assertive", "button-assertive");
+	    			       showCordovaAlert($cordovaDialogs, "Schedule Error", err, "OK");
 	    			   else
 	    				   if(isTooLarge)
 	    				       //updateStatusMessage(tooLarge, "error");
-	    				       showIonicAlert($ionicPopup, null, "Schedule Error", tooLarge, "assertive", "button-assertive");
+	    				       //showIonicAlert($ionicPopup, null, "Schedule Error", tooLarge, "assertive", "button-assertive");
+	    				       showCordovaAlert($cordovaDialogs, "Schedule Error", tooLarge, "OK");
 	    		   
 	    		   toggleIonicLoading($ionicLoading, null);
 	    		   
@@ -3210,7 +3216,7 @@ angular.module('mbs.controllers', [])
 	           $scope.hasNotifications = true;
 	       });
 	   }])	   
-	   .controller('appointmentController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', '$filter', '$timeout', '$rootScope', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup, $filter, $timeout, $rootScope) {
+	   .controller('appointmentController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$ionicPopup', '$filter', '$timeout', '$rootScope', '$cordovaDialogs', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $ionicPopup, $filter, $timeout, $rootScope, $cordovaDialogs) {
 	       
 	       $scope.eventSources = [];
 	       $scope.screenHeight = (screen.height - (hasAds ? 50 : 0)) + "px";
@@ -3534,26 +3540,23 @@ angular.module('mbs.controllers', [])
 	           });
 
 	           $scope.confirmAppointment = function (apptTime) {
-	               var confirmPopup = $ionicPopup.confirm({
-	                   title: 'Confirm Appointment',
-                       template: 'Set appointment for this time? ' + apptTime
-	               });
-	               confirmPopup.then(function (res) {
-	                   if (res) {
+	               var confirmPopup = $cordovaDialogs.confirm('Set appointment for this time? ' + apptTime, 
+                       'Confirm Appointment', ["OK", "Cancel"]).then(function (res) {
+	                   if (res == 1) {
 	                       scheduleAppointment($scope.selectedDate, apptTime, $ionicPopup, $timeout);
-	                   } else
-	                       confirmPopup.close();
+	                   } //else
+	                       //confirmPopup.close();
 	               });
 	           };
 
-	           var p = $(".popup").css("width");
+	           /*var p = $(".popup").css("width");
 
 	           $scope.screenWidth = (screen.width - 75) + "px";
 
 	           $(".popup").css({
 	               "height": "200px",
                    "width": "50px"
-	            });
+	            });*/
 	       };
 
 	       var apptVisible = true;
@@ -3634,7 +3637,7 @@ angular.module('mbs.controllers', [])
 	           $scope.hasNotifications = true;
 	       });
 	   }])
-        .controller('galleryController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$ionicLoading', '$ionicNavBarDelegate', '$ionicSlideBoxDelegate', '$ionicActionSheet', 'camera', '$cordovaCamera', '$ionicPopup', '$cordovaActionSheet', '$rootScope', '$state', '$cordovaFileTransfer', function ($scope, MbsAPI, $stateParams, $location, $ionicLoading, $ionicNavBarDelegate, $ionicSlideBoxDelegate, $ionicActionSheet, camera, $cordovaCamera, $ionicPopup, $cordovaActionSheet, $rootScope, $state, $cordovaFileTransfer) {
+        .controller('galleryController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$ionicLoading', '$ionicNavBarDelegate', '$ionicSlideBoxDelegate', '$ionicActionSheet', 'camera', '$cordovaCamera', '$ionicPopup', '$cordovaActionSheet', '$rootScope', '$state', '$cordovaFileTransfer', '$cordovaDialogs', function ($scope, MbsAPI, $stateParams, $location, $ionicLoading, $ionicNavBarDelegate, $ionicSlideBoxDelegate, $ionicActionSheet, camera, $cordovaCamera, $ionicPopup, $cordovaActionSheet, $rootScope, $state, $cordovaFileTransfer, $cordovaDialogs) {
             
             var userID = $stateParams.userID;
             var type = $stateParams.type;
@@ -4084,16 +4087,10 @@ angular.module('mbs.controllers', [])
 
             $scope.uploadImage = function () {
                 if (type == "Barber") {
-                    var confirmPopup = $ionicPopup.confirm({
-                        title: "Barber Shop Gallery",
-                        template: "Do you want to add this image to your barber shops gallery?",
-                        cancelText: "No",
-                        cancelType: "button-assertive",
-                        okType: "button-balanced"
-                    });
-
-                    confirmPopup.then(function (res) {
-                        if (res) 
+                    var confirmPopup = $cordovaDialogs.confirm("Do you want to add this image to your barber shops gallery?",
+                        "Barber Shop Gallery",
+                        ["Yes", "No"]).then(function (res) {
+                        if (res == 1) 
                             addToShop = true;
                         else 
                             addToShop = false;

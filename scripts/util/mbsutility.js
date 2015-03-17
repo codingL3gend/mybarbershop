@@ -545,17 +545,11 @@ function renderNearbyBarberShops(data, $scope, $filter, coords) {
 	        		{
 						$scope.currentBarber.barberShopID = selectedShop.barberShopID;
 	            		
-	            		var confirmPopup = $scope.$ionicPopup.confirm({
-	            			title: "Barber Shop Select",
-	            			template: "Do you own this shop?", 
-	            			cancelText: "No",
-	            			cancelType: "button-assertive",
-	            			okType: "button-balanced"
-	            		});
-	            		
-	            		confirmPopup.then(function(res) 
+						var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?", 
+	            			"Barber Shop Select",
+	            			["Yes", "No"]).then(function(res) 
         				{
-	            		     if(res) 
+	            		     if(res == 1) 
 	            		     {
 	            		    	$scope.currentBarber.isOwner = true;
             					$scope.updateBarberInfo();
@@ -678,16 +672,10 @@ function renderBarberShops(data, $scope, coords)
                                 if (isBarber($scope.mbsAccountType)) {
                                     shop.isCustomer = false;
 
-                                    var confirmPopup = $scope.$ionicPopup.confirm({
-                                        title: "Barber Shop Select",
-                                        template: "Do you own this shop?",
-                                        cancelText: "No",
-                                        cancelType: "button-assertive",
-                                        okType: "button-balanced"
-                                    });
-
-                                    confirmPopup.then(function (res) {
-                                        if (res) {
+                                    var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?",
+                                        "Barber Shop Select",
+                                        ["Yes", "No"]).then(function (res) {
+                                        if (res == 1) {
                                             shop.isOwner = true;
 
                                             $scope.createBarberShop(shop);
@@ -2414,22 +2402,16 @@ function showIonicAlert($ionicPopup, $timeout, title, message, type, buttonType)
     }
 }
 
-function showCordovaAlert($ionicPopup, $timeout, title, message, type, buttonType) {
-    var alertPopup = $ionicPopup.alert({
-        title: title,
-        template: '<span class="' + type + '" style="text-align:center;">' + message + '</span>',
-        okType: buttonType
-    });
-
-    alertPopup.then(function (res) {
+function showCordovaAlert($cordovaDialogs, title, message, buttonText) {
+    var alertPopup = $cordovaDialogs.alert(message, title, buttonText).then(function () {
 
     });
 
-    if ($timeout) {
+    /*if ($timeout) {
         $timeout(function () {
             alertPopup.close();
         }, 3000);
-    }
+    }*/
 }
 
 function toggleIonicLoading($ionicLoading, message, show, useDuration, type)
