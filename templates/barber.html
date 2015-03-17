@@ -59,7 +59,7 @@
                 </div>-->
                         <div class="list">
                             <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;">
+                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
                                     {{day.day.substring(0, 2)}}
                                 </button>
                                 {{day.time}}
@@ -93,7 +93,7 @@
 
                         <div class="list">
                             <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;">
+                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
                                     {{specialty.specialty.substring(0, 1).toUpperCase()}}
                                 </button>
                                 {{specialty.specialty}}

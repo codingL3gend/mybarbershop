@@ -222,6 +222,7 @@ angular.module('mbs.controllers', [])
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 } else {
@@ -326,6 +327,7 @@ angular.module('mbs.controllers', [])
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 }else
@@ -404,6 +406,8 @@ angular.module('mbs.controllers', [])
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 } else {
@@ -426,6 +430,7 @@ angular.module('mbs.controllers', [])
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
             }
@@ -478,6 +483,7 @@ angular.module('mbs.controllers', [])
                                 if (data.barber) {
                                     buildBarberProfile(data.barber, $scope)
                                     $scope.mbsBarberID = data.barber.barberID;
+                                    $scope.mbsProfileImage = getProfileImage($scope.currentBarber.profile.image.defaultImage, "profile");
 
                                     setUserData($scope);
                                 }
@@ -525,6 +531,7 @@ angular.module('mbs.controllers', [])
                             //error getting user data
                             toggleIonicLoading($ionicLoading, "Could not load profile", true, true, "assertive");
                             //showCordovaLoading($cordovaSpinnerDialog, "Profile Loading Failed", "Could not load profile", false, true);
+                            $scope.getUser();
                         }
 
                         //removeNotifications();
@@ -535,6 +542,7 @@ angular.module('mbs.controllers', [])
                             showAdmobAd(window.AdMob, "banner");
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            $scope.getUser();
                         }
                     });
 		   };
@@ -548,11 +556,13 @@ angular.module('mbs.controllers', [])
 
                            var dateCreated = splitDate($scope.currentProfile.dateCreated);
 
-                           $scope.userImage = getProfileImage($scope.currentProfile.image, "profile");
+                           $scope.userImage = $scope.mbsProfileImage = getProfileImage($scope.currentProfile.image, "profile");
                            $scope.memberSince = getReadableMonth(dateCreated.getMonth()) + " " + dateCreated.getDate() + ", " +
         	               						 dateCreated.getFullYear();
 
                            handleImages($scope.currentProfile.images);
+
+                           setUserData($scope);
                        } else {
                            //error getting user data
                        }
@@ -561,6 +571,7 @@ angular.module('mbs.controllers', [])
                        //showCordovaLoading($cordovaSpinnerDialog, null, false, false);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -609,6 +620,7 @@ angular.module('mbs.controllers', [])
                        //showNavigation("search");
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 		   };
@@ -846,6 +858,7 @@ angular.module('mbs.controllers', [])
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
                         }
+                        toggleIonicLoading($ionicLoading, null, false);
                     });
 
                     function initialize() {
@@ -942,17 +955,20 @@ angular.module('mbs.controllers', [])
                        //showNavigation("search");
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
 	       $scope.createBarberShop = function (shop) {
+	           alert(formatAddress(shop.formatted_address, "State"));
+	           alert(JSON.stringify(shop));
 	           $scope.shopInfo = MbsAPI.createBarberShop({
 	               call: "barbershop/create", values: $scope.mbsProfileID,
 	               shopName: shop.name, totalBarbers: 0, owner: "", phoneNumber: shop.phoneNumber,
 	               email: "", dateEstablished: "", street: formatAddress(shop.formatted_address, "Street"),
 	               city: formatAddress(shop.formatted_address, "City"), stateProvince: formatAddress(shop.formatted_address, "State"),
 	               addressType: "address_type_barber_shop", latitude: shop.geometry.location.k, longitude: shop.geometry.location.A != null ? shop.geometry.location.A : shop.geometry.location.D,
-	               isCustomer: true, sunday: shop.sunday != undefined ? shop.sunday : null, monday: shop.monday != undefined ? shop.monday : null,
+	               isCustomer: shop.isCustomer, sunday: shop.sunday != undefined ? shop.sunday : null, monday: shop.monday != undefined ? shop.monday : null,
                    tuesday: shop.tuesday != undefined ? shop.tuesday : null, wednesday: shop.wednesday != undefined ? shop.wednesday : null,
                    thursday: shop.thursday != undefined ? shop.thursday : null, friday: shop.friday != undefined ? shop.friday : null, 
         		   saturday: shop.saturday != undefined ? shop.saturday : null 
@@ -987,7 +1003,16 @@ angular.module('mbs.controllers', [])
                                    setUserShop($scope.userShop);
 
                                if (isBarber($scope.mbsAccountType)) {
-                                   $scope.barberInfo = null;
+                                   if ($scope.barberInfo && type == "BarberSetup")
+                                   {
+                                       $scope.currentBarber.normalTimeIn = $scope.barberInfo.normalTimeIn;
+                                       $scope.currentBarber.avgCutTime = $scope.barberInfo.avgCutTime;
+                                       $scope.currentBarber.yearsOfExperience = $scope.barberInfo.yearsOfExperience;
+                                       $scope.currentBarber.acceptsAppointments = $scope.barberInfo.acceptsAppointments;
+
+                                       $scope.barberInfo = null;
+                                   }
+
                                    $scope.currentBarber.barberShopID = userShop.barberShopID
 
                                    $scope.updateBarberInfo();
@@ -1001,6 +1026,7 @@ angular.module('mbs.controllers', [])
                        }
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -1025,6 +1051,7 @@ angular.module('mbs.controllers', [])
                            toggleIonicLoading($ionicLoading, "could not set " + shop.shopName + " as your barber shop...", true, true, "assertive")
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -1056,6 +1083,7 @@ angular.module('mbs.controllers', [])
 	    				   toggleIonicLoading($ionicLoading, "Could not save barber shop info", true, true, "assertive");
 		    	   	}, function error(e) {
 		    	   	    if (e.status == 500 || e.status == 404) {
+		    	   	        toggleIonicLoading($ionicLoading, null, false);
 		    	   	    }
 		    	   	});
     	   		}else
@@ -1080,6 +1108,7 @@ angular.module('mbs.controllers', [])
 		    				   toggleIonicLoading($ionicLoading, "Could not save barber shop info", true, true, "assertive");
 			    	   	}, function error(e) {
 			    	   	    if (e.status == 500 || e.status == 404) {
+			    	   	        toggleIonicLoading($ionicLoading, null, false);
 			    	   	    }
 			    	   	});
 	    		   }
@@ -1136,6 +1165,7 @@ angular.module('mbs.controllers', [])
                        }
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1173,6 +1203,7 @@ angular.module('mbs.controllers', [])
                            }
                        }, function error(e) {
                            if (e.status == 500 || e.status == 404) {
+                               toggleIonicLoading($ionicLoading, null, false);
                            }
                        });
 	           }else
@@ -1242,6 +1273,7 @@ angular.module('mbs.controllers', [])
                        //showNavigation("search");
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -1315,6 +1347,7 @@ angular.module('mbs.controllers', [])
 
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1423,6 +1456,7 @@ angular.module('mbs.controllers', [])
                        //showNavigation("search");
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1503,6 +1537,7 @@ angular.module('mbs.controllers', [])
                     	   toggleIonicLoading($ionicLoading, null);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1543,6 +1578,7 @@ angular.module('mbs.controllers', [])
 
                        }, function error(e) {
                            if (e.status == 500 || e.status == 404) {
+                               toggleIonicLoading($ionicLoading, null, false);
                            }
                        });
 	    	   } else
@@ -1578,6 +1614,7 @@ angular.module('mbs.controllers', [])
 
     		                   }, function error(e) {
     		                       if (e.status == 500 || e.status == 404) {
+    		                           toggleIonicLoading($ionicLoading, null, false);
     		                       }
     		                   });
 	                   }
@@ -1603,10 +1640,10 @@ angular.module('mbs.controllers', [])
                                profileID: $scope.mbsProfileID,
                                displayName: $scope.mbsDisplayName,
                                image:{
-                                   defaultImage: ""//client.profile.image.fileLocation + client.profile.image.fileName;
+                                   defaultImage: $scope.mbsProfileImage
                                }
                            }
-                           //newClient.clientImage = getProfileImage(client.profile.image, "profile");
+                           newClient.clientImage = $scope.mbsProfileImage;
 
                            $scope.isClient = true;
 
@@ -1626,6 +1663,7 @@ angular.module('mbs.controllers', [])
                        }
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1756,6 +1794,7 @@ angular.module('mbs.controllers', [])
                        toggleIonicLoading($ionicLoading, null, false);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1805,6 +1844,7 @@ angular.module('mbs.controllers', [])
 	    	   	        toggleIonicLoading($ionicLoading, "Could not save user info", true, true, "assertive");
 	    	   	}, function error(e) {
 	    	   	    if (e.status == 500 || e.status == 404) {
+	    	   	        toggleIonicLoading($ionicLoading, null, false);
 	    	   	    }
 	    	   	});
 	       }
@@ -1892,6 +1932,7 @@ angular.module('mbs.controllers', [])
                        toggleIonicLoading($ionicLoading, null, false);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -1940,7 +1981,8 @@ angular.module('mbs.controllers', [])
 	       $scope.vacationPeriod;
 	       $scope.memberSince;
 	       $scope.screenHeight = (screen.height - (hasAds ? 50 : 0)) + "px";
-		   
+	       var savingBarberSchedule = false;
+
 	       $scope.getUser = function () {
 	           $scope.userInfo = MbsAPI.getUserProfile({
 	               call: "login/gather", values: $scope.mbsProfileID,
@@ -1958,7 +2000,8 @@ angular.module('mbs.controllers', [])
 
                        toggleIonicLoading($ionicLoading, null);
                    }, function error(e) {
-                       if (e.status == 500 || e.status == 404) {
+                       if (e.status == 500 || e.status == 404 || barberID == null || barberID == undefined) {
+                           $scope.getUser();
                        }
                    });
 	       }
@@ -1971,42 +2014,47 @@ angular.module('mbs.controllers', [])
                            if (data.member) {
                                buildBarberProfile(data.member, $scope);
 
-                               /*$scope.barberImage = getProfileImage($scope.currentBarber.profile.image, "barber");
-                               $scope.isAvailable = convertBoolean($scope.currentBarber.barberStatus.isAvailable);
-                               $scope.isAppointments = convertBoolean($scope.currentBarber.acceptsAppointments);
-                    	       $scope.isAppointment = $scope.currentBarber.acceptsAppointments == "false" ? true : false;
-                    	       $scope.isVacationing = convertBoolean($scope.currentBarber.barberStatus.isOnVacation);
-                    	       
-                    	       if($scope.currentBarber.barberStatus.vacationStartDate && $scope.currentBarber.barberStatus.vacationEndDate)
-                        	   {
-                    	    	   $scope.vacationPeriod = formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationStartDate)) + " - " + 
-                            	   					formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationEndDate))
-                        	   }
-                    	       
-                               $("#barberScheduleDiv").append(getHoursOfOperation($scope.currentBarber.barberSchedule));
-                               $("#barberSpecialtiesDiv").append(getSpecialties($scope.currentBarber.barberSpecialties));
-                               
-                               var gallery = renderGallery($scope.currentBarber.barberImages, "#barberGallery");
-                               
-                               if(gallery != null)
-                            	   $("#barberGallery").append(gallery);
-                               
-                               $("#barberClients").append(renderClients($scope.currentBarber.barberClients));
-                                /*$("#shopBarbers").append(renderBarbers($scope.currentBarberShops[0].barbers));
-                               
-                               //renderBarberShopDetails($scope);
-                              /* blueimp.Gallery(
-                            		    document.getElementById('links').getElementsByTagName('a'),
-                            		    {
-                            		        container: '#blueimp-gallery',
-                            		        carousel: true,
-                            		    	fullScreen: true
-                            		    }
-                            		);*/
+                               if(savingBarberSchedule)
+                               {
+                                   savingBarberSchedule = false;
+
+                                   $scope.scheduleInfo = MbsAPI.createBarberSchedule({
+                                       call: "barber/schedule/create", values: barberID,
+                                       sunday: checkTime(scheduling.sunday), monday: checkTime(scheduling.monday), tuesday: checkTime(scheduling.tuesday),
+                                       wednesday: checkTime(scheduling.wednesday), thursday: checkTime(scheduling.thursday), friday: checkTime(scheduling.friday),
+                                       saturday: checkTime(scheduling.saturday), blackOutTime: checkTime(scheduling.freetime), profileID: $scope.mbsProfileID
+                                   },
+                                   function (data) {
+                                       if (data && data.response.success) {
+                                           if (data.member) {
+                                               $scope.currentBarber.barberSchedule = data.member;
+
+                                               //updateStatusMessage("Schedule saved successfully", "success");
+                                               toggleIonicLoading($ionicLoading, "Schedule saved successfully", true, false, "balanced");
+
+                                               $("#barberScheduleDiv").css("display", "none");
+                                               $("#barberSpecialtiesDivContainer").css("display", "block");
+
+                                               //showLoadingBar("Loading specialties...");
+                                               toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
+
+                                               $scope.getSpecialties();
+                                           }
+                                       } else {
+                                           //updateStatusMessage("Could not save schedule", "error");
+                                           toggleIonicLoading($ionicLoading, "Could not save schedule", true, true, "assertive");
+                                       }
+                                   }, function error(e) {
+                                       if (e.status == 500 || e.status == 404) {
+                                           toggleIonicLoading($ionicLoading, null, false);
+                                       }
+                                   });
+                               }
                            }
                        }
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -2077,40 +2125,45 @@ angular.module('mbs.controllers', [])
 	    		   hasError = false;
     		   }else
 			   {
-    			   if($scope.currentBarber == null || $scope.currentBarber == undefined)
-    				   $scope.getBarberDetails();
-    			   
-    			   $scope.scheduleInfo = MbsAPI.createBarberSchedule({
-    	               call: "barber/schedule/create", values: barberID,
-    	               sunday: checkTime(scheduling.sunday), monday: checkTime(scheduling.monday), tuesday: checkTime(scheduling.tuesday),
-    	               wednesday: checkTime(scheduling.wednesday), thursday: checkTime(scheduling.thursday), friday: checkTime(scheduling.friday),
-    	               saturday: checkTime(scheduling.saturday), blackOutTime: checkTime(scheduling.freetime), profileID: $scope.mbsProfileID
-    	           },
-                       function (data) {
-                           if (data && data.response.success) {
-                               if (data.member) {
-                                   $scope.currentBarber.barberSchedule = data.member;
-                                   
-                                   //updateStatusMessage("Schedule saved successfully", "success");
-                                   toggleIonicLoading($ionicLoading, "Schedule saved successfully", true, false, "balanced");
-                                   
-                                   $("#barberScheduleDiv").css("display", "none");
-                                   $("#barberSpecialtiesDivContainer").css("display", "block");
-                                   
-                                   //showLoadingBar("Loading specialties...");
-                                   toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
-                                   
-                        	       $scope.getSpecialties();
+	    	       if ($scope.currentBarber == null || $scope.currentBarber == undefined) {
+	    	           $scope.getBarberDetails();
+	    	           savingBarberSchedule = true;
+	    	       }
+	    	       else {
+	    	           savingBarberSchedule = false;
+
+	    	           $scope.scheduleInfo = MbsAPI.createBarberSchedule({
+	    	               call: "barber/schedule/create", values: barberID,
+	    	               sunday: checkTime(scheduling.sunday), monday: checkTime(scheduling.monday), tuesday: checkTime(scheduling.tuesday),
+	    	               wednesday: checkTime(scheduling.wednesday), thursday: checkTime(scheduling.thursday), friday: checkTime(scheduling.friday),
+	    	               saturday: checkTime(scheduling.saturday), blackOutTime: checkTime(scheduling.freetime), profileID: $scope.mbsProfileID
+	    	           },
+                           function (data) {
+                               if (data && data.response.success) {
+                                   if (data.member) {
+                                       $scope.currentBarber.barberSchedule = data.member;
+
+                                       //updateStatusMessage("Schedule saved successfully", "success");
+                                       toggleIonicLoading($ionicLoading, "Schedule saved successfully", true, false, "balanced");
+
+                                       $("#barberScheduleDiv").css("display", "none");
+                                       $("#barberSpecialtiesDivContainer").css("display", "block");
+
+                                       //showLoadingBar("Loading specialties...");
+                                       toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
+
+                                       $scope.getSpecialties();
+                                   }
+                               } else {
+                                   //updateStatusMessage("Could not save schedule", "error");
+                                   toggleIonicLoading($ionicLoading, "Could not save schedule", true, true, "assertive");
                                }
-                           }else
-                    	   {
-                               //updateStatusMessage("Could not save schedule", "error");
-                               toggleIonicLoading($ionicLoading, "Could not save schedule", true, true, "assertive");
-                    	   }
-                       }, function error(e) {
-                           if (e.status == 500 || e.status == 404) {
-                           }
-                       });
+                           }, function error(e) {
+                               if (e.status == 500 || e.status == 404) {
+                                   toggleIonicLoading($ionicLoading, null, false);
+                               }
+                           });
+	    	       }
 			   }
 	       }
 	       $scope.saveBarberSpecialties = function()
@@ -2167,6 +2220,7 @@ angular.module('mbs.controllers', [])
 	            	   }
 	               }, function error(e) {
 	                   if (e.status == 500 || e.status == 404) {
+	                       toggleIonicLoading($ionicLoading, null, false);
 	                   }
 	               });
     		   }else
@@ -2218,6 +2272,7 @@ angular.module('mbs.controllers', [])
 	    		   //removeLoadingBar();
 	    	   	}, function error(e) {
 	    	   	    if (e.status == 500 || e.status == 404) {
+	    	   	        $scope.getSpecialties();
 	    	   	    }
 	    	   	});
 	       }
@@ -2407,6 +2462,9 @@ angular.module('mbs.controllers', [])
 	       });
 	       
 	       //set default values 
+	       barberInfo.normalTimeIn = "8:00 AM";
+	       barberInfo.yearsOfExperience = "1";
+	       barberInfo.avgCutTime = "5";
     	   scheduling["sunday"] = "8:00 AM" + " - " + "8:00 AM";
     	   scheduling["monday"] = "8:00 AM" + " - " + "8:00 AM";
     	   scheduling["tuesday"] = "8:00 AM" + " - " + "8:00 AM";
@@ -2464,6 +2522,7 @@ angular.module('mbs.controllers', [])
                        $scope.getBarberDetails();
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -2493,6 +2552,7 @@ angular.module('mbs.controllers', [])
         	           toggleIonicLoading($ionicLoading, null);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -2553,6 +2613,7 @@ angular.module('mbs.controllers', [])
     				   toggleIonicLoading($ionicLoading, "Could not save barber info", true, true, "assertive");
 	    	   	}, function error(e) {
 	    	   	    if (e.status == 500 || e.status == 404) {
+	    	   	        toggleIonicLoading($ionicLoading, null, false);
 	    	   	    }
 	    	   	});
 	       }
@@ -2670,6 +2731,7 @@ angular.module('mbs.controllers', [])
                             }
                         }, function error(e) {
                             if (e.status == 500 || e.status == 404) {
+                                toggleIonicLoading($ionicLoading, null, false);
                             }
                         });
 	            }
@@ -2812,6 +2874,7 @@ angular.module('mbs.controllers', [])
                     	   }
                        }, function error(e) {
                            if (e.status == 500 || e.status == 404) {
+                               toggleIonicLoading($ionicLoading, null, false);
                            }
                        });
 			   }
@@ -2880,6 +2943,7 @@ angular.module('mbs.controllers', [])
 	            	   }
 	               }, function error(e) {
 	                   if (e.status == 500 || e.status == 404) {
+	                       toggleIonicLoading($ionicLoading, null, false);
 	                   }
 	               });
     		   }else
@@ -2936,6 +3000,7 @@ angular.module('mbs.controllers', [])
 	    	   	    toggleIonicLoading($ionicLoading, null);
 	    	   	}, function error(e) {
 	    	   	    if (e.status == 500 || e.status == 404) {
+	    	   	        toggleIonicLoading($ionicLoading, null, false);
 	    	   	    }
 	    	   	});
 	       };
@@ -3210,6 +3275,7 @@ angular.module('mbs.controllers', [])
                         }
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
 	       }
@@ -3298,6 +3364,7 @@ angular.module('mbs.controllers', [])
                        $scope.eventSources.push($scope.calendarEvents);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -3352,6 +3419,7 @@ angular.module('mbs.controllers', [])
 
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       }
@@ -3407,6 +3475,7 @@ angular.module('mbs.controllers', [])
                        //showNavigation("search");
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };
@@ -3606,6 +3675,7 @@ angular.module('mbs.controllers', [])
                             toggleIonicLoading($ionicLoading, null, false);
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 } else
@@ -3635,6 +3705,7 @@ angular.module('mbs.controllers', [])
                             toggleIonicLoading($ionicLoading, null, false);
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 }
@@ -3660,6 +3731,7 @@ angular.module('mbs.controllers', [])
 
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
             };
@@ -3845,6 +3917,7 @@ angular.module('mbs.controllers', [])
 
                             }, function error(e) {
                                 if (e.status == 500 || e.status == 404) {
+                                    toggleIonicLoading($ionicLoading, null, false);
                                 }
                             });
                     } else {
@@ -3872,6 +3945,7 @@ angular.module('mbs.controllers', [])
 
                         }, function error(e) {
                             if (e.status == 500 || e.status == 404) {
+                                toggleIonicLoading($ionicLoading, null, false);
                             }
                         });
                     }
@@ -3902,6 +3976,7 @@ angular.module('mbs.controllers', [])
 
                         }, function error(e) {
                             if (e.status == 500 || e.status == 404) {
+                                toggleIonicLoading($ionicLoading, null, false);
                             }
                         });
                 } else {
@@ -3921,6 +3996,7 @@ angular.module('mbs.controllers', [])
 
                     }, function error(e) {
                         if (e.status == 500 || e.status == 404) {
+                            toggleIonicLoading($ionicLoading, null, false);
                         }
                     });
                 }
@@ -4138,6 +4214,7 @@ angular.module('mbs.controllers', [])
                     toggleIonicLoading($ionicLoading, null, false);
                 }, function error(e) {
                     if (e.status == 500 || e.status == 404) {
+                        toggleIonicLoading($ionicLoading, null, false);
                     }
                 });
             };
@@ -4212,6 +4289,7 @@ angular.module('mbs.controllers', [])
                        toggleIonicLoading($ionicLoading, null, false);
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
+                           toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
 	       };

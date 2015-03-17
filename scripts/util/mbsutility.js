@@ -276,6 +276,7 @@ function setUserData($scope) {
     localStorage["mbsAccountType"] = $scope.mbsAccountType;
     localStorage["mbsGalleryID"] = $scope.mbsGalleryID;
     localStorage["mbsGalleryName"] = $scope.mbsGalleryName;
+    localStorage["mbsProfileImage"] = $scope.mbsProfileImage;
 
     if(isBarber($scope.mbsAccountType))
         localStorage["mbsBarberID"] = $scope.mbsBarberID;
@@ -361,12 +362,11 @@ function getUserData($scope) {
     $scope.mbsAccountType = localStorage["mbsAccountType"];
     $scope.mbsGalleryID = localStorage["mbsGalleryID"];
     $scope.mbsGalleryName = localStorage["mbsGalleryName"];
+    $scope.mbsProfileImage = localStorage["mbsProfileImage"];
     //$scope.newUser = (localStorage["newUser"] == "true");
 
     if(isBarber($scope.mbsAccountType))
         $scope.mbsBarberID = localStorage["mbsBarberID"];
-    if (true)
-        $scope.hasAds = true;
 
     var iconPrefix = "icon ";
 
@@ -674,6 +674,11 @@ function renderBarberShops(data, $scope, coords)
                                         }
                                     }
                                 }
+
+                                if (isBarber($scope.mbsAccountType))
+                                    shop.isCustomer = false;
+                                else
+                                    shop.isCustomer = true;
 
                                 $scope.createBarberShop(shop);
                             });
