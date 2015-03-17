@@ -37,9 +37,9 @@
                         <div id="ratingEditContainer" style="display:none;">
                             <output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>
                             <div class="range range-positive">
-                                <i class="starOutlineIcon"></i>
+                                <i ng-class="starOutlineIcon"></i>
                                 <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
-                                <i class="starIcon"></i>
+                                <i ng-class="starIcon"></i>
                             </div>
                             <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
                         </div>
@@ -54,7 +54,7 @@
                             <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
                         </div>
                         <hr />
-                        <textarea style="resize:none; font-size: 16px;" ng-hide="isVacationing" ng-cloak class="ng-cloak" disabled>Vacation Period: {{vacationPeriod}}</textarea>
+                        <textarea style="resize:none; font-size: 16px;" ng-hide="isVacationing == false" ng-cloak class="ng-cloak" disabled>Vacation Period: {{vacationPeriod}}</textarea>
                         <!--<div ng-bind-html="hoursOf">
                 </div>-->
                         <div class="list">

@@ -283,6 +283,9 @@ angular.module('mbs.controllers', [])
 
                 if (!failed)
                 {
+                    $("#l_email").val("");
+                    $("#l_password").val("");
+
                     var accountType = "account_type_customer";
 
                     $("#accountTypeButtons").find('input:radio').each(function () {
@@ -1520,7 +1523,8 @@ angular.module('mbs.controllers', [])
                                    client["clientImage"] = getProfileImage(client.profile.image, "profile");
                                    client["clientSince"] = getReadableMonth(dateCreated.getMonth()) + " " + dateCreated.getDate() + ", " + dateCreated.getFullYear();
 
-                                   if (client.profile.profileID == $scope.mbsProfileID || client.profile.profileID == $scope.currentBarber.profile.profileID)
+                                   if (client.profile.profileID == $scope.mbsProfileID || client.profile.profileID == $scope.currentBarber.profile.profileID
+                                       || $scope.currentBarber.profile.profileID == $scope.mbsProfileID)
                                        $scope.isClient = true;
                                });
 
