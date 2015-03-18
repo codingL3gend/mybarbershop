@@ -4,7 +4,7 @@
 /**controllers*/
 var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
-var iosTok, platformType, navigationData, hasAds = true, splashScreen;
+var iosTok, platformType, navigationData, hasAds = false, splashScreen;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
@@ -821,10 +821,10 @@ angular.module('mbs.controllers', [])
 	       $scope.gatherNearByBarberShops = function () {
 	           //showLoadingBar("Loading...");
 	           var posOptions = { timeout: 10000, enableHighAccuracy: false };
-
+	           alert($cordovaGeolocation);
 	           $cordovaGeolocation.getCurrentPosition(posOptions)
                                   .then(function (position) {
-
+                                      alert(posOptions);
                     var nearbyBarberShops = [];
 
                     $scope.nearbyShops = MbsAPI.getNearbyBarberShops({
@@ -4040,9 +4040,8 @@ angular.module('mbs.controllers', [])
             }
             
             function win(data) {
-                //console.log("Code = " + r.responseCode);
-                //console.log("Response = " + r.response);
-                //console.log("Sent = " + r.bytesSent);
+                toggleIonicLoading($ionicLoading, "Image uploaded successfully!", true, false, "balanced");
+
                 if(data.response)
                 {
                     data = JSON.parse(data.response);
@@ -4060,14 +4059,26 @@ angular.module('mbs.controllers', [])
                             dateCreated: data.media.dateCreated
                         };
 
-                        if (type == "User")
+                        if (type == "User") {
+                            if (!$scope.currentProfile.images)
+                                $scope.currentProfile.images = [];
+
                             $scope.currentProfile.images.push(image);
+                        }
                         else
-                            if (type == "Barber")
+                            if (type == "Barber") {
+                                if (!$scope.currentBarber.barberImages)
+                                    $scope.currentBarber.barberImages = [];
+
                                 $scope.currentBarber.barberImages.push(image);
+                            }
                             else
-                                if (type == "BarberShop")
+                                if (type == "BarberShop") {
+                                    if (!$scope.currentBarberShops[0].imgaes)
+                                        $scope.currentBarberShops[0].images = [];
+
                                     $scope.currentBarberShops[0].images.push(image);
+                                }
 
                         if (!$scope.imageInfo)
                             $scope.imageInfo = [];
@@ -4077,8 +4088,8 @@ angular.module('mbs.controllers', [])
                         toggleIonicLoading($ionicLoading, null);
                         $scope.cancelImageUpload();
                     }
-                }
-
+                }else
+                    toggleIonicLoading($ionicLoading, null);
             }
 
             function fail(error) {

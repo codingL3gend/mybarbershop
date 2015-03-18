@@ -395,7 +395,7 @@ function getUserData($scope) {
             $scope.menuIcon = iconPrefix + "ion-android-menu";
             $scope.searchIcon = iconPrefix + "ion-android-search";
             $scope.notificationsIcon = iconPrefix + "ion-android-mail";
-            $scope.profileIcon = iconPrefix + "ion-anroid-person";
+            $scope.profileIcon = iconPrefix + "ion-android-person";
             $scope.galleryIcon = iconPrefix + "ion-android-film";
             $scope.logOutIcon = iconPrefix + "ion-android-exit";
             $scope.homeIcon = iconPrefix + "ion-android-home";
