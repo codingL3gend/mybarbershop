@@ -35,7 +35,6 @@ angular.module('mbs.controllers', [])
 
             $rootScope.$on('$cordovaPush:notificationReceived', function (event, notification)
             {
-                alert(JSON.stringify(notification));
                 if (notification.notification != undefined)
                     notification = notification.notification;
 
@@ -59,7 +58,6 @@ angular.module('mbs.controllers', [])
                 }
                 else
                     if (ionic.Platform.isAndroid()) {
-                        alert(notification.event);
                         switch (notification.event) {
                             case 'registered':
                                 if (notification.regid.length > 0) {
@@ -427,6 +425,7 @@ angular.module('mbs.controllers', [])
             };
 
             function handlePushNotificationRegistration(tokenID, platformType) {
+                
                 MbsAPI.registerForPushNotifications({
                     call: "notification/register/device", values: $scope.mbsProfileID, deviceID: tokenID, deviceType: platformType,
                     mobileDeviceID: $cordovaDevice.getUUID()
@@ -514,11 +513,11 @@ angular.module('mbs.controllers', [])
                                     if ($scope.currentAppointments.length == 0)
                                     {
                                         $scope.hasAppointments = false;
-                                        $scope.appointmentHeight = ((screen.height / 2) - 30) + "px";//"100px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 80 : 30)) + "px";//"100px";
                                     } else
                                     {
                                         $scope.hasAppointments = true;
-                                        $scope.appointmentHeight = (screen.height / 2) + "px";//"250px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 80 : 0)) + "px";//"250px";
                                     }
 
                                     if ($scope.currentBarberShops.length == 0)
