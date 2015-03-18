@@ -513,11 +513,11 @@ angular.module('mbs.controllers', [])
                                     if ($scope.currentAppointments.length == 0)
                                     {
                                         $scope.hasAppointments = false;
-                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 80 : 30)) + "px";//"100px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 30)) + "px";//"100px";
                                     } else
                                     {
                                         $scope.hasAppointments = true;
-                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 80 : 0)) + "px";//"250px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 0)) + "px";//"250px";
                                     }
 
                                     if ($scope.currentBarberShops.length == 0)
@@ -539,6 +539,7 @@ angular.module('mbs.controllers', [])
                             //error getting user data
                             toggleIonicLoading($ionicLoading, "Could not load profile", true, true, "assertive");
                             //showCordovaLoading($cordovaSpinnerDialog, "Profile Loading Failed", "Could not load profile", false, true);
+                            toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
                             $scope.getUser();
                         }
 
