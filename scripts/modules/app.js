@@ -41,6 +41,7 @@ angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 
                 //splashScreen = $cordovaSplashscreen;
 
                 $cordovaPush.register(config).then(function (result) {
+                    alert('registered');
                     if (ionic.Platform.isIOS())
                     {
                         iosTok = result;

@@ -35,6 +35,7 @@ angular.module('mbs.controllers', [])
 
             $rootScope.$on('$cordovaPush:notificationReceived', function (event, notification)
             {
+                alert(JSON.stringify(notification));
                 if (notification.notification != undefined)
                     notification = notification.notification;
 
@@ -58,6 +59,7 @@ angular.module('mbs.controllers', [])
                 }
                 else
                     if (ionic.Platform.isAndroid()) {
+                        alert(notification.event);
                         switch (notification.event) {
                             case 'registered':
                                 if (notification.regid.length > 0) {
@@ -821,10 +823,10 @@ angular.module('mbs.controllers', [])
 	       $scope.gatherNearByBarberShops = function () {
 	           //showLoadingBar("Loading...");
 	           var posOptions = { timeout: 10000, enableHighAccuracy: false };
-	           alert($cordovaGeolocation);
+	           
 	           $cordovaGeolocation.getCurrentPosition(posOptions)
                                   .then(function (position) {
-                                      alert(posOptions);
+                                      
                     var nearbyBarberShops = [];
 
                     $scope.nearbyShops = MbsAPI.getNearbyBarberShops({
