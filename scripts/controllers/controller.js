@@ -1491,8 +1491,8 @@ angular.module('mbs.controllers', [])
 
                     	       if($scope.currentBarber.barberStatus.vacationStartDate && $scope.currentBarber.barberStatus.vacationEndDate)
                         	   {
-                    	    	   $scope.vacationPeriod = formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationStartDate)) + " - " + 
-                            	   					formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationEndDate))
+                    	    	   $scope.vacationPeriod = formatDateNoTime($scope.currentBarber.barberStatus.vacationStartDate) + " - " + 
+                            	   					formatDateNoTime($scope.currentBarber.barberStatus.vacationEndDate)
                     	       } else
                     	       {
                     	           $scope.vacationPeriod = "N/A";
@@ -3331,13 +3331,13 @@ angular.module('mbs.controllers', [])
                                        if(appointment.barber)
                                        {
                                     	   currentAppointment.title = appointment.barber.profile.displayName;
-                                           currentAppointment.image = getProfileImage(appointment.profile.image);
+                                           currentAppointment.image = appointment.appointmentImage;
                                        }
                                        else
                                     	   if(appointment.profile)
                                     	   {
                                     		   currentAppointment.title = appointment.profile.displayName;
-                                               currentAppointment.image = getProfileImage(appointment.image);
+                                    		   currentAppointment.image = appointment.appointmentImage;
                                     	   }
                                        
                                        currentAppointment.color = appointment.wasCancelled == "true" ? "red" : "green";
@@ -3365,7 +3365,7 @@ angular.module('mbs.controllers', [])
                             	   vacation.class = "event-info";
                             	   vacation.start = splitDate($scope.currentBarber.barberStatus.vacationStartDate);
                                    vacation.status = "Vacation";
-                                   vacation.end = splitDate($scope.currentBarber.barberStatus.vacationEndDate);
+                                   vacation.end = moment(splitDate($scope.currentBarber.barberStatus.vacationEndDate)).add(1, "days");
 
                                    $scope.calendarEvents.push(vacation);
                         	   }
@@ -3391,7 +3391,7 @@ angular.module('mbs.controllers', [])
 	    	   
 	           $scope.userAppt = MbsAPI.createAppointment({
 	               call: "appointment/create", values: $scope.mbsProfileID,
-	               appointmentDate: apptDate.toUTCString(),
+	               appointmentDate: createJavaDate(apptDate),
 	               appointmentStatus: "Accepted", 
 	               barberID: $scope.currentBarber.barberID,
 	               barberProfileID: barberProfileID,
@@ -3407,6 +3407,7 @@ angular.module('mbs.controllers', [])
                                 currentAppointment.barberID = data.appointment.barberID;
                                 currentAppointment.profileID = data.appointment.profileID;
                                 currentAppointment.wasCancelled = "false";
+                                data.appointment["wasCancelled"] = "false";
 
                                 currentAppointment.image = getProfileImage($scope.currentProfile.image);
                                 data.appointment.appointmentImage = getProfileImage($scope.currentProfile.image);
@@ -3509,6 +3510,8 @@ angular.module('mbs.controllers', [])
 	           $scope.popover = popover;
 	       });*/
 
+	       $scope.$cordovaDialogs = $cordovaDialogs;
+
 	       $scope.getAppointmentDetails = function (date, event, addDays) {
 	           if($scope.currentAppointments && date)
 	           {
@@ -3535,15 +3538,17 @@ angular.module('mbs.controllers', [])
 	                $scope.availableApptTimes = getAvailableAppointmentTimes($scope, newDate, $scope.apts, null, null, $filter);
 	           }
 
-	           $scope.appointmentPopup = $ionicPopup.show({
-	               templateUrl: 'templates/appointment-popover.html',
-	               //title: 'Appointments',
-	               scope: $scope
-	           });
+	           if ($scope.availableApptTimes != false) {
+	               $scope.appointmentPopup = $ionicPopup.show({
+	                   templateUrl: 'templates/appointment-popover.html',
+	                   //title: 'Appointments',
+	                   scope: $scope
+	               });
 
-	           $scope.appointmentPopup.then(function (res) {
-	               var s = ";;";
-	           });
+	               $scope.appointmentPopup.then(function (res) {
+	                   var s = ";;";
+	               });
+	           }
 
 	           $scope.confirmAppointment = function (apptTime) {
 	               var confirmPopup = $cordovaDialogs.confirm('Set appointment for this time? ' + apptTime, 
@@ -3555,14 +3560,14 @@ angular.module('mbs.controllers', [])
 	               });
 	           };
 
-	           /*var p = $(".popup").css("width");
+	           var p = $(".popup").css("width");
 
 	           $scope.screenWidth = (screen.width - 75) + "px";
 
 	           $(".popup").css({
 	               "height": "200px",
                    "width": "50px"
-	            });*/
+	            });
 	       };
 
 	       var apptVisible = true;

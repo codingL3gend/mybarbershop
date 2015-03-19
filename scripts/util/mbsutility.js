@@ -837,10 +837,11 @@ function buildBarberSearchProfile(barber) {
         currentBarber.isOwner = barber.isOwner;
         currentBarber.profile = barber.profile;
 
-        if (barber.profile.image.imageID > 0)
-            currentBarber.barberImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
-        else
-            currentBarber.barberImage = getProfileImage(barber.profile.image, "barber");
+        if (barber.profile.image.imageID > 0) {
+            barber.profile.image.defaultImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
+        }
+        
+        currentBarber.barberImage = getProfileImage(barber.profile.image, "barber");
 
         currentBarber.barberShop = barber.barberShop;
         currentBarber.barberStatus = barber.barberStatus;
@@ -975,13 +976,21 @@ function buildAppointments(appointments, $scope, $filter, useFilter) {
             if (appointment.barber) {
                 currentAppointment.barber = appointment.barber;
                 currentAppointment.displayName = appointment.barber.profile.displayName;
-                currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile);
+
+                if (appointment.barber.profile.image && appointment.barber.profile.image.imageID > 0)
+                    appointment.barber.profile.image["defaultImage"] = appointment.barber.profile.image.fileLocation + appointment.barber.profile.image.fileName;
+
+                currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile.image, "Barber");
             }
             else
                 if (appointment.profile) {
                     currentAppointment.profile = appointment.profile;
                     currentAppointment.displayName = appointment.profile.displayName;
-                    currentAppointment.appointmentImage = getProfileImage(appointment.profile);
+
+                    if (appointment.profile.image && appointment.profile.image.imageID > 0)
+                        appointment.profile.image["defaultImage"] = appointment.profile.image.fileLocation + appointment.profile.image.fileName;
+
+                    currentAppointment.appointmentImage = getProfileImage(appointment.profile.image, "Profile");
                 }
 
             $scope.currentAppointments.push(currentAppointment);
@@ -2185,8 +2194,10 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 		    minutes = hours.toString().indexOf(".") > -1 ? 30 : 0;
 		    hours = hours.toString().indexOf(".") > -1 ? hours.toString().replace(".5", "") : hours;
 
-		    apptDate.setMinutes(minutes);
-		    apptDate.setHours(hours);
+		    apptDate = moment(apptDate);
+		    
+		    apptDate.set("minute", minutes);
+		    apptDate.set("hours", hours);
 
 		    tScope.createAppointment(apptDate);
 		} else
@@ -2297,7 +2308,10 @@ function getAvailableAppointmentTimes($scope, day, events, slider, calendar, $fi
 		   if(hours == "OFF" || checkVacation(day, $scope))
 		   {
 			   //slider.stop(false, true).slideToggle("fast");
-			   //calendar.activecell = 0;
+		       //calendar.activecell = 0;
+		       showCordovaAlert($scope.$cordovaDialogs, "Barber Unavailable", $scope.currentBarber.profile.displayName + " is unavailable for appointments at this time!", "OK");
+
+		       return false;
 		   }else
 			   {
 			   		getDefaultApptTimes($scope);
