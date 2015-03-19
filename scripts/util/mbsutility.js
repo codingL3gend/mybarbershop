@@ -2251,7 +2251,7 @@ function getAvailableAppointmentTimes($scope, day, events, slider, calendar, $fi
     //filter out appt times
     if($scope.barberSchedule && $scope.barberSchedule.barberScheduleID > 0)
     {
-       var hours = $scope.barberSchedule[getReadableDayForCalendar(day.getDay()).toLowerCase()];
+       var hours = $scope.barberSchedule[getReadableDay(day.getDay()).toLowerCase()];
        
        if(hours != null && hours != "OFF" && !checkVacation(day, $scope))
 	   {
