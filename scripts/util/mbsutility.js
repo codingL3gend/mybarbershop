@@ -2199,6 +2199,9 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 		    apptDate.set("minute", minutes);
 		    apptDate.set("hours", hours);
 
+		    if (ionic.Platform.isAndroid())
+		        apptDate.add(1, "hours");
+
 		    tScope.createAppointment(apptDate);
 		} else
 		    //postStatusMessage("Appointments can only be made for " + formatDateNoTime(new Date()) + " or later", "error");
