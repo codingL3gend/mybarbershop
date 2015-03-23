@@ -5,7 +5,10 @@
 var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
 var iosTok, platformType, navigationData, hasAds = false, splashScreen;
+<<<<<<< HEAD
 var isProd = true;
+=======
+>>>>>>> origin/master
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
