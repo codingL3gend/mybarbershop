@@ -1,8 +1,8 @@
 ﻿var places = 'AIzaSyBRn4K1hSAsfob8cB064EQLpvk4M4l8x1Q';
 var dataObjects;
 var map;
-var SITE_ENDPOINT = "http://107.146.188.140:8080/";
-var IMAGE_ENDPOINT = "http://107.146.188.140:8080/";
+var SITE_ENDPOINT = isProd ? "http://mybikeconnect.com/" : "http://107.146.188.140:8080/";
+var IMAGE_ENDPOINT = isProd ? "http://mybikeconnect.com/" : "http://107.146.188.140:8080/";
 var globalScope, navStack = [];
 
 //$(function(){
@@ -395,7 +395,7 @@ function getUserData($scope) {
             $scope.menuIcon = iconPrefix + "ion-android-menu";
             $scope.searchIcon = iconPrefix + "ion-android-search";
             $scope.notificationsIcon = iconPrefix + "ion-android-mail";
-            $scope.profileIcon = iconPrefix + "ion-anroid-person";
+            $scope.profileIcon = iconPrefix + "ion-android-person";
             $scope.galleryIcon = iconPrefix + "ion-android-film";
             $scope.logOutIcon = iconPrefix + "ion-android-exit";
             $scope.homeIcon = iconPrefix + "ion-android-home";
@@ -837,10 +837,11 @@ function buildBarberSearchProfile(barber) {
         currentBarber.isOwner = barber.isOwner;
         currentBarber.profile = barber.profile;
 
-        if (barber.profile.image.imageID > 0)
-            currentBarber.barberImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
-        else
-            currentBarber.barberImage = getProfileImage(barber.profile.image, "barber");
+        if (barber.profile.image.imageID > 0) {
+            barber.profile.image.defaultImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
+        }
+        
+        currentBarber.barberImage = getProfileImage(barber.profile.image, "barber");
 
         currentBarber.barberShop = barber.barberShop;
         currentBarber.barberStatus = barber.barberStatus;
@@ -975,13 +976,21 @@ function buildAppointments(appointments, $scope, $filter, useFilter) {
             if (appointment.barber) {
                 currentAppointment.barber = appointment.barber;
                 currentAppointment.displayName = appointment.barber.profile.displayName;
-                currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile);
+
+                if (appointment.barber.profile.image && appointment.barber.profile.image.imageID > 0)
+                    appointment.barber.profile.image["defaultImage"] = appointment.barber.profile.image.fileLocation + appointment.barber.profile.image.fileName;
+
+                currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile.image, "Barber");
             }
             else
                 if (appointment.profile) {
                     currentAppointment.profile = appointment.profile;
                     currentAppointment.displayName = appointment.profile.displayName;
-                    currentAppointment.appointmentImage = getProfileImage(appointment.profile);
+
+                    if (appointment.profile.image && appointment.profile.image.imageID > 0)
+                        appointment.profile.image["defaultImage"] = appointment.profile.image.fileLocation + appointment.profile.image.fileName;
+
+                    currentAppointment.appointmentImage = getProfileImage(appointment.profile.image, "Profile");
                 }
 
             $scope.currentAppointments.push(currentAppointment);
@@ -2185,8 +2194,13 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 		    minutes = hours.toString().indexOf(".") > -1 ? 30 : 0;
 		    hours = hours.toString().indexOf(".") > -1 ? hours.toString().replace(".5", "") : hours;
 
-		    apptDate.setMinutes(minutes);
-		    apptDate.setHours(hours);
+		    apptDate = moment(apptDate);
+		    
+		    apptDate.set("minute", minutes);
+		    apptDate.set("hours", hours);
+
+		    if (ionic.Platform.isAndroid())
+		        apptDate.add(1, "hours");
 
 		    tScope.createAppointment(apptDate);
 		} else
@@ -2240,7 +2254,7 @@ function getAvailableAppointmentTimes($scope, day, events, slider, calendar, $fi
     //filter out appt times
     if($scope.barberSchedule && $scope.barberSchedule.barberScheduleID > 0)
     {
-       var hours = $scope.barberSchedule[getReadableDayForCalendar(day.getDay()).toLowerCase()];
+       var hours = $scope.barberSchedule[getReadableDay(day.getDay()).toLowerCase()];
        
        if(hours != null && hours != "OFF" && !checkVacation(day, $scope))
 	   {
@@ -2297,7 +2311,10 @@ function getAvailableAppointmentTimes($scope, day, events, slider, calendar, $fi
 		   if(hours == "OFF" || checkVacation(day, $scope))
 		   {
 			   //slider.stop(false, true).slideToggle("fast");
-			   //calendar.activecell = 0;
+		       //calendar.activecell = 0;
+		       showCordovaAlert($scope.$cordovaDialogs, "Barber Unavailable", $scope.currentBarber.profile.displayName + " is unavailable for appointments at this time!", "OK");
+
+		       return false;
 		   }else
 			   {
 			   		getDefaultApptTimes($scope);
@@ -2630,7 +2647,7 @@ function getUserNotifications($scope, $ionicPopup)
         });
         
         $scope.notificationPopup.then(function (res) {
-            clearNotificationData();
+            
 
             $scope.hasNotifications = false;
         });
@@ -2644,6 +2661,8 @@ function getUserNotifications($scope, $ionicPopup)
             left: "5px",
             right: "5px"
         });*/
+        clearNotificationData();
+
         $scope.hasNotifications = false;
     }
 }

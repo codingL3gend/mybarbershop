@@ -17,8 +17,8 @@
                 <label>{{appointment.appointmentStatus.appointmentStatus}}</label>
                 <textarea style="resize:none" disabled>{{appointment.time}}</textarea>
 
-                <ion-option-button class="button-assertive" ng-hide="{{appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'
-                                                                      || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled' && mbsProfileID != appointment.profileID}}"
+                <ion-option-button class="button-assertive" ng-hide="{{(appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'
+                                                                      || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled' && mbsProfileID != appointment.profileID)}}"
                                    ng-click="deleteAppointment(appointment)">Cancel</ion-option-button>
             </ion-item>
             <ion-item ng-hide="apts.length > 0">
@@ -27,14 +27,14 @@
         </ion-list>
     </div>
     <ion-list id="createView" type="card" style="display:none" ng-style="{width: screenWidth, display: 'none'}">
-        <ion-item ng-repeat="apptTime in availableApptTimes | orderBy:appptTime" ng-click="confirmAppointment(apptTime)">
+        <ion-item ng-repeat="apptTime in availableApptTimes | orderBy:appptTime" ng-click="confirmAppointment(apptTime)" ng-hide="apptTime == null">
             <label class="item-radio">
                 <input type="radio" name="group"
                        ng-disabled="apptTime.indexOf('Taken') > -1" />
                 <div>
                     {{apptTime}}
                 </div>
-                <i class="'radio-icon ' + checkmarkIcon"></i>
+                <i ng-class="'radio-icon ' + checkmarkIcon"></i>
             </label>
         </ion-item>
     </ion-list>

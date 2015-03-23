@@ -4,7 +4,8 @@
 /**controllers*/
 var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
-var iosTok, platformType, navigationData, hasAds = true, splashScreen;
+var iosTok, platformType, navigationData, hasAds = false, splashScreen;
+var isProd = true;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
@@ -425,6 +426,7 @@ angular.module('mbs.controllers', [])
             };
 
             function handlePushNotificationRegistration(tokenID, platformType) {
+                
                 MbsAPI.registerForPushNotifications({
                     call: "notification/register/device", values: $scope.mbsProfileID, deviceID: tokenID, deviceType: platformType,
                     mobileDeviceID: $cordovaDevice.getUUID()
@@ -512,11 +514,11 @@ angular.module('mbs.controllers', [])
                                     if ($scope.currentAppointments.length == 0)
                                     {
                                         $scope.hasAppointments = false;
-                                        $scope.appointmentHeight = ((screen.height / 2) - 30) + "px";//"100px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 30)) + "px";//"100px";
                                     } else
                                     {
                                         $scope.hasAppointments = true;
-                                        $scope.appointmentHeight = (screen.height / 2) + "px";//"250px";
+                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 0)) + "px";//"250px";
                                     }
 
                                     if ($scope.currentBarberShops.length == 0)
@@ -538,6 +540,7 @@ angular.module('mbs.controllers', [])
                             //error getting user data
                             toggleIonicLoading($ionicLoading, "Could not load profile", true, true, "assertive");
                             //showCordovaLoading($cordovaSpinnerDialog, "Profile Loading Failed", "Could not load profile", false, true);
+                            toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
                             $scope.getUser();
                         }
 
@@ -821,10 +824,10 @@ angular.module('mbs.controllers', [])
 	       $scope.gatherNearByBarberShops = function () {
 	           //showLoadingBar("Loading...");
 	           var posOptions = { timeout: 10000, enableHighAccuracy: false };
-
+	           
 	           $cordovaGeolocation.getCurrentPosition(posOptions)
                                   .then(function (position) {
-
+                                      
                     var nearbyBarberShops = [];
 
                     $scope.nearbyShops = MbsAPI.getNearbyBarberShops({
@@ -1489,8 +1492,8 @@ angular.module('mbs.controllers', [])
 
                     	       if($scope.currentBarber.barberStatus.vacationStartDate && $scope.currentBarber.barberStatus.vacationEndDate)
                         	   {
-                    	    	   $scope.vacationPeriod = formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationStartDate)) + " - " + 
-                            	   					formatDateNoTime(new Date($scope.currentBarber.barberStatus.vacationEndDate))
+                    	    	   $scope.vacationPeriod = formatDateNoTime($scope.currentBarber.barberStatus.vacationStartDate) + " - " + 
+                            	   					formatDateNoTime($scope.currentBarber.barberStatus.vacationEndDate)
                     	       } else
                     	       {
                     	           $scope.vacationPeriod = "N/A";
@@ -3329,13 +3332,13 @@ angular.module('mbs.controllers', [])
                                        if(appointment.barber)
                                        {
                                     	   currentAppointment.title = appointment.barber.profile.displayName;
-                                           currentAppointment.image = getProfileImage(appointment.profile.image);
+                                           currentAppointment.image = appointment.appointmentImage;
                                        }
                                        else
                                     	   if(appointment.profile)
                                     	   {
                                     		   currentAppointment.title = appointment.profile.displayName;
-                                               currentAppointment.image = getProfileImage(appointment.image);
+                                    		   currentAppointment.image = appointment.appointmentImage;
                                     	   }
                                        
                                        currentAppointment.color = appointment.wasCancelled == "true" ? "red" : "green";
@@ -3363,7 +3366,7 @@ angular.module('mbs.controllers', [])
                             	   vacation.class = "event-info";
                             	   vacation.start = splitDate($scope.currentBarber.barberStatus.vacationStartDate);
                                    vacation.status = "Vacation";
-                                   vacation.end = splitDate($scope.currentBarber.barberStatus.vacationEndDate);
+                                   vacation.end = moment(splitDate($scope.currentBarber.barberStatus.vacationEndDate)).add(1, "days");
 
                                    $scope.calendarEvents.push(vacation);
                         	   }
@@ -3389,7 +3392,7 @@ angular.module('mbs.controllers', [])
 	    	   
 	           $scope.userAppt = MbsAPI.createAppointment({
 	               call: "appointment/create", values: $scope.mbsProfileID,
-	               appointmentDate: apptDate.toUTCString(),
+	               appointmentDate: createJavaDate(apptDate),
 	               appointmentStatus: "Accepted", 
 	               barberID: $scope.currentBarber.barberID,
 	               barberProfileID: barberProfileID,
@@ -3405,6 +3408,7 @@ angular.module('mbs.controllers', [])
                                 currentAppointment.barberID = data.appointment.barberID;
                                 currentAppointment.profileID = data.appointment.profileID;
                                 currentAppointment.wasCancelled = "false";
+                                data.appointment["wasCancelled"] = "false";
 
                                 currentAppointment.image = getProfileImage($scope.currentProfile.image);
                                 data.appointment.appointmentImage = getProfileImage($scope.currentProfile.image);
@@ -3507,6 +3511,8 @@ angular.module('mbs.controllers', [])
 	           $scope.popover = popover;
 	       });*/
 
+	       $scope.$cordovaDialogs = $cordovaDialogs;
+
 	       $scope.getAppointmentDetails = function (date, event, addDays) {
 	           if($scope.currentAppointments && date)
 	           {
@@ -3533,15 +3539,17 @@ angular.module('mbs.controllers', [])
 	                $scope.availableApptTimes = getAvailableAppointmentTimes($scope, newDate, $scope.apts, null, null, $filter);
 	           }
 
-	           $scope.appointmentPopup = $ionicPopup.show({
-	               templateUrl: 'templates/appointment-popover.html',
-	               //title: 'Appointments',
-	               scope: $scope
-	           });
+	           if ($scope.availableApptTimes != false) {
+	               $scope.appointmentPopup = $ionicPopup.show({
+	                   templateUrl: 'templates/appointment-popover.html',
+	                   //title: 'Appointments',
+	                   scope: $scope
+	               });
 
-	           $scope.appointmentPopup.then(function (res) {
-	               var s = ";;";
-	           });
+	               $scope.appointmentPopup.then(function (res) {
+	                   var s = ";;";
+	               });
+	           }
 
 	           $scope.confirmAppointment = function (apptTime) {
 	               var confirmPopup = $cordovaDialogs.confirm('Set appointment for this time? ' + apptTime, 
@@ -3553,14 +3561,14 @@ angular.module('mbs.controllers', [])
 	               });
 	           };
 
-	           /*var p = $(".popup").css("width");
+	           var p = $(".popup").css("width");
 
 	           $scope.screenWidth = (screen.width - 75) + "px";
 
 	           $(".popup").css({
 	               "height": "200px",
                    "width": "50px"
-	            });*/
+	            });
 	       };
 
 	       var apptVisible = true;
@@ -3661,7 +3669,7 @@ angular.module('mbs.controllers', [])
                 if (type == "Barber" || isBarber($scope.mbsAccountType))
                 {
                     $scope.profileInfo = MbsAPI.getBaberProfile({
-                        call: "barber/gather/details", barberID: $scope.mbsBarberID
+                        call: "barber/gather/details", barberID: $scope.mbsBarberID != null ? $scope.mbsBarberID : userID
                     },
                     function (data) {
                         if (data && data.response.success) {
@@ -4040,9 +4048,8 @@ angular.module('mbs.controllers', [])
             }
             
             function win(data) {
-                //console.log("Code = " + r.responseCode);
-                //console.log("Response = " + r.response);
-                //console.log("Sent = " + r.bytesSent);
+                toggleIonicLoading($ionicLoading, "Image uploaded successfully!", true, false, "balanced");
+
                 if(data.response)
                 {
                     data = JSON.parse(data.response);
@@ -4060,14 +4067,26 @@ angular.module('mbs.controllers', [])
                             dateCreated: data.media.dateCreated
                         };
 
-                        if (type == "User")
+                        if (type == "User") {
+                            if (!$scope.currentProfile.images)
+                                $scope.currentProfile.images = [];
+
                             $scope.currentProfile.images.push(image);
+                        }
                         else
-                            if (type == "Barber")
+                            if (type == "Barber") {
+                                if (!$scope.currentBarber.barberImages)
+                                    $scope.currentBarber.barberImages = [];
+
                                 $scope.currentBarber.barberImages.push(image);
+                            }
                             else
-                                if (type == "BarberShop")
+                                if (type == "BarberShop") {
+                                    if (!$scope.currentBarberShops[0].imgaes)
+                                        $scope.currentBarberShops[0].images = [];
+
                                     $scope.currentBarberShops[0].images.push(image);
+                                }
 
                         if (!$scope.imageInfo)
                             $scope.imageInfo = [];
@@ -4077,8 +4096,8 @@ angular.module('mbs.controllers', [])
                         toggleIonicLoading($ionicLoading, null);
                         $scope.cancelImageUpload();
                     }
-                }
-
+                }else
+                    toggleIonicLoading($ionicLoading, null);
             }
 
             function fail(error) {

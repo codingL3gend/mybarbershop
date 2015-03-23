@@ -3,7 +3,7 @@
 angular.module('mbs.services', ['ngRoute', 'ngResource'])
 	   .factory('MbsAPI',
 			   function ($resource) {
-			       return $resource('http://107.146.188.140\\:8080/my.barber.shop.api/:call/:values', { call: '', values: '' },
+			       return $resource('http://' + (isProd ? 'mybikeconnect.com' : '107.146.188.140\\:8080') + '/my.barber.shop.api/:call/:values', { call: '', values: '' },
                                     {//98.71.97.100
                                         //		   								query: {method: 'GET', params:{phoneId: 'phones'}, isArray:true},
                                         checkUsername: { method: 'GET' },
