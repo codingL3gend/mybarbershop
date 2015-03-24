@@ -5,7 +5,7 @@
 var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
 var iosTok, platformType, navigationData, hasAds = false, splashScreen;
-var isProd = false;
+var isProd = true;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
@@ -463,7 +463,7 @@ angular.module('mbs.controllers', [])
                     db.transaction(checkUser, errorCB);
                 }*/
         }])
-	   .controller('siteController', ['$scope', '$location', 'MbsAPI', '$routeParams', '$ionicLoading', '$filter', '$sce', '$ionicSideMenuDelegate', '$state', '$ionicPopup', '$rootScope', '$cordovaAppAvailability', '$cordovaSpinnerDialog'/*, '$cordovaAdMobPro'*/, function ($scope, $location, MbsAPI, $routeParams, $ionicLoading, $filter, $sce, $ionicSideMenuDelegate, $state, $ionicPopup, $rootScope, $cordovaAppAvailability, $cordovaSpinnerDialog/*, $cordovaAdMobPro*/) {
+	   .controller('siteController', ['$scope', '$location', 'MbsAPI', '$routeParams', '$ionicLoading', '$filter', '$sce', '$ionicSideMenuDelegate', '$state', '$ionicPopup', '$rootScope', '$cordovaAppAvailability', '$cordovaSpinnerDialog', '$ionicListDelegate'/*, '$cordovaAdMobPro'*/, function ($scope, $location, MbsAPI, $routeParams, $ionicLoading, $filter, $sce, $ionicSideMenuDelegate, $state, $ionicPopup, $rootScope, $cordovaAppAvailability, $cordovaSpinnerDialog, $ionicListDelegate/*, $cordovaAdMobPro*/) {
 	       toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
 	       //showCordovaLoading($cordovaSpinnerDialog, "Loading", "Loading information ...", true, true);
 	       getUserData($scope);
@@ -510,7 +510,8 @@ angular.module('mbs.controllers', [])
                                     $scope.hasBarberShops = false;
                                     $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
 
-                                    $("#shopScroll").css("top", "-80px");
+                                    if (screen.height >= 1600)
+                                        $("#shopScroll").css("top", "-80px");
                                 } else
                                 {
                                     if ($scope.currentAppointments.length == 0)
@@ -630,6 +631,7 @@ angular.module('mbs.controllers', [])
                        }
 
                        //showNavigation("search");
+                       $ionicListDelegate.closeOptionButtons();
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
                            toggleIonicLoading($ionicLoading, null, false);
