@@ -506,7 +506,7 @@ angular.module('mbs.controllers', [])
                                 if ($scope.currentAppointments.length == 0 && $scope.currentBarberShops.length == 0)
                                 {
                                     $scope.hasAppointments = false;
-                                    $scope.appointmentHeight ="250px"; //(screen.height / 3) + "px";
+                                    $scope.appointmentHeight = screen.height > 1800 ? "300px" : (screen.height / 2) + "px"; //"250px";
                                     $scope.hasBarberShops = false;
                                     $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
                                 } else
@@ -514,11 +514,11 @@ angular.module('mbs.controllers', [])
                                     if ($scope.currentAppointments.length == 0)
                                     {
                                         $scope.hasAppointments = false;
-                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 30)) + "px";//"100px";
+                                        $scope.appointmentHeight = screen.height > 1800 ? "300px" : (((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 30)) + "px");//"100px";
                                     } else
                                     {
                                         $scope.hasAppointments = true;
-                                        $scope.appointmentHeight = ((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 0)) + "px";//"250px";
+                                        $scope.appointmentHeight = screen.height > 1800 ? "300px" : (((screen.height / 2) - (ionic.Platform.isAndroid() ? 120 : 0)) + "px");//"250px";
                                     }
 
                                     if ($scope.currentBarberShops.length == 0)
