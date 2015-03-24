@@ -510,7 +510,7 @@ angular.module('mbs.controllers', [])
                                     $scope.hasBarberShops = false;
                                     $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
 
-                                    $("#shopScroll").css("top", "10px");
+                                    $("#shopScroll").css("top", "-40px");
                                 } else
                                 {
                                     if ($scope.currentAppointments.length == 0)
