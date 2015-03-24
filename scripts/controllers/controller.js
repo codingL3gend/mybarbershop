@@ -508,7 +508,7 @@ angular.module('mbs.controllers', [])
                                     $scope.hasAppointments = false;
                                     $scope.appointmentHeight = screen.height >= 1600 ? "300px" : (screen.height / 2) + "px"; //"250px";
                                     $scope.hasBarberShops = false;
-                                    $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
+                                    $scope.barberShopHeight = screen.height >= 1600 ? "500px" : (screen.height / 2) + "px";//"250px";
                                 } else
                                 {
                                     if ($scope.currentAppointments.length == 0)
