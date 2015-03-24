@@ -467,7 +467,6 @@ angular.module('mbs.controllers', [])
 	       toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
 	       //showCordovaLoading($cordovaSpinnerDialog, "Loading", "Loading information ...", true, true);
 	       getUserData($scope);
-           alert(screen.height);
 	       $scope.viewHeight = (screen.height - (hasAds ? 50 : 0)) + "px";
            
 	       if($scope.backButtonPressed)
@@ -510,7 +509,6 @@ angular.module('mbs.controllers', [])
                                     $scope.appointmentHeight = (screen.height / 2) + "px";//"250px";
                                     $scope.hasBarberShops = false;
                                     $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
-                                    alert($scope.appointmentHeight);
                                 } else
                                 {
                                     if ($scope.currentAppointments.length == 0)
