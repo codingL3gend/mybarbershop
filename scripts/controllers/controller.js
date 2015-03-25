@@ -511,7 +511,7 @@ angular.module('mbs.controllers', [])
                                     $scope.barberShopHeight = (screen.height / 2) + "px";//"250px";
 
                                     if (screen.height >= 1600)
-                                        $("#shopScroll").css("top", "-80px");
+                                        $("#shopScroll").css("top", "-40px");
                                 } else
                                 {
                                     if ($scope.currentAppointments.length == 0)
