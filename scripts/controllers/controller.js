@@ -5,7 +5,7 @@
 var authFailed = false;
 var url = 'http://localhost:8080/scout.me.out.api/file/upload/image/j.ant.wallace@gmail.com/2';
 var iosTok, platformType, navigationData, hasAds = false, splashScreen;
-var isProd = true;
+var isProd = false;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
@@ -1048,27 +1048,34 @@ angular.module('mbs.controllers', [])
 	       $scope.createBarberShopCustomer = function (shop) {
 	           toggleIonicLoading($ionicLoading, "Setting " + shop.shopName + " as your barber shop...", true, false, "positive");
 
-               $scope.customerInfo = MbsAPI.createBarberShop({
+	           $scope.customerInfo = MbsAPI.createBarberShop({
 	               call: "customer/create", values: $scope.mbsProfileID, barberShopID: shop.barberShopID
 	           },
                    function (data) {
                        if (data && data.response.success) {
                            if (data.member) {
-                               var userShop = {}; 
+                               var userShop = {};
 
                                toggleIonicLoading($ionicLoading, "Setting barber shop succeeded!", true, true, "balanced");
                                //remove the list of shops and get the barber shop
                                //profile 
                                //window.location = document.URL.replace("search", "index");
-    		    			   $state.go('main');
+                               $state.go('main');
                            }
-                       }else
+                       } else
                            toggleIonicLoading($ionicLoading, "could not set " + shop.shopName + " as your barber shop...", true, true, "assertive")
                    }, function error(e) {
                        if (e.status == 500 || e.status == 404) {
                            toggleIonicLoading($ionicLoading, null, false);
                        }
                    });
+	       };
+	       $scope.handleFreelancerClicked = function()
+	       {
+	           $scope.currentBarber.isOwner = false;
+	           $scope.barberInfo.isFreelancer = true;
+
+	           $scope.updateBarberInfo();
 	       }
 	       $scope.updateBarberInfo = function(){	    
 	    	   
@@ -1082,7 +1089,7 @@ angular.module('mbs.controllers', [])
 		    		   normalTimeIn: $scope.barberInfo.normalTimeIn, yearsOfExperience: $scope.barberInfo.yearsOfExperience,
 		    		   avgCutTime: $scope.barberInfo.avgCutTime, acceptsAppointments: $scope.barberInfo.acceptsAppointments,
 		    		   profileID: $scope.mbsProfileID, barberShopID: $scope.currentBarber.barberShopID, owner: $scope.currentBarber.isOwner,
-		    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $scope.mbsDisplayName
+		    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $scope.mbsDisplayName, isFreeLancer: $scope.barberInfo.isFreelancer
 		    	   }, 
 		    	   	function(data){
 		    		   if(data && data.response.success)
@@ -2276,7 +2283,8 @@ angular.module('mbs.controllers', [])
 	    					   )
 	    				   });
 
-	    				   ionic.trigger("click", { target: $("#barberSpecialtiesDivContainer") });
+	    				   $("#specialtyHeader").focus();
+	    				   //ionic.trigger("click", { target: $("#barberSpecialtiesDivContainer") });
     				   }
 	    		   }
 
@@ -2549,6 +2557,7 @@ angular.module('mbs.controllers', [])
                                buildBarberProfile(data.member, $scope);
                                
                                $scope.currentBarber.acceptsAppointmentsFlag = convertBoolean($scope.currentBarber.acceptsAppointments);
+                               $scope.currentBarber.isFreelancerFlag = convertBoolean($scope.currentBarber.isFreelancer);
                                $scope.currentBarber.ratingCalc = calculateRating(data.member.rating, 100);
 
                                $scope.isVacationing = convertBoolean($scope.currentBarber.barberStatus.isOnVacation);
@@ -2577,22 +2586,24 @@ angular.module('mbs.controllers', [])
 	    		   
 	    		   $("#newDisplayName").val($scope.currentBarber.profile.displayName);
 	    		   barberInfo.displayName = $scope.currentBarber.profile.displayName;
-		    	   $(".normalTimeIn").val($scope.currentBarber.normalTimeIn);
-		    	   barberInfo.normalTimeIn = $scope.currentBarber.normalTimeIn;
+	    		   barberInfo.normalTimeIn = $scope.currentBarber.normalTimeIn == null || $scope.currentBarber.normalTimeIn == undefined ? "8:00 AM" : $scope.currentBarber.normalTimeIn;
+		    	   $(".normalTimeIn").val(barberInfo.normalTimeIn);
+		    	   barberInfo.yearsOfExperience = $scope.currentBarber.yearsOfExperience == 0 || $scope.currentBarber.yearsOfExperience == undefined ? 1 : $scope.currentBarber.yearsOfExperience;
 		    	   $(".yearsOfExperience option").filter(function() {
 		    		    //may want to use $.trim in here
-		    		    return $(this).text().trim() == $scope.currentBarber.yearsOfExperience; 
+		    		    return $(this).text().trim() == barberInfo.yearsOfExperience; 
 		    		}).prop('selected', true);
 		    	   //$(".yearsOfExperience").val($scope.currentBarber.yearsOfExperience);
-		    	   barberInfo.yearsOfExperience = $scope.currentBarber.yearsOfExperience;
+		    	   barberInfo.avgCutTime = $scope.currentBarber.avgCutTime == null || $scope.currentBarber.avgCutTime == undefined ? 25 : $scope.currentBarber.avgCutTime;
 		    	   $(".avgCutTime option").filter(function() {
 		    		    //may want to use $.trim in here
-		    		    return $(this).text().trim() == $scope.currentBarber.avgCutTime; 
+		    		    return $(this).text().trim() == barberInfo.avgCutTime; 
 		    		}).prop('selected', true);
 		    	   //$(".avgCutTime").val($scope.currentBarber.avgCutTime);
-		    	   barberInfo.avgCutTime = $scope.currentBarber.avgCutTime;
 		    	   $("#acceptAppt").attr("checked", $scope.currentBarber.acceptsAppointments == "true" ? true : false);
 		    	   barberInfo.acceptsAppointments = $scope.currentBarber.acceptsAppointments;
+		    	   $("#freelancer").attr("checked", $scope.currentBarber.isFreelancer == "true" ? true : false);
+		    	   barberInfo.isFreelancer = $scope.currentBarber.isFreelancer;
     		   }
 	       }
 	       $scope.cancelEditBarberInfo = function(){
@@ -2608,7 +2619,8 @@ angular.module('mbs.controllers', [])
 	    		   normalTimeIn: barberInfo.normalTimeIn, yearsOfExperience: barberInfo.yearsOfExperience,
 	    		   avgCutTime: barberInfo.avgCutTime, acceptsAppointments: $("#acceptAppt").is(":checked"),
 	    		   profileID: $scope.mbsProfileID, barberShopID: $scope.currentBarber.barberShopID, owner: $scope.currentBarber.isOwner,
-	    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $("#newDisplayName").val() != null ? $("#newDisplayName").val() : barberInfo.displayName
+	    		   dateCreated: createJavaDate($scope.mbsDateCreated), displayName: $("#newDisplayName").val() != null ? $("#newDisplayName").val() : barberInfo.displayName,
+	    		   isfreelancer: $("#freelancer").is(":checked")
 	    	   }, 
 	    	   	function(data){
 	    		   if(data && data.response.success)
@@ -2621,7 +2633,9 @@ angular.module('mbs.controllers', [])
 	    			   $scope.currentBarber.yearsOfExperience = barberInfo.yearsOfExperience;
 	    			   $scope.currentBarber.avgCutTime = barberInfo.avgCutTime;
 	    			   $scope.currentBarber.acceptsAppointments = $("#acceptAppt").is(":checked");
+	    			   $scope.currentBarber.isFreelancer = $("#freelancer").is(":checked");
 	    			   $scope.currentBarber.acceptsAppointmentsFlag = convertBoolean($scope.currentBarber.acceptsAppointments);
+	    			   $scope.currentBarber.isFreelancerFlag = convertBoolean($scope.currentBarber.isFreelancer);
                        
                        $scope.cancelEditBarberInfo();
     			   }else	    		   

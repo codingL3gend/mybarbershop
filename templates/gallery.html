@@ -22,7 +22,7 @@
                                     <button ng-class="'button button-assertive button-clear button-large ' + closeOutlineIcon" style="position:absolute; right:5px;" ng-click="handleExitClick()"></button>
 	                            </div>
 	
-	                            <img ng-src="{{image.imageSrc}}" style="height: 100%; width:100%;" ng-click="handleImageClick()">
+	                            <img class="item item-image" ng-src="{{image.imageSrc}}" style="height: 100%; width:100%;" ng-click="handleImageClick()">
 	
 	                            <div style="position:absolute; bottom: 0px; width: 100%; height: 200px;" ng-if="wasTapped">
 	                                <hr style="border-color: red" ng-hide="canModify == false"/>
@@ -44,7 +44,7 @@
         <div id="galleryUploadContainer" style="display:none;">
             <img ng-src="{{selectedImage}}" style="width:100%;" ng-style="{height: imageHeight}" />
 
-            <textarea id="captionText" ng-model="imageCaption" style="resize: none; height: 50px;" maxlength="100" placeholder="Caption" class="padding-horizontal"></textarea>
+            <textarea id="captionText" ng-model="{{imageCaption}}" style="resize: none; height: 50px;" maxlength="100" placeholder="Caption" class="padding-horizontal"></textarea>
             <button class="button button-block button-positive" ng-click="uploadImage()">Upload</button>
             <button class="button button-block button-assertive" ng-click="cancelImageUpload()">Cancel</button>
         </div>

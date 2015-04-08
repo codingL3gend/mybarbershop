@@ -802,6 +802,7 @@ function buildBarberProfile(barber, $scope)
         currentBarber.profileID = barber.profileID;
         currentBarber.acceptsAppointments = barber.acceptsAppointments;
         currentBarber.isOwner = barber.isOwner;
+        currentBarber.isFreelancer = barber.isFreelancer;
         currentBarber.profile = barber.profile;
 
         if (barber.profile.image.imageID > 0)
@@ -835,6 +836,7 @@ function buildBarberSearchProfile(barber) {
         currentBarber.acceptsAppointments = barber.acceptsAppointments;
         currentBarber.doesAppointments = convertBoolean(barber.acceptsAppointments);
         currentBarber.isOwner = barber.isOwner;
+        currentBarber.isFreelancer = barber.isFreelancer;
         currentBarber.profile = barber.profile;
 
         if (barber.profile.image.imageID > 0) {
