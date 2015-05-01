@@ -4,7 +4,7 @@
 /**controllers*/
 var authFailed = false;
 var iosTok, platformType, navigationData, hasAds = false, splashScreen;
-var isProd = false;
+var isProd = true;
 var db = window.openDatabase("mybarbershop", "1.0", "MyBarberShop", 1000000);
 
 angular.module('mbs.controllers', [])
