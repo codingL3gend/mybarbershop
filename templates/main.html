@@ -1,34 +1,36 @@
-<ion-view view-title="" hide-nav-bar="false" hide-back-button="true" cache-view="false"> <!--ng-style="{height: viewHeight}"-->
+<ion-view view-title="{{myTitle}}" hide-nav-bar="false" hide-back-button="true"> <!--cache-view="false"-->
+    <!--ng-style="{height: viewHeight}"-->
+
     <ion-nav-buttons side="left">
-        <button menu-toggle="left" ng-class="'button button-icon ' + menuIcon" ng-click="toggleLeft()"></button>
+        <button menu-toggle="left" ng-class="'button button-icon button-clear ' + menuIcon" ng-click="toggleLeft()"></button>
         <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon ' + searchIcon" ng-click="loadSearch()" ng-if="searchIcon != null"></button>
+        <button id="createApptButton" ng-class="'button button-icon button-clear ' + addIcon" ng-click="createAppointment()" ng-hide="isCustomer == true"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content>
-            <ion-scroll ng-style="{height: appointmentHeight}">
-                <div class=" bar bar-subheader bar-dark">
-                    <h1 class="title">Appointments</h1>
-                </div>
+            <div class=" bar bar-subheader bar-dark expanded push-down">
+                <h1 class="title">Appointments</h1>
+            </div>
+            <!--<ion-scroll ng-style="{height: appointmentHeight}">
                 <br />
                 <br />
                 <br />
                 <br />
                 <br />
                 <ion-list type="card">
-                    <ion-item ng-repeat="appointment in currentAppointments" class="item-thumbnail-left" ng-hide="hasAppointments == false">
+                    <ion-item ng-repeat="appointment in currentAppointments" class="item item-avatar" ng-hide="hasAppointments == false">
                         <img ng-src="{{appointment.appointmentImage}}">
                         <h2>{{appointment.displayName}}</h2>
                         <label>Status: {{appointment.appointmentStatus.appointmentStatus}}</label>
-                        <textarea style="resize:none" disabled>Date: {{appointment.aptDate}}</textarea>
+                        <textarea style="resize:none; background-color: #ffffff;" disabled>Date: {{appointment.aptDate}}</textarea>
 
                         <ion-option-button class="button-assertive" ng-hide="{{appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'}}"
                                            ng-click="deleteAppointment(appointment)">Cancel</ion-option-button>
                     </ion-item>
                     <ion-item ng-hide="hasAppointments == true">
-                        <textarea style="resize:none" disabled>You have no appointments scheduled for today!</textarea>
+                        <textarea style="resize:none; background-color: #ffffff;" disabled>You have no appointments scheduled for today!</textarea>
                     </ion-item>
                 </ion-list>
             </ion-scroll>
@@ -40,32 +42,134 @@
                 <br />
                 <br />
                 <br />
-                <ion-list type="card">
-                    <!--<ion-header-bar align-title="center" class="bar-positive">
-                        <h2 class="title">Your Barber Shops</h2>
-                    </ion-header-bar>-->
-                    <ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left" ng-hide="hasBarberShops == false" ng-click="loadBarberShop(barbershop)">
-                        <img ng-src="{{barbershop.shopImage}}" />
-                        <h3>{{barbershop.shopName}}</h3>
-                        <label>{{barbershop.formattedStreet}}</label>
-                        <br />
-                        <label>{{barbershop.formattedCityState}}</label>
-                        <br />
-                        <label>{{barbershop.phoneNumber}}</label>
-                        <div ng-bind-html="barbershop.hoursOf">
+                <div class="ionic">
+                    <div class="content">
+                        <div class="list condensed-space no-padding animate-blinds">
+                            <div class="card dark-bg">
+                                <a  class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                                    <h2>Toronto</h2>
+                                    <p>Drake's Raptastic Raptors</p>
+                                    <img ng-src="{{currentBarberShops[1].shopImage}}">
+                                </a>
+                            </div>
                         </div>
-                    </ion-item>
-                    <ion-item ng-hide="hasBarberShops == true">
-                        <textarea style="resize:none" disabled>You have no barber shops set!</textarea>
-                    </ion-item>
-                </ion-list>
-            </ion-scroll>
+                    </div>
+                </div>-->
+            <!--<ion-list style="background-color: transparent; opacity: 0.8" class="list condensed-space no-padding animate-blinds">-->
+            <!--<ion-header-bar align-title="center" class="bar-positive">
+                <h2 class="title">Your Barber Shops</h2>
+            </ion-header-bar>-->
+            <!--<ion-item ng-repeat="barbershop in currentBarberShops"  class="dark-bg card" ng-hide="hasBarberShops == false" ng-click="loadBarberShop(barbershop)">
+            <a class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                <img ng-src="{{barbershop.shopImage}}" />-->
+            <!--<h3>{{barbershop.shopName}}</h3>
+            <label>{{barbershop.formattedStreet}}</label>
+            <br />
+            <label>{{barbershop.formattedCityState}}</label>
+            <br />
+            <label>{{barbershop.phoneNumber}}</label>
+            <div ng-bind-html="barbershop.hoursOf">
+            </div>-->
+            <!--</a>
+                </ion-item>
+                <ion-item ng-hide="hasBarberShops == true">
+                    <textarea style="resize:none; background-color: #ffffff;" disabled>You have no barber shops set!</textarea>
+                </ion-item>
+            </ion-list>-->
+            <!--</ion-scroll>-->
+            <ion-tabs class="tabs-dark tabs-icon-top">
+                <ion-tab title="Appointments" icon-on="{{appointmentIcon}}" icon-off="{{appointmentIcon}}" on-select="tabClicked('Appointments')">
+                    <br />
+                    <br />
+                    <br />
+                    <br ng-hide="isAndroid == false" />
+                    <ion-scroll ng-style="{height: appointmentHeight}" class="horizontal-padding">
+                        <div id="apptList" class="list condensed-space no-padding animate-blinds">
+                            <div class="card dark-bg" ng-repeat="appointment in currentAppointments" ng-hide="hasAppointments == false">
+                                <a class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                                    <h2 style="text-align: center">{{appointment.displayName}}</h2>
+                                    <p style="text-align: center">Status: {{appointment.appointmentStatus.appointmentStatus}}</p>
+                                    <p class="item-text-wrap" style="text-align: center">{{appointment.aptDate}}</p>
+                                    <img ng-src="{{appointment.appointmentImage}}">
+                                </a>
+                            </div>
+                            <div class="centeredDiv" ng-hide="hasAppointments == true">
+                                <p style="text-align: center">You have no appointments scheduled for today!</p>
+                            </div>
+                        </div>        
+                    </ion-scroll>
+                </ion-tab>
+                <ion-tab title="Shops" icon-on="{{homeIcon}}" icon-off="{{homeIcon}}" on-select="tabClicked('Shops')">
+                    <br />
+                    <br />
+                    <br />
+                    <br ng-hide="isAndroid == false" />
+                    <ion-scroll id="shopScroll" ng-style="{height: barberShopHeight}" class="horizontal-padding">
+                        <div class="list condensed-space no-padding animate-blinds">
+                            <div class="card dark-bg" ng-repeat="barbershop in currentBarberShops" ng-hide="hasBarberShops == false" ng-click="loadBarberShop(barbershop)">
+                                <a class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                                    <h2 style="text-align: center">{{barbershop.shopName}}</h2>
+                                    <p style="text-align: center">{{barbershop.formattedStreet}}</p>
+                                    <p style="text-align: center">{{barbershop.formattedCityState}}</p>
+                                    <p style="text-align: center">{{barbershop.phoneNumber}}</p>
+                                    <img ng-src="{{barbershop.shopImage}}">
+                                </a>
+                            </div>
+                            <div class="centeredDiv" ng-hide="hasBarberShops == true">
+                                <p style="text-align: center">You have no barber shops set!</p>
+                            </div>
+                        </div>
+                    </ion-scroll>
+                </ion-tab>
+                <ion-tab title="{{tabTitle}}" icon-on="{{miscIcon}}" icon-off="{{miscIcon}}" on-select="tabClicked('BarberClient')">
+                    <br />
+                    <br />
+                    <br />
+                    <br ng-hide="isAndroid == false" />
+                    <ion-scroll ng-style="{height: barberShopHeight}" class="horizontal-padding">
+                        <div class="list animate-blinds" ng-hide="isCustomer == false">
+                            <div class="card item-avatar item-text-wrap" ng-repeat="barber in currentUserBarbers" ng-click="loadBarber(barber)" ng-hide="hasBarbers == false">
+                                <img ng-src="{{barber.barberImage}}">
+                                <h4>
+                                    {{barber.profile.displayName}}</h2>
+                                    <label>Available: {{barber.available}}</label>
+                                    <div class="card-footer text-right">
+                                        <div class="pull-left">
+                                            <i ng-class="appointmentIcon + (barber.makeAppointment ? ' assertive' : ' balanced')"></i> {{barber.doesAppointments}}
+                                            <i ng-class="starIcon + ' energized'"></i> {{barber.ratingCalc}}%
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="centeredDiv" ng-hide="hasBarbers == true">
+                                <p style="text-align: center">You have are not a client of any barbers!</p>
+                            </div>
+                        </div>
+                        <div class="list animate-blinds" ng-hide="isCustomer == true">
+                            <div class="card item-avatar item-text-wrap" ng-repeat="client in currentClients" ng-click="loadClient(client)" ng-hide="hasClients == false">
+                                <img ng-src="{{client.clientImage}}">
+                                <h4>{{client.displayName}}</h4>
+                                <p>Since: {{client.clientSince}}</p>
+                            </div>
+                            <div class="centeredDiv" ng-hide="hasClients == true">
+                                <p style="text-align: center">You have no clients!</p>
+                            </div>
+                        </div>
+                    </ion-scroll>
+                </ion-tab>
+            </ion-tabs>
         </ion-side-menu-content>
         <ion-side-menu side="left">
             <br />
             <br />
             <br />
-            <ion-content>
+            <!--<ion-header-bar class="dark-bg expanded" style="border: 1px solid red">
+                <br />
+                <br />
+                <br />
+                <img ng-src="{{mbsProfileImage}}" style="position: absolute; top: 100px; border: 1px solid red" class="avatar motion spin fade">
+                <h4 class="menu-bottom dark-bg" style="border: 1px solid red">{{mbsDisplayName}}</h4>
+            </ion-header-bar>-->
+            <ion-content> <!--class="has-expanded-header" style="border: 1px solid red"-->
                 <div class="list">
                     <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadProfile()">
                         <i ng-class="profileIcon"></i>
@@ -79,10 +183,14 @@
                         <i ng-class="searchIcon"></i>
                         Search Barbers
                     </a>
+                    <a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadSearch()">
+                        <i ng-class="searchIcon"></i>
+                        Search Shops
+                    </a>
                     <!--<a menu-close class="item item-icon-left" style="text-align:center" ng-click="loadSquarePayment()" ng-hide="isABarber == false">
-                        <i class="icon ion-card"></i>
-                        Pay with Square
-                    </a>-->
+                <i class="icon ion-card"></i>
+                Pay with Square
+            </a>-->
                     <a menu-close class="item item-icon-left" style="text-align:center" ng-click="logOut()">
                         <i ng-class="logOutIcon"></i>
                         Logout

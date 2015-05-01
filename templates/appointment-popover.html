@@ -1,8 +1,8 @@
 ﻿<ion-content> 
     <div class="bar bar-header bar-stable" ng-style="{width: screenWidth}">
         <button ng-class="'button button-icon ' + appointmentIcon" ng-click="toggleAppointments()"></button>
-        <h3 id="headerTitle" class="title">{{selectedDateOnly}}</h3>
         <button ng-class="'button button-clear ' + closeIcon" ng-click="appointmentPopup.close()"></button>
+        <h3 id="headerTitle" class="title">{{selectedDateOnly}}</h3>
     </div>
     <br/>
     <br />
@@ -15,14 +15,14 @@
                 <img ng-src="{{appointment.appointmentImage}}" />
                 <h3>{{appointment.displayName}}</h3>
                 <label>{{appointment.appointmentStatus.appointmentStatus}}</label>
-                <textarea style="resize:none" disabled>{{appointment.time}}</textarea>
+                <textarea style="resize:none; background-color: #ffffff;" disabled>{{appointment.time}}</textarea>
 
                 <ion-option-button class="button-assertive" ng-hide="{{(appointment.appointmentStatus == null || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled'
                                                                       || appointment.appointmentStatus != null && appointment.appointmentStatus.appointmentStatus == 'Cancelled' && mbsProfileID != appointment.profileID)}}"
                                    ng-click="deleteAppointment(appointment)">Cancel</ion-option-button>
             </ion-item>
             <ion-item ng-hide="apts.length > 0">
-                <textarea style="resize:none" disabled>No appointments scheduled!</textarea>
+                <textarea style="resize:none; background-color: #ffffff;" disabled>No appointments scheduled!</textarea>
             </ion-item>
         </ion-list>
     </div>

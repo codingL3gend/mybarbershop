@@ -1,72 +1,137 @@
 <ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon ' + galleryIcon" ng-click="loadImages(currentBarberShops[0].images)"></button>
-        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>
+        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarberShops[0].images)"></button>
+        <!--<button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>-->
     </ion-nav-buttons>
-    <ion-side-menus>
-        <ion-side-menu-content drag-content="false">
+    <!--<ion-side-menus>-->
+    <ion-content drag-content="false" scroll="false">
+        <div class="hero slide-up" ng-style="{'background-image': shopImage}">
+            <div class="content">
+                <h4 class="embossedText" style="color: white;">{{currentBarberShops[0].shopName}}</h4>
+                <br />
+                <label class="embossedText" style="color: white;">{{shopAddress}}</label>
+                <br />
+                <label class="embossedText" style="color: white;">{{shopCityState}}</label>
+                <br />
+                <label class="embossedText" style="color: white;">{{currentBarberShops[0].phoneNumber}}</label>
+            </div>
+        </div>
+        <div id="bBar" class="tabs tabs-dark tabs-icon-top static">
+            <a class="tab-item">
+                <i ng-class="clockIcon" ng-click="isHours = true; isSpecialties = false; $ionicScrollDelegate.scrollTop(true)"></i>Hours
+            </a>
+            <a class="tab-item">
+                <i ng-class="listIcon" ng-click="isHours = false; isSpecialties = true; $ionicScrollDelegate.scrollTop(true)"></i>Specialties
+            </a>
+            <a class="tab-item">
+                <i ng-class="barbersIcon" ng-click="loadBarbers()"></i>Barbers
+            </a>
+            <a class="tab-item">
+                <i ng-class="clientsIcon" ng-click="loadClients()"></i>Customers
+            </a>
+        </div>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <ion-list>
+                <!--<ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left">
+                    <img ng-src="{{shopImage}}" />
+                    <h2>{{barbershop.shopName}}</h2>
+                    <label>{{shopAddress}}</label>
+                    <br />
+                    <label>{{shopCityState}}</label>
+                    <br />
+                    <label>{{barbershop.phoneNumber}}</label>
+                </ion-item>-->
+                <ion-item ng-hide="isHours == false">
+                    <div class="bar bar-header bar-dark">
+                        <h2 class="title">Shop Hours</h2>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="list">
+                        <div ng-repeat="day in hoursOfImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                            <!--<button class="button button-fab button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                {{day.day.substring(0, 2)}}
+                            </button>-->
+                            {{day.day}}: {{day.time}}
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item ng-hide="isSpecialties == false">
+                    <div class="bar bar-header bar-dark">
+                        <h2 class="title">Shop Specialties</h2>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="list">
+                        <div ng-repeat="specialty in specialtiesImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                            <!--<button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                {{specialty.specialty.substring(0, 1).toUpperCase()}}
+                            </button>-->
+                            {{specialty.specialty}}
+                        </div>
+                    </div>
+                </ion-item>
+            </ion-list>
             <br />
             <br />
-            <br/>
-            <ion-scroll ng-style="{height: screenHeight}">
-                <ion-list>
-                    <ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left">
-                        <img ng-src="{{shopImage}}" />
-                        <h2>{{barbershop.shopName}}</h2>
-                        <label>{{shopAddress}}</label>
-                        <br />
-                        <label>{{shopCityState}}</label>
-                        <br />
-                        <label>{{barbershop.phoneNumber}}</label>
-                    </ion-item>
-                    <ion-item>
+            <br />
+        </ion-scroll>
+        <!--<ion-tabs class ="tabs-dark">
+            <ion-tab title="Hours" icon-on="{{clockIcon}}" icon-off="{{clockOutlineIcon}}">
+                <ion-scroll ng-style="{'height': '280px', 'position': 'absolute', 'top': '220px'}">
+                    <ion-list>
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Shop Hours</h2>
                         </div>
-                        <br />
-                        <br />
-                        <br />
-
-                        <!--<div ng-bind-html="hoursOf" style="flex-wrap:wrap">
-                </div>-->
-                        <div class="list">
-                            <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
-                                    {{day.day.substring(0, 2)}}
-                                </button>
-                                {{day.time}}
+                        <ion-item ng-hide="hoursOfImp.length == 0">
+                            <br />
+                            <br />
+                            <div class="list">
+                                <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                    <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                        {{day.day.substring(0, 2)}}
+                                    </button>
+                                    {{day.time}}
+                                </div>
                             </div>
-                        </div>
-                    </ion-item>
-                    <ion-item>
+                        </ion-item>
+                        <ion-item ng-hide="hoursOfImp.length > 0">
+                            <textarea style="resize:none; background-color: #ffffff;" disabled>No hours have been posted!</textarea>
+                        </ion-item>
+                    </ion-list>
+                </ion-scroll>
+            </ion-tab>
+            <ion-tab title="Specialties" icon-on="{{listIcon}}" icon-off="{{listOutlineIcon}}">
+                <ion-scroll ng-style="{'height': '280px', 'position': 'absolute', 'top': '220px'}">
+                    <ion-list>
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Shop Specialties</h2>
                         </div>
-                        <br />
-                        <br />
-                        <br />
-                        <!--<div ng-bind-html="specialties">
-                </div>-->
-                        <div class="list">
-                            <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
-                                    {{specialty.specialty.substring(0, 1).toUpperCase()}}
-                                </button>
-                                {{specialty.specialty}}
+                        <ion-item ng-hide="specialtiesImp.length == 0">
+                            <br />
+                            <br />
+                            <div class="list">
+                                <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                    <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                        {{specialty.specialty.substring(0, 1).toUpperCase()}}
+                                    </button>
+                                    {{specialty.specialty}}
+                                </div>
                             </div>
-                        </div>
-                    </ion-item>
-                </ion-list>
-                <br/>
-                <br/>
-                <br />
-            </ion-scroll>
-        </ion-side-menu-content>
-        <ion-side-menu side="right">
-            <ion-scroll ng-style="{height: customerHeight}">
+                        </ion-item>
+                        <ion-item ng-hide="specialtiesImp.length > 0">
+                            <textarea style="resize:none; background-color: #ffffff;" disabled>No specialties Posted!</textarea>
+                        </ion-item>
+                    </ion-list>
+                </ion-scroll>
+            </ion-tab>
+        </ion-tabs>-->
+    </ion-content>
+        <!--<ion-side-menu side="right">-->
+            <!--<ion-scroll ng-style="{height: customerHeight}">
                 <div class="bar bar-subheader bar-dark">
                     <h1 class="title">Customers</h1>
                 </div>
@@ -79,12 +144,12 @@
                     <ion-item ng-repeat="customer in currentBarberShops[0].customers" class="item-thumbnail-left" ng-click="loadCustomer(customer)">
                         <img ng-src="{{customer.customerImage}}" />
                         <h3>{{customer.profile.displayName}}</h3>
-                        <textarea style="resize:none" disabled>Customer Since: {{customer.customerSince}}</textarea>
+                        <textarea style="resize:none; background-color: #ffffff;" disabled>Customer Since: {{customer.customerSince}}</textarea>
                     </ion-item>
                 </ion-list>
                 <ion-list type="card" ng-hide="currentBarberShops[0].customers.length > 0">
                     <ion-item>
-                        <textarea style="resize:none" disabled>No Customers at this shop currently.</textarea>
+                        <textarea style="resize:none; background-color: #ffffff;" disabled>No Customers at this shop currently.</textarea>
                     </ion-item>
                 </ion-list>
             </ion-scroll>
@@ -111,14 +176,14 @@
                 </ion-list>
                 <ion-list type="card" ng-hide="currentBarberShops[0].barbers.length > 0">
                     <ion-item>
-                        <textarea style="resize:none" disabled>No Barbers at this shop currently.</textarea>
+                        <textarea style="resize:none; background-color: #ffffff;" disabled>No Barbers at this shop currently.</textarea>
                     </ion-item>
                 </ion-list>
             </ion-scroll>
             <br />
             <br />
-            <br />
-        </ion-side-menu>
-    </ion-side-menus>
+            <br />-->
+        <!--</ion-side-menu>
+    </ion-side-menus>-->
 </ion-view>
 <!--ng-style="{height: getContainerHeight(this)}"-->

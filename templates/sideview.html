@@ -1,0 +1,56 @@
+<ion-view view-title="{{type}}" hide-nav-bar="false">
+    <!--<ion-nav-buttons side="right">
+        <button ng-class="'button button-icon ' + galleryIcon" ng-click="loadImages(currentProfile.images)"></button>
+    </ion-nav-buttons>-->
+    <ion-content>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <ion-list class="animate-ripple" ng-hide="type != 'Customers'">
+                <ion-item ng-repeat="customer in sideViewData" class="item-avatar item-text-wrap" ng-hide="sideViewData.length == 0" ng-click="loadCustomer(customer)">
+                    <img ng-src="{{customer.customerImage}}"/>
+                    <!--<img class="avatar" ng-src="{{customer.customerImage}}" />-->  
+                    <h2>{{customer.profile.displayName}}</h2>
+                    <p>Since: {{customer.customerSince}}</p>
+                </ion-item>
+                <ion-item ng-hide="sideViewData.length > 0" class="centeredDiv">
+                    <p style="text-align: center">Shop has no customers!</p>
+                </ion-item>
+            </ion-list>
+            <ion-list class="animate-ripple" ng-hide="type != 'Clients'">
+                <ion-item ng-repeat="client in sideViewData" class="item-avatar item-text-wrap" ng-hide="sideViewData.length == 0" ng-click="loadClient(client)">
+                    <img ng-src="{{client.clientImage}}" />
+                    <h2>{{client.profile.displayName}}</h2>
+                    <p>Since: {{client.clientSince}}</p>
+                </ion-item>
+                <ion-item ng-hide="sideViewData.length > 0" class="centeredDiv">
+                    <p style="text-align: center">Barber has no clients!</p>
+                </ion-item>
+            </ion-list>
+            <ion-list class="animate-ripple" ng-hide="type != 'Barbers'">
+                <ion-item ng-repeat="barber in sideViewData" class="item-avatar item-text-wrap" ng-hide="sideViewData.length == 0" ng-click="loadBarber(barber)">
+                    <img ng-src="{{barber.barberImage}}" />
+                    <h2>{{barber.profile.displayName}}</h2>
+                    <label>Available: {{barber.available}}</label>
+                    <div class="card-footer text-right">
+                        <div class="pull-left">
+                            <i ng-class="appointmentIcon + (barber.makeAppointment ? ' assertive' : ' balanced')"></i> {{barber.doesAppointments}}
+                            <i ng-class="starIcon + ' energized'"></i> {{barber.ratingCalc}}%
+                        </div>
+                    </div>
+                </ion-item>
+                <ion-item ng-hide="sideViewData.length > 0" class="centeredDiv">
+                    <p style="text-align: center">Shop has no barbers!</p>
+                </ion-item>
+            </ion-list>
+            <ion-list class="animate-ripple" ng-hide="type != 'BarberShops'">
+                <ion-item ng-repeat="customer in sideViewData" class="item-avatar item-text-wrap" ng-hide="sideViewData.length == 0">
+                   <img ng-src="{{customer.customerImage}}" />
+                    <h2>{{customer.profile.displayName}}</h2>
+                    <p>Customer Since: {{customer.customerSince}}</p>
+                </ion-item>
+                <ion-item ng-hide="sideViewData.length > 0" class="centeredDiv">
+                    <p style="text-align: center">You are not a customer at any shops!</p>
+                </ion-item>
+            </ion-list>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

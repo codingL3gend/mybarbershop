@@ -1,95 +1,140 @@
-<ion-view hide-nav-bar="false" view-title="Welcome to My Barber Shop" cache-view="false">
+<ion-view hide-nav-bar="true" view-title="" cache-view="false" class="login animate-fade-slide-in-right" ng-style="{'background-image': 'url(' + backgroundImage + ')', 'background-size': 'cover'}">
     <!--<ion-header-bar align-title="center" class="bar-positive">
         <h2 class="title">WElcome</h2>
     </ion-header-bar>class="row row-center"-->
-    <ion-content >
-        <div id="mbslogin">
-            <div class="list ">
-                <!--<header>
-                    <h2 class="mbsheader" style="text-align:left"style="background: #4b4d4e;">Sign in</h2>
-                </header>-->
-                <label class="item item-input">
-                    <span class="input-label">Username</span>
-                    <input id="l_email" type="email" value="random@gmail.com" placeholder="john.doe@example.com" ng-model="logUsername">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Password</span>
-                    <input id="l_password" type="password" value="random" placeholder="Password" ng-model="logPassword">
-                </label>
-
-            </div>
-
-            <button class="button button-block button-positive button-dark" ng-click="authUser(true)">
-                Login
-            </button>
-
-            <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister()">
-                Sign Up!
-            </button>
-            <!--<div style="text-align:center" class="mbsinner">
-                <p style="text-decoration:underline; text-align:center; color:white" ng-click="toggleLoginRegister()">Don't have an account? Sign Up!</p>
-            </div>-->
-        </div>
-        <div id="mbsregister" style="display:none; height:100%">
-            <div class="list">
-                <!--<header>
-                    <h2 class="mbsheader">Welcome to My Barber Shop</h2>
-                </header>-->
-                <!--<header>
-                    <h2 class="mbsheader" style="text-align:left">Register</h2>
-                </header>-->
-                <label id="inputEmailLabel" class="item item-input">
-                    <span id="inputEmailSpan" class="input-label">Username</span>
-                    <input id="inputEmail" class="balanced" type="email" value="" placeholder="john.doe@example.com" ng-model="regUsername">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Password</span>
-                    <input id="inputPassword" type="password" value="" placeholder="Password" ng-disabled="passDisabled" ng-model="regPassword">
-                </label>
-                <label id="inputConPasswordLabel" class="item item-input">
-                    <span id="inputConPasswordSpan" class="input-label">Confirm Password</span>
-                    <input id="inputConPassword" type="password" value="" placeholder="Confirm Password" ng-disabled="passConDisabled" ng-model="regConPassword">
-                </label>
-                <label class="item item-input">
-                    <span class="input-label">Display Name</span>
-                    <input id="inputDisplayName" type="text" value="" placeholder="Display Name" ng-disabled="dispNameDisabled" ng-model="regDisplayName">
-                </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Password Question</span>
-                    <input id="inputPassQuest" type="text" value="" placeholder="Password Question" ng-disabled="passQuestDisabled" ng-model="regPassQuest">
-                </label>
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Password Answer</span>
-                    <input id="inputPassAns" type="text" value="" placeholder="Password Answer" ng-disabled="passAnsDisabled" ng-model="regPassAns">
-                </label>
-                <div id="accountTypeButtons" class="list">
-                    <div class="bar bar-header bar-light">
-                        <h1 class="title">Account Type</h1>
-                    </div>
-                    <br />
-                    <br />
+    <ion-content>
+        <ion-scroll ng-style="{height: screenHeight}">
+            <div class="no-header flat" style="width: 100%">
+                <div class="content">
                     <br/>
-                    <label class="item item-radio">
-                        <input type="radio" name="group" value="Customer" checked>
-                        <div class="item-content">Customer</div>
-                        <i class="radio-icon ion-checkmark"></i>
-                    </label>
-                    <label class="item item-radio">
-                        <input type="radio" name="group" value="Barber">
-                        <div class="item-content">Barber</div>
-                        <i class="radio-icon ion-checkmark"></i>
-                    </label>
-
+                    <h1 class="embossedText" style="text-align: center; color: white; font-style: italic; font-family:Arial; font-weight: bold;">Welcome to My Barber Shop</h1>
                 </div>
             </div>
+            <div id="mbslogin" style="height:100%">
+                <div class="list ">
+                    <!--<header>
+                        <h2 class="mbsheader" style="text-align:left"style="background: #4b4d4e;">Sign in</h2>
+                    </header>-->
+                    <!--<label class="item item-input">-->
+                    <!--<span class="input-label">Username</span>-->
+                    <ion-md-input id="l_email" type="email" placeholder="Email: john.doe@example.com" ng-model="logUsername" highlight-color="balanced"></ion-md-input>
+                    <!--</label>-->
+                    <!--<label class="item item-input">
+                    <span class="input-label">Password</span>-->
+                    <ion-md-input id="l_password" type="password" placeholder="Password" ng-model="logPassword" highlight-color="balanced"></ion-md-input>
+                    <!--</label>-->
 
-            <button class="button button-block button-positive button-balanced" ng-click="createUser()">
-                Register
-            </button>
+                </div>
 
-            <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister()">
-                Cancel
-            </button>
-        </div>
+                <div class="padding">
+                    <button id="loginButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="authUser(true)">Login</button>
+                    <br /><br />
+                    <button class="padding-vertical button button-block button-dark" ng-click="toggleLoginRegister()">Sign Up!</button>
+                </div>
+                <div class="padding">
+                    <button class="button button-block button-assertive" ng-click="toggleLoginRegister('ForgotPassword')">Forgot Password</button>
+                </div>
+            </div>
+            <div id="mbsregister" style="display:none; height:100%">
+                <div class="list">
+                    <!--<label id="inputEmailLabel" class="item item-input item-md-label">
+                        <span id="inputEmailSpan" class="input-label">Username</span>-->
+                    <ion-md-input id="inputEmail" class="balanced" type="email" value="" placeholder="john.doe@example.com" ng-model="regUsername" highlight-color="positive"></ion-md-input>
+                    <!--<div class="highlight"></div>
+                    </label>-->
+                    <!--<label class="item item-input item-md-label">
+                        <span class="input-label">Password</span>-->
+                    <ion-md-input id="inputPassword" type="password" value="" placeholder="Password" ng-disabled="passDisabled" ng-model="regPassword" highlight-color="positive"></ion-md-input>
+                    <!--</label>-->
+                    <!--<label id="inputConPasswordLabel" class="item item-input item-md-label">
+                        <span id="inputConPasswordSpan" class="input-label">Confirm Password</span>-->
+                    <ion-md-input id="inputConPassword" type="password" value="" placeholder="Confirm Password" ng-disabled="passConDisabled" ng-model="regConPassword" highlight-color="positive"></ion-md-input>
+                    <!--</label>-->
+                    <!--<label class="item item-input item-md-label">
+                        <span class="input-label">Display Name</span>-->
+                    <ion-md-input id="inputDisplayName" type="text" value="" placeholder="Display Name" ng-disabled="dispNameDisabled" ng-model="regDisplayName" highlight-color="positive"></ion-md-input>
+                    <!--</label>
+                    <label class="item item-input item-md-label">
+                        <span class="input-label">Password Question</span>-->
+                    <ion-md-input id="inputPassQuest" type="text" value="" placeholder="Password Question" ng-disabled="passQuestDisabled" ng-model="regPassQuest" highlight-color="positive"></ion-md-input>
+                    <!--</label>
+                    <label class="item item-input item-md-label">
+                        <span class="input-label">Password Answer</span>-->
+                    <ion-md-input id="inputPassAns" type="text" value="" placeholder="Password Answer" ng-disabled="passAnsDisabled" ng-model="regPassAns" highlight-color="positive"></ion-md-input>
+                    <!--</label>-->
+                    <br /><br />
+
+                    <div id="accountTypeButtons">
+                        <!--<div class="bar bar-subheader bar-dark padding">
+                            <h1 class="title">Account Type</h1>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <br />-->
+                        <label class="item item-radio">
+                            <input type="radio" name="group" value="Customer" checked>
+                            <div class="item-content" style="background-color: rgba(0, 0, 0, 0.6); color: #ffffff; letter-spacing: 0.25rem">Customer</div>
+                            <i class="radio-icon ion-checkmark" style="color: #ffffff"></i>
+                        </label>
+                        <br />
+                        <label class="item item-radio">
+                            <input type="radio" name="group" value="Barber">
+                            <div class="item-content" style="background-color: rgba(0, 0, 0, 0.6); color: #ffffff; letter-spacing: 0.25rem">Barber</div>
+                            <i class="radio-icon ion-checkmark" style="color: #ffffff"></i>
+                        </label>
+
+                    </div>
+                </div>
+
+                <div class="padding">
+                    <button id="registerButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="createUser()">Register</button>
+                    <br /><br />
+                    <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister()">Cancel</button>
+                </div>
+            </div>
+            <div id="mbsforgotpassword" style="display:none; height:100%">
+                <div class="list">
+                    <div ng-hide="showQuestion == true || showNewPassword == true">
+                        <ion-md-input id="forgotEmail" class="assertive" type="email" value="" placeholder="john.doe@example.com" highlight-color="positive"></ion-md-input>
+
+                        <br />
+
+                        <div class="padding">
+                            <button class="button button-block button-positive button-positive" ng-click="checkPasswordQuestion()">Get Question</button>
+                            <br /><br />
+                            <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div ng-hide="showQuestion == false || showNewPassword == true">
+                        <p id="forgotQuestion" class="padding embossedText" style="font-weight: bold; font-size: 20px">Question: {{passwordQuestion}}</p>
+                        <ion-md-input id="forgotAnswer" class="assertive" placeholder="Answer" highlight-color="positive"></ion-md-input>
+
+                        <br />
+
+                        <div class="padding">
+                            <button class="button button-block button-positive button-positive" ng-click="checkAnswer()">Answer</button>
+                            <br /><br />
+                            <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
+                        </div>
+                    </div>
+
+                    <div ng-hide="showNewPassword == false">
+                        <ion-md-input id="forgotPassword" class="assertive" placeholder="New Password" highlight-color="positive"></ion-md-input>
+
+                        <ion-md-input id="forgotPasswordConfirm" class="assertive" placeholder="Confirm New Password" highlight-color="positive"></ion-md-input>
+
+                        <br />
+
+                        <div class="padding">
+                            <button id="forgotButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="updatePassword()">Submit</button>
+                            <br /><br />
+                            <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-scroll>
     </ion-content>
 </ion-view>

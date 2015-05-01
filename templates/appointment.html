@@ -1,8 +1,9 @@
-<ion-view view-title="{{currentBarber.profile.displayName}}" hide-nav-bar="false">
+<ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <br/>
+    <br />
     <br />
     <br />
     <div id="appointmentCalendar" ui-calendar="calendarConfig.calendar" ng-model="eventSources" calendar="appointmentCalendar" class="padding-bottom"></div>

@@ -5,10 +5,36 @@
     <ion-content>
         <div id="maps"></div>
         <ion-scroll ng-style="{height: screenHeight}">
-            <button class="button button-positive button-block" ng-click="handleFreelanceClicked()">I'm A Freelance Barber</button>
-            <br />
-            <ion-list id="conDiv">
-            </ion-list>
+            <button class="button button-positive button-block padding-horizontal" ng-click="handleFreelanceClicked()" ng-hide="showFreelance == false">I'm A Freelance Barber</button>
+            <br ng-hide="showFreelance == false" />
+            <!--<ion-list id="conDiv">
+            </ion-list>-->
+            <div class="list condensed-space no-padding animate-blinds">
+                <div class="card dark-bg" ng-repeat="shop in nearbyBarberShops" ng-hide="nearbyBarberShops.length == 0">
+                    <a class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                        <h2 style="text-align: center">{{shop.shopName}}</h2>
+                        <p style="text-align: center">{{shop.street}}</p>
+                        <p style="text-align: center">{{shop.city}}, {{shop.state}}</p>
+                        <p style="text-align: center">Distance: {{shop.distance}} miles away</p>
+                        <img ng-src="{{shop.shopImage}}">
+                    </a>
+                    <div class="item tabs tabs-secondary tabs-icon-left dark-bg">
+                        <button style="color: white" class="waves-effect button button-clear button-block" ng-click="handleNearbyShopClicked(shop)">Set as your shop</button>
+                    </div>
+                </div>
+                <div class="card dark-bg" ng-repeat="shop in newResults" ng-hide="newResults.length == 0">
+                    <a class="item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse">
+                        <h2 style="text-align: center">{{shop.name}}</h2>
+                        <p style="text-align: center">{{shop.shopAddress}}</p>
+                        <p style="text-align: center">{{shop.shopCityState}}</p>
+                        <p style="text-align: center">Distance: {{shop.distance}} miles away</p>
+                        <img ng-src="{{shop.shopImage}}">
+                    </a>
+                    <div class="item tabs tabs-secondary tabs-icon-left dark-bg">
+                        <button style="color: white" class="waves-effect button button-clear button-block" ng-click="newResultsShopClicked(shop)">Set as your shop</button>
+                    </div>
+                </div>
+            </div>
         </ion-scroll>
     </ion-content>
 </ion-view>

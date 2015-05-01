@@ -389,6 +389,13 @@ function getUserData($scope) {
         $scope.checkmarkIcon = iconPrefix + "ion-ios-checkmark-empty";
         $scope.starOutlineIcon = iconPrefix + "ion-ios-star-outline";
         $scope.starIcon = iconPrefix + "ion-ios-star";
+        $scope.barbersIcon = iconPrefix + "ion-ios-person";
+        $scope.clientsIcon = iconPrefix + "ion-ios-people";
+        $scope.clockIcon = iconPrefix + "ion-ios-time";
+        $scope.clockOutlineIcon = iconPrefix + "ion-ios-time-outline";
+        $scope.listIcon = iconPrefix + "ion-ios-list";
+        $scope.listOutlineIcon = iconPrefix + "ion-ios-list-outline";
+        $scope.addIcon = iconPrefix + "ion-ios-plus-empty";
     }else
         if(ionic.Platform.isAndroid())
         {
@@ -409,6 +416,13 @@ function getUserData($scope) {
             $scope.checkmarkIcon = iconPrefix + "ion-android-done";
             $scope.starOutlineIcon = iconPrefix + "ion-android-star-outline";
             $scope.starIcon = iconPrefix + "ion-android-star";
+            $scope.barbersIcon = iconPrefix + "ion-android-person";
+            $scope.clientsIcon = iconPrefix + "ion-android-people";
+            $scope.clockIcon = iconPrefix + "ion-android-time";
+            $scope.clockOutlineIcon = iconPrefix + "ion-android-time";
+            $scope.listIcon = iconPrefix + "ion-android-list";
+            $scope.listOutlineIcon = iconPrefix + "ion-android-list";
+            $scope.addIcon = iconPrefix + "ion-android-add";
         }else
         {
             $scope.menuIcon = iconPrefix + "ion-navicon";
@@ -426,8 +440,15 @@ function getUserData($scope) {
             $scope.closeIcon = iconPrefix + "ion-close-circled";
             $scope.settingsIcon = iconPrefix + "ion-gear-b";
             $scope.checkmarkIcon = iconPrefix + "ion-checkmark";
-            $scope.starOutlineIcon = iconPrefix + "ion-ios-checkmark-empty";
-            $scope.starIcon = iconPrefix + "ion-ios-checkmark-empty";
+            $scope.starOutlineIcon = iconPrefix + "ion-ios-star-outline";
+            $scope.starIcon = iconPrefix + "ion-ios-star";
+            $scope.barbersIcon = iconPrefix + "ion-ios-person";
+            $scope.clientsIcon = iconPrefix + "ion-ios-people";
+            $scope.clockIcon = iconPrefix + "ion-ios-time";
+            $scope.clockOutlineIcon = iconPrefix + "ion-ios-time-outline";
+            $scope.listIcon = iconPrefix + "ion-ios-list";
+            $scope.listOutlineIcon = iconPrefix + "ion-ios-list-outline";
+            $scope.addIcon = iconPrefix + "ion-plus";
         }
 }
 
@@ -439,6 +460,86 @@ function getBarberData($scope) {
 function getImageData($scope) {
     if (localStorage["imageInfo"])
         $scope.imageInfo = JSON.parse(localStorage["imageInfo"]);
+}
+
+function setSideViewData(sideViewInfo) {
+    localStorage["sideViewInfo"] = JSON.stringify(sideViewInfo);
+}
+
+function getSideViewData($scope) {
+    if (localStorage["sideViewInfo"])
+        $scope.sideViewData = JSON.parse(localStorage["sideViewInfo"]);
+}
+
+function saveApptData(apts, apptTimes, selectedDate, selectedDateOnly) {
+    localStorage["apts"] = JSON.stringify(apts);
+    localStorage["availableApptTimes"] = JSON.stringify(apptTimes);
+    localStorage["selectedDate"] = JSON.stringify(selectedDate);
+    localStorage["selectedDateOnly"] = JSON.stringify(selectedDateOnly);
+}
+
+function getApptData($scope) {
+    if (localStorage["apts"])
+        $scope.apts = JSON.parse(localStorage["apts"]);
+    if (localStorage["availableApptTimes"])
+        $scope.availableApptTimes = JSON.parse(localStorage["availableApptTimes"]);
+    if (localStorage["selectedDate"])
+        $scope.selectedDate = JSON.parse(localStorage["selectedDate"]);
+    if (localStorage["selectedDateOnly"])
+        $scope.selectedDateOnly = JSON.parse(localStorage["selectedDateOnly"]);
+}
+
+function clearApptData() {
+    if (localStorage["apts"])
+        localStorage.removeItem("apts");
+    if (localStorage["availableApptTimes"])
+        localStorage.removeItem("availableApptTimes");
+    if (localStorage["selectedDate"])
+        localStorage.removeItem("selectedDate");
+    if (localStorage["selectedDateOnly"])
+        localStorage.removeItem("selectedDateOnly");
+}
+
+function saveNewAppointments(calendarNewEvents, currentNewAppointments) {
+    localStorage["calendarNewEvents"] = JSON.stringify(calendarNewEvents);
+    localStorage["currentNewAppointments"] = JSON.stringify(currentNewAppointments);
+}
+
+function getNewAppointments($scope) {
+    if (localStorage["calendarNewEvents"])
+        $scope.calendarNewEvents = JSON.parse(localStorage["calendarNewEvents"]);
+    if (localStorage["currentNewAppointments"])
+        $scope.currentNewAppointments = JSON.parse(localStorage["currentNewAppointments"]);
+}
+
+function clearNewAppointmentsData() {
+    if (localStorage["calendarNewEvents"])
+        localStorage.removeItem("calendarNewEvents");
+    if (localStorage["currentNewAppointments"])
+        localStorage.removeItem("currentNewAppointments");
+}
+
+function saveNewData(getNewData) {
+    localStorage["getNewData"] = JSON.stringify(getNewData);
+}
+
+function getNewData($scope) {
+    if (localStorage["getNewData"])
+        $scope.getNewData = JSON.parse(localStorage["getNewData"]);
+}
+
+function saveBarberShopProfileImage(newBarberShopImage) {
+    localStorage["newBarberShopImage"] = JSON.stringify(newBarberShopImage);
+}
+
+function getBarberShopProfileImage($scope) {
+    if (localStorage["newBarberShopImage"])
+        $scope.newBarberShopImage = JSON.parse(localStorage["newBarberShopImage"]);
+}
+
+function clearBarberShopProfileImage() {
+    if (localStorage["newBarberShopImage"])
+        localStorage.removeItem("newBarberShopImage");
 }
 
 function getNavigationStack() {
@@ -496,230 +597,458 @@ function isBarber(type)
 	return false;
 }
 
+//function renderNearbyBarberShops(data, $scope, $filter, coords) {
+//    if (data) {
+//        dataObjects = new Array();
+        
+//        var shops = data;
+        
+//        var barberShopID = []; 
+        
+//        if(isBarber($scope.mbsAccountType))
+//        	barberShopID.push($scope.currentBarber.barberShopID);
+//        else
+//    	{
+//        	angular.forEach($scope.currentBarberShops, function(shop, key){
+//        		barberShopID.push(shop.barberShopID);
+//        	});
+//    	}
+        
+//        if (shops && shops.length > 0)
+//            shops = $filter('filter')(shops, { barberShopID: barberShopID }, function (actual, expected) {
+//                return barberShopID.indexOf(actual) > -1 ? false : true;
+//            });
+
+//        var container = $("<div/>").addClass("list card ");
+
+//        angular.forEach(shops, function (barberShop, key) {
+//            var shop = $("<div/>").addClass("item item-body")/*.css("background-color", "#4b4d4e")*/;
+
+//            var shopName = $("<label/>").text(barberShop.shopName);
+//            var shopAddress = $("<label/>").text(barberShop.street);
+//            var shopCityState = $("<label/>").text(barberShop.city + ", " + barberShop.state);
+//            var defaultButton = $("<button/>").addClass("button button-icon button-clear icon-left ion-images")/*.append(
+//            						$("<i/>").addClass("")
+//            								 .text()
+//        						)*/.text("Set as your shop").attr("value", barberShop.shopName).click(function () {          	
+//                if (dataObjects) 
+//                {                    
+//                    var selectedShop = {};
+//                    var button = $(this);
+//                    angular.forEach(dataObjects, function (shop, key) {
+//                        if (shop.shopName == button.attr("value")) {                        	
+//                        	selectedShop = shop;                        	
+//                        }
+                        
+//                    });      
+                    
+//	            	if(isBarber($scope.mbsAccountType))
+//	        		{
+//						$scope.currentBarber.barberShopID = selectedShop.barberShopID;
+	            		
+//						var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?", 
+//	            			"Barber Shop Select",
+//	            			["Yes", "No"]).then(function(res) 
+//        				{
+//	            		     if(res == 1) 
+//	            		     {
+//	            		    	$scope.currentBarber.isOwner = true;
+//            					$scope.updateBarberInfo();
+//	            		     } else 
+//	            		     {
+//	            		    	$scope.currentBarber.isOwner = false;
+//            					$scope.updateBarberInfo();
+//	            		     }
+//	            		});            		        		
+//	        		}else  
+//                        $scope.createBarberShopCustomer(selectedShop);
+//                }
+//            });
+
+//            var distance = $("<label/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.latitude, barberShop.longitude, "M") +
+//                            " miles away");
+
+//            shop.append(shopName)
+//                .append($("<br/>"))
+//                .append(shopAddress)
+//                .append($("<br/>"))
+//                .append(shopCityState)
+//                //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
+//                .append($("<br/>"))
+//                .append(distance)
+//                .append($("<br/>"));
+//               // .append();
+
+
+//            container.append(shop);
+//            container.append($("<div/>").addClass("item").append(defaultButton));
+//        $("#conDiv").append(container);
+
+//            dataObjects.push(barberShop);
+//        });
+
+//    }
+//}
 function renderNearbyBarberShops(data, $scope, $filter, coords) {
     if (data) {
         dataObjects = new Array();
-        
+
         var shops = data;
-        
-        var barberShopID = []; 
-        
-        if(isBarber($scope.mbsAccountType))
-        	barberShopID.push($scope.currentBarber.barberShopID);
-        else
-    	{
-        	angular.forEach($scope.currentBarberShops, function(shop, key){
-        		barberShopID.push(shop.barberShopID);
-        	});
-    	}
-        
+
+        var barberShopID = [];
+
+        if (isBarber($scope.mbsAccountType))
+            barberShopID.push($scope.currentBarber.barberShopID);
+        else {
+            angular.forEach($scope.currentBarberShops, function (shop, key) {
+                barberShopID.push(shop.barberShopID);
+            });
+        }
+
         if (shops && shops.length > 0)
             shops = $filter('filter')(shops, { barberShopID: barberShopID }, function (actual, expected) {
                 return barberShopID.indexOf(actual) > -1 ? false : true;
             });
 
-        var container = $("<div/>").addClass("list card ");
+        var ionicCon = $("<div/>").addClass("ionic"), contentCon = $("<div/>").addClass("content"), listCon = $("<div/>").addClass("list condensed-space no-padding animate-blinds");
+
+        var container = $("<div/>").addClass("card dark-bg");
 
         angular.forEach(shops, function (barberShop, key) {
-            var shop = $("<div/>").addClass("item item-body")/*.css("background-color", "#4b4d4e")*/;
+            barberShop.distance = calculateDistance(coords.lat, coords.lon, barberShop.latitude, barberShop.longitude, "M");
+            //var shop = $("<a/>").addClass("item clear-bg item-bg-image waves-effect waves-button waves-light has-mask-reverse");
 
-            var shopName = $("<label/>").text(barberShop.shopName);
-            var shopAddress = $("<label/>").text(barberShop.street);
-            var shopCityState = $("<label/>").text(barberShop.city + ", " + barberShop.state);
-            var defaultButton = $("<button/>").addClass("button button-icon button-clear icon-left ion-images")/*.append(
-            						$("<i/>").addClass("")
-            								 .text()
-        						)*/.text("Set as your shop").attr("value", barberShop.shopName).click(function () {          	
-                if (dataObjects) 
-                {                    
-                    var selectedShop = {};
-                    var button = $(this);
-                    angular.forEach(dataObjects, function (shop, key) {
-                        if (shop.shopName == button.attr("value")) {                        	
-                        	selectedShop = shop;                        	
-                        }
-                        
-                    });      
-                    
-	            	if(isBarber($scope.mbsAccountType))
-	        		{
-						$scope.currentBarber.barberShopID = selectedShop.barberShopID;
-	            		
-						var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?", 
-	            			"Barber Shop Select",
-	            			["Yes", "No"]).then(function(res) 
-        				{
-	            		     if(res == 1) 
-	            		     {
-	            		    	$scope.currentBarber.isOwner = true;
-            					$scope.updateBarberInfo();
-	            		     } else 
-	            		     {
-	            		    	$scope.currentBarber.isOwner = false;
-            					$scope.updateBarberInfo();
-	            		     }
-	            		});            		        		
-	        		}else  
-                        $scope.createBarberShopCustomer(selectedShop);
-                }
-            });
+            //var shopName = $("<h2/>").text(barberShop.shopName);
+            //var shopAddress = $("<p/>").text(barberShop.street);
+            //var shopCityState = $("<p/>").text(barberShop.city + ", " + barberShop.state);
+            //var img = $("<img/>").attr("ng-src", barberShop.shopImage);
 
-            var distance = $("<label/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.latitude, barberShop.longitude, "M") +
-                            " miles away");
+            //var defaultButton = $("<button/>").addClass("button button-icon button-clear ion-images")/*.append(
+            //						$("<i/>").addClass("")
+            //								 .text()
+        	//					)*/.text("Set as your shop").attr("value", barberShop.shopName).click(function () {
+        	//					    if (dataObjects) {
+        	//					        var selectedShop = {};
+        	//					        var button = $(this);
+        	//					        angular.forEach(dataObjects, function (shop, key) {
+        	//					            if (shop.shopName == button.attr("value")) {
+        	//					                selectedShop = shop;
+        	//					            }
 
-            shop.append(shopName)
-                .append($("<br/>"))
-                .append(shopAddress)
-                .append($("<br/>"))
-                .append(shopCityState)
-                //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
-                .append($("<br/>"))
-                .append(distance)
-                .append($("<br/>"));
-               // .append();
+        	//					        });
+
+        	//					        if (isBarber($scope.mbsAccountType)) {
+        	//					            $scope.currentBarber.barberShopID = selectedShop.barberShopID;
+
+        	//					            var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?",
+            //                                    "Barber Shop Select",
+            //                                    ["Yes", "No"]).then(function (res) {
+            //                                        if (res == 1) {
+            //                                            $scope.currentBarber.isOwner = true;
+            //                                            $scope.updateBarberInfo();
+            //                                        } else {
+            //                                            $scope.currentBarber.isOwner = false;
+            //                                            $scope.updateBarberInfo();
+            //                                        }
+            //                                    });
+        	//					        } else
+        	//					            $scope.createBarberShopCustomer(selectedShop);
+        	//					    }
+        	//					});
+
+            //var distance = $("<p/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.latitude, barberShop.longitude, "M") +
+            //                " miles away");
+
+            //shop.append(shopName)
+            //    //.append($("<br/>"))
+            //    .append(shopAddress)
+            //    //.append($("<br/>"))
+            //    .append(shopCityState)
+            //    //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
+            //    //.append($("<br/>"))
+            //    .append(distance)
+            //    .append(img)
+            //    //.append($("<br/>"));
+            //// .append();
 
 
-            container.append(shop);
-            container.append($("<div/>").addClass("item").append(defaultButton));
-        $("#conDiv").append(container);
+            //container.append(shop);
+            //container.append($("<div/>").addClass("item tabs tabs-secondary tabs-icon-left subdued").append(defaultButton));
 
-            dataObjects.push(barberShop);
+            //ionicCon.append(contentCon.append(listCon.append(container)));
+
+            //$("#conDiv").append(ionicCon);
+
+            //dataObjects.push(barberShop);
         });
 
     }
 }
 
-function renderBarberShops(data, $scope, coords)
-{
-    if(data)
-    {
-    	if(dataObjects == null)
-    		dataObjects = new Array();
+//function renderBarberShops(data, $scope, coords)
+//{
+//    if(data)
+//    {
+//    	if(dataObjects == null)
+//    		dataObjects = new Array();
+
+//        var container = $("<div/>").addClass("list card ");
+
+//        angular.forEach(data, function (barberShop, key) {
+//            var shop = $("<div/>").addClass("item item-body")/*.css("background-color", "#4b4d4e")*/;
+
+//            var shopName = $("<label/>").text(barberShop.name);
+//            var shopAddress = $("<label/>").text(formatAddress(barberShop.formatted_address, "Street"));
+//            var shopCityState = $("<label/>").text(formatAddress(barberShop.formatted_address, "CityState"));
+//            var defaultButton = $("<button/>").addClass("button button-icon button-clear icon-left ion-images")/*.append(
+//            						$("<i/>").addClass("")
+//            								 .text()
+//        						)*/.text("Set as your shop").attr("value", barberShop.name).click(function () {
+//                if(dataObjects)
+//                {
+//                    var button = $(this);
+
+//                    angular.forEach(dataObjects, function (shop, key) {
+//                        if(shop.name == button.attr("value"))
+//                        {
+//                            //check for more details on the shop
+//                            var request = {
+//                                reference: shop.reference
+//                            };
+
+//                            var service = new google.maps.places.PlacesService(map);
+//                            service.getDetails(request, function (results, status) {
+//                                if (status == google.maps.places.PlacesServiceStatus.OK) {
+//                                    //update the shop information
+//                                    shop.phoneNumber = results.formatted_phone_number;
+//                                    if(results.website)
+//                                        shop.website = results.website;
+//                                    if (results.opening_hours) {
+//                                        for (var i = 0; i < results.opening_hours.periods.length; i++) {
+//                                            var hours = results.opening_hours.periods[i];
+//                                            var allDay = false;
+
+//                                            if(!hours.close)
+//                                                allDay = true;
+
+//                                            switch (i) {
+//                                                case 0:
+//                                                    shop.sunday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 1:
+//                                                    shop.monday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 2:
+//                                                    shop.tuesday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 3:
+//                                                    shop.wednesday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 4:
+//                                                    shop.thursday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 5:
+//                                                    shop.friday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                                case 6:
+//                                                    shop.saturday = allDay == true ? "Open All Day" :
+//                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+//                                                    break;
+//                                            }
+//                                        }
+//                                    }
+//                                }
+
+//                                if (isBarber($scope.mbsAccountType)) {
+//                                    shop.isCustomer = false;
+
+//                                    var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?",
+//                                        "Barber Shop Select",
+//                                        ["Yes", "No"]).then(function (res) {
+//                                        if (res == 1) {
+//                                            shop.isOwner = true;
+
+//                                            $scope.createBarberShop(shop);
+//                                        }
+//                                        else {
+//                                            shop.isOwner = false;
+
+//                                            $scope.createBarberShop(shop);
+//                                        }
+//                                    });
+//                                } else
+//                                {
+//                                    shop.isCustomer = true;
+//                                    shop.isOwner = false;
+
+//                                    $scope.createBarberShop(shop);
+//                                }
+//                            });
+
+//                        }  
+//                    });
+//                }
+//            });
+//            var distance = $("<label/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.geometry.location.k, barberShop.geometry.location.A != null ? barberShop.geometry.location.A : barberShop.geometry.location.D, "M") +
+//                            " miles away");
+
+//            shop.append(shopName)
+//                .append($("<br/>"))
+//                .append(shopAddress)
+//                .append($("<br/>"))
+//                .append(shopCityState)
+//                //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
+//                .append($("<br/>"))
+//                .append(distance)
+//                .append($("<br/>"))
+//                .append(defaultButton);
+                
+
+//           // container.append(shop);
+//            container.append(shop);
+//            container.append($("<div/>").addClass("item").append(defaultButton).append(defaultButton));
+//            $("#conDiv").append(container);
+
+//            dataObjects.push(barberShop);
+//        });
+
+//    }
+//}
+function renderBarberShops(data, $scope, coords) {
+    if (data) {
+        if (dataObjects == null)
+            dataObjects = new Array();
 
         var container = $("<div/>").addClass("list card ");
 
         angular.forEach(data, function (barberShop, key) {
-            var shop = $("<div/>").addClass("item item-body")/*.css("background-color", "#4b4d4e")*/;
+            //var shop = $("<div/>").addClass("item item-body")/*.css("background-color", "#4b4d4e")*/;
 
-            var shopName = $("<label/>").text(barberShop.name);
-            var shopAddress = $("<label/>").text(formatAddress(barberShop.formatted_address, "Street"));
-            var shopCityState = $("<label/>").text(formatAddress(barberShop.formatted_address, "CityState"));
-            var defaultButton = $("<button/>").addClass("button button-icon button-clear icon-left ion-images")/*.append(
-            						$("<i/>").addClass("")
-            								 .text()
-        						)*/.text("Set as your shop").attr("value", barberShop.name).click(function () {
-                if(dataObjects)
-                {
-                    var button = $(this);
+            //var shopName = $("<label/>").text(barberShop.name);
+            //var shopAddress = $("<label/>").text(formatAddress(barberShop.formatted_address, "Street"));
+            barberShop.shopAddress = formatAddress(barberShop.formatted_address, "Street");
+            //var shopCityState = $("<label/>").text(formatAddress(barberShop.formatted_address, "CityState"));
+            barberShop.shopCityState = formatAddress(barberShop.formatted_address, "CityState");
+            //var defaultButton = $("<button/>").addClass("button button-icon button-clear icon-left ion-images")/*.append(
+            //						$("<i/>").addClass("")
+            //								 .text()
+        	//					)*/.text("Set as your shop").attr("value", barberShop.name).click(function () {
+        	//					    if (dataObjects) {
+        	//					        var button = $(this);
 
-                    angular.forEach(dataObjects, function (shop, key) {
-                        if(shop.name == button.attr("value"))
-                        {
-                            //check for more details on the shop
-                            var request = {
-                                reference: shop.reference
-                            };
+        	//					        angular.forEach(dataObjects, function (shop, key) {
+        	//					            if (shop.name == button.attr("value")) {
+        	//					                //check for more details on the shop
+        	//					                var request = {
+        	//					                    reference: shop.reference
+        	//					                };
 
-                            var service = new google.maps.places.PlacesService(map);
-                            service.getDetails(request, function (results, status) {
-                                if (status == google.maps.places.PlacesServiceStatus.OK) {
-                                    //update the shop information
-                                    shop.phoneNumber = results.formatted_phone_number;
-                                    if(results.website)
-                                        shop.website = results.website;
-                                    if (results.opening_hours) {
-                                        for (var i = 0; i < results.opening_hours.periods.length; i++) {
-                                            var hours = results.opening_hours.periods[i];
-                                            var allDay = false;
+        	//					                var service = new google.maps.places.PlacesService(map);
+        	//					                service.getDetails(request, function (results, status) {
+        	//					                    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        	//					                        //update the shop information
+        	//					                        shop.phoneNumber = results.formatted_phone_number;
+        	//					                        if (results.website)
+        	//					                            shop.website = results.website;
+        	//					                        if (results.opening_hours) {
+        	//					                            for (var i = 0; i < results.opening_hours.periods.length; i++) {
+        	//					                                var hours = results.opening_hours.periods[i];
+        	//					                                var allDay = false;
 
-                                            if(!hours.close)
-                                                allDay = true;
+        	//					                                if (!hours.close)
+        	//					                                    allDay = true;
 
-                                            switch (i) {
-                                                case 0:
-                                                    shop.sunday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 1:
-                                                    shop.monday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 2:
-                                                    shop.tuesday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 3:
-                                                    shop.wednesday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 4:
-                                                    shop.thursday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 5:
-                                                    shop.friday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                                case 6:
-                                                    shop.saturday = allDay == true ? "Open All Day" :
-                                                    getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
-                                                    break;
-                                            }
-                                        }
-                                    }
-                                }
+        	//					                                switch (i) {
+        	//					                                    case 0:
+        	//					                                        shop.sunday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 1:
+        	//					                                        shop.monday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 2:
+        	//					                                        shop.tuesday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 3:
+        	//					                                        shop.wednesday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 4:
+        	//					                                        shop.thursday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 5:
+        	//					                                        shop.friday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                    case 6:
+        	//					                                        shop.saturday = allDay == true ? "Open All Day" :
+            //                                                            getReadableGoogleHours(hours.open) + " - " + getReadableGoogleHours(hours.close);
+        	//					                                        break;
+        	//					                                }
+        	//					                            }
+        	//					                        }
+        	//					                    }
 
-                                if (isBarber($scope.mbsAccountType)) {
-                                    shop.isCustomer = false;
+        	//					                    if (isBarber($scope.mbsAccountType)) {
+        	//					                        shop.isCustomer = false;
 
-                                    var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?",
-                                        "Barber Shop Select",
-                                        ["Yes", "No"]).then(function (res) {
-                                        if (res == 1) {
-                                            shop.isOwner = true;
+        	//					                        var confirmPopup = $scope.$cordovaDialogs.confirm("Do you own this shop?",
+            //                                                "Barber Shop Select",
+            //                                                ["Yes", "No"]).then(function (res) {
+            //                                                    if (res == 1) {
+            //                                                        shop.isOwner = true;
 
-                                            $scope.createBarberShop(shop);
-                                        }
-                                        else {
-                                            shop.isOwner = false;
+            //                                                        $scope.createBarberShop(shop);
+            //                                                    }
+            //                                                    else {
+            //                                                        shop.isOwner = false;
 
-                                            $scope.createBarberShop(shop);
-                                        }
-                                    });
-                                } else
-                                {
-                                    shop.isCustomer = true;
-                                    shop.isOwner = false;
+            //                                                        $scope.createBarberShop(shop);
+            //                                                    }
+            //                                                });
+        	//					                    } else {
+        	//					                        shop.isCustomer = true;
+        	//					                        shop.isOwner = false;
 
-                                    $scope.createBarberShop(shop);
-                                }
-                            });
+        	//					                        $scope.createBarberShop(shop);
+        	//					                    }
+        	//					                });
 
-                        }  
-                    });
-                }
-            });
-            var distance = $("<label/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.geometry.location.k, barberShop.geometry.location.A != null ? barberShop.geometry.location.A : barberShop.geometry.location.D, "M") +
-                            " miles away");
+        	//					            }
+        	//					        });
+        	//					    }
+        	//					});
+            //var distance = $("<label/>").text("Distance: " + calculateDistance(coords.lat, coords.lon, barberShop.geometry.location.k, barberShop.geometry.location.A != null ? barberShop.geometry.location.A : barberShop.geometry.location.D, "M") +
+            //              " miles away");
+            barberShop.distance = calculateDistance(coords.lat, coords.lon, barberShop.geometry.location.k, barberShop.geometry.location.A != null ? barberShop.geometry.location.A : barberShop.geometry.location.D, "M");
 
-            shop.append(shopName)
-                .append($("<br/>"))
-                .append(shopAddress)
-                .append($("<br/>"))
-                .append(shopCityState)
-                //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
-                .append($("<br/>"))
-                .append(distance)
-                .append($("<br/>"))
-                .append(defaultButton);
-                
+            //shop.append(shopName)
+            //    .append($("<br/>"))
+            //    .append(shopAddress)
+            //    .append($("<br/>"))
+            //    .append(shopCityState)
+            //    //.append($("<i/>").addClass("fa fa-chevron-right pull-right").val("::before").css("color", "white"))
+            //    .append($("<br/>"))
+            //    .append(distance)
+            //    .append($("<br/>"))
+            //    .append(defaultButton);
 
-           // container.append(shop);
-            container.append(shop);
-            container.append($("<div/>").addClass("item").append(defaultButton).append(defaultButton));
-            $("#conDiv").append(container);
 
-            dataObjects.push(barberShop);
+            //// container.append(shop);
+            //container.append(shop);
+            //container.append($("<div/>").addClass("item").append(defaultButton).append(defaultButton));
+            //$("#conDiv").append(container);
+
+            //dataObjects.push(barberShop);
         });
 
     }
@@ -745,6 +1074,9 @@ function calculateDistance(lat1, lon1, lat2, lon2, unit) {
 
 function formatAddress(address, type)
 {
+    if(address.indexOf("Suite") > -1)
+        address = address.replace(address.charAt(address.indexOf(",")), "");
+
     var format = address.split(", ");
 
     if(format)
@@ -843,7 +1175,7 @@ function buildBarberSearchProfile(barber) {
             barber.profile.image.defaultImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
         }
         
-        currentBarber.barberImage = getProfileImage(barber.profile.image, "barber");
+        currentBarber.barberImage = getProfileImage(barber.profile.image, "barber", "avatar");
 
         currentBarber.barberShop = barber.barberShop;
         currentBarber.barberStatus = barber.barberStatus;
@@ -861,6 +1193,50 @@ function buildBarberSearchProfile(barber) {
     }
 }
 
+function buildUserBarbers(barbers, $scope) {
+    if (barbers) {
+        $scope.currentUserBarbers = [];
+
+        angular.forEach(barbers, function (barber, key) {
+            var currentBarber = new Object();
+
+            currentBarber.barberID = barber.barberID;
+            currentBarber.avgCutTime = barber.avgCutTime;
+            currentBarber.normalTimeIn = barber.normalTimeIn;
+            currentBarber.yearsOfExperience = barber.yearsOfExperience;
+            currentBarber.barberShopID = barber.barberShopID;
+            currentBarber.profileID = barber.profileID;
+            currentBarber.acceptsAppointments = barber.acceptsAppointments;
+            currentBarber.isOwner = barber.isOwner;
+            currentBarber.isFreelancer = barber.isFreelancer;
+            currentBarber.profile = barber.profile;
+
+            if (barber.profile.image.imageID > 0)
+                currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
+
+            currentBarber.barberImage = getProfileImage(barber.profile.image, "barber", "avatar");
+
+            currentBarber.barberShop = barber.barberShop;
+            currentBarber.barberStatus = barber.barberStatus;
+            currentBarber.barberStatus.vacationStartDateReadable = barber.barberStatus.vacationStartDate != null ? formatDateNoTime(barber.barberStatus.vacationStartDate) : "N/A";
+            currentBarber.barberStatus.vacationEndDateReadable = barber.barberStatus.vacationEndDate != null ? formatDateNoTime(barber.barberStatus.vacationEndDate) : "N/A";
+            currentBarber.rating = barber.rating;
+            currentBarber.barberSchedule = barber.barberSchedule;
+            currentBarber.barberSpecialties = barber.barberSpecialties;
+            currentBarber.barberClients = barber.barberClients;
+            currentBarber.barberImages = barber.barberImages;
+            currentBarber.dateCreated = barber.dateCreated;
+
+            currentBarber.doesAppointments = convertBoolean(barber.acceptsAppointments);
+            currentBarber.available = convertBoolean(barber.barberStatus.isAvailable);
+            currentBarber.makeAppointment = barber.acceptsAppointments == "true" && barber.profile.profileID != $scope.mbsProfileID ? false : true;
+            currentBarber.ratingCalc = calculateRating(barber.rating.rating, 100);
+
+            $scope.currentUserBarbers.push(currentBarber);
+        });
+    }
+}
+
 
 function buildProfile(profile, $scope)
 {
@@ -872,6 +1248,9 @@ function buildProfile(profile, $scope)
 
         currentProfile.profileID = profile.member.profileID;
         currentProfile.displayName = profile.member.displayName;
+        currentProfile.firstName = profile.member.firstName == null || profile.member.firstName == undefined ? "" : profile.member.firstName;
+        currentProfile.lastName = profile.member.lastName == null || profile.member.lastName == undefined ? "" : profile.member.lastName;
+        currentProfile.phoneNumber = profile.member.phoneNumber == null || profile.member.phoneNumber == undefined ? "" : profile.member.phoneNumber;
         currentProfile.profileStatus = profile.member.profileStatus;
         currentProfile.accountType = profile.member.accountType;
         currentProfile.image = profile.member.image;
@@ -887,38 +1266,115 @@ function buildProfile(profile, $scope)
     }
 }
 
-function buildBarberShop(barberShop, $scope, $sce)
+function buildClients(profiles, $scope) {
+    if (profiles) {
+        $scope.currentClients = [];
+
+        angular.forEach(profiles, function (profile, key) {
+            var currentProfile = new Object();
+
+            currentProfile.profileID = profile.profile.profileID;
+            currentProfile.displayName = profile.profile.displayName;
+            currentProfile.firstName = profile.profile.firstName == null || profile.profile.firstName == undefined ? "" : profile.profile.firstName;
+            currentProfile.lastName = profile.profile.lastName == null || profile.profile.lastName == undefined ? "" : profile.profile.lastName;
+            currentProfile.phoneNumber = profile.profile.phoneNumber == null || profile.profile.phoneNumber == undefined ? "" : profile.profile.phoneNumber;
+            currentProfile.profileStatus = profile.profile.profileStatus;
+            currentProfile.accountType = profile.profile.accountType;
+            currentProfile.image = profile.profile.image;
+
+            if (profile.profile.image.imageID > 0)
+                currentProfile.image.defaultImage = profile.profile.image.fileLocation + profile.profile.image.fileName;
+
+            currentProfile.clientImage = getProfileImage(profile.profile.image, "profile", "avatar");
+
+            var dateCreated = splitDate(profile.profile.dateCreated);
+            currentProfile.clientSince = getReadableMonth(dateCreated.getMonth()) + " " + dateCreated.getDate() + ", " + dateCreated.getFullYear();
+
+            currentProfile.dateCreated = profile.profile.dateCreated;
+            currentProfile.barberShop = profile.barberShop;
+            currentProfile.images = profile.media;
+
+            $scope.currentClients.push(currentProfile);
+        });
+    }
+}
+
+function buildBarberShop(barberShop, $scope, $sce, newData, isUserProfile)
 {
     if(barberShop)
     {
+        var shouldAdd = true;
         $scope.currentBarberShops = new Array();
 
-        angular.forEach(barberShop, function (shop, key) {
-            var currentBarberShop = new Object();
+        //if (barberShop.length != $scope.currentBarberShops.length && newData) {
+        //    //barberShop = barberShop.slice($scope.currentBarberShops.length, barberShop.length);
+        //    $scope.currentBarberShops = new Array();
+        //    shouldAdd = true;
+        //}
+        var counter = 0;
 
-            currentBarberShop.barberShopID = shop.barberShopID;
-            currentBarberShop.shopName = shop.shopName;
-            currentBarberShop.totalBarbers = shop.totalBarbers;
-            currentBarberShop.phoneNumber = shop.phoneNumber;
-            currentBarberShop.hoursOfOperation = shop.hoursOfOperation;
-            currentBarberShop.image = shop.image;
+        if (newData == null || shouldAdd) {
+            angular.forEach(barberShop, function (shop, key) {
+                var currentBarberShop = new Object();
 
-            if (shop.image.imageID > 0)
-                currentBarberShop.image.defaultImage = shop.image.fileLocation + shop.image.fileName;
+                currentBarberShop.barberShopID = shop.barberShopID;
+                currentBarberShop.shopName = shop.shopName;
+                currentBarberShop.totalBarbers = shop.totalBarbers;
+                currentBarberShop.phoneNumber = shop.phoneNumber;
+                currentBarberShop.hoursOfOperation = shop.hoursOfOperation;
+                currentBarberShop.image = shop.image;
 
-            currentBarberShop.address = shop.address;
-            currentBarberShop.barberShopSpecialties = shop.barberShopSpecialties;
-            currentBarberShop.barbers = shop.barbers;
-            currentBarberShop.images = shop.images;
-            currentBarberShop.customers = shop.customers;
+                if (shop.image.imageID > 0)
+                    currentBarberShop.image.defaultImage = shop.image.fileLocation + shop.image.fileName;
 
-            currentBarberShop.shopImage = getProfileImage(shop.image, "barberShop");
-            currentBarberShop.formattedStreet = formatAddressReverse(shop.address, "Street");
-            currentBarberShop.formattedCityState = formatAddressReverse(shop.address, "CityState");
-            currentBarberShop.hoursOf = getHoursOfOperation(currentBarberShop.hoursOfOperation, true).html();
+                currentBarberShop.address = shop.address;
+                currentBarberShop.shopImage = "";
+                if (currentBarberShop.image && currentBarberShop.image.imageID) {
+                    currentBarberShop.shopImage = getProfileImage(currentBarberShop.image, "barberShop", "background");
 
-            $scope.currentBarberShops.push(currentBarberShop);
-        });
+                    if (isUserProfile && isUserProfile == true) {
+                        counter++;
+
+                        if (counter == $scope.currentBarberShops.length)
+                            $scope.playEffect();
+                    }
+                }
+                else {
+                    $.ajax({
+                        url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&heading=270&location=" +
+                              currentBarberShop.address.latitude + "," + currentBarberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw",
+                        success: function (response) {
+                            if (response.length < 5000)
+                                currentBarberShop.shopImage = getProfileImage(currentBarberShop.image, "barberShop", "background");
+                            else
+                                currentBarberShop.shopImage = "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
+                                                   currentBarberShop.address.latitude + "," + currentBarberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw";
+
+
+                            if (isUserProfile && isUserProfile == true)
+                            {
+                                counter++;
+
+                                if (counter == $scope.currentBarberShops.length)
+                                    $scope.playEffect();
+                            }
+                        }
+                    });
+                }
+
+                currentBarberShop.barberShopSpecialties = shop.barberShopSpecialties;
+                currentBarberShop.barbers = shop.barbers;
+                currentBarberShop.images = shop.images;
+                currentBarberShop.customers = shop.customers;
+
+                //currentBarberShop.shopImage = getProfileImage(shop.image, "barberShop", "background");
+                currentBarberShop.formattedStreet = formatAddressReverse(shop.address, "Street");
+                currentBarberShop.formattedCityState = formatAddressReverse(shop.address, "CityState");
+                currentBarberShop.hoursOf = getHoursOfOperation(currentBarberShop.hoursOfOperation, true).html();
+
+                $scope.currentBarberShops.push(currentBarberShop);
+            });
+        }
     }
 }
 
@@ -948,11 +1404,12 @@ function buildBarberShopDetail(barberShop, $scope) {
     }
 }
 
-function buildAppointments(appointments, $scope, $filter, useFilter) {
+function buildAppointments(appointments, $scope, $filter, useFilter, newData) {
     if (appointments) {
-        var apts = appointments;
+        var shouldAdd = false;
+        $scope.currentAppointments = newData == null ? new Array() : $scope.currentAppointments;
 
-        $scope.currentAppointments = new Array();
+        var apts = appointments;
 
         if (useFilter) {
             if (apts && apts.length > 0)
@@ -963,40 +1420,47 @@ function buildAppointments(appointments, $scope, $filter, useFilter) {
                 });
         }
 
+        if (apts.length != $scope.currentAppointments.length && newData) {
+            //appointments = appointments.slice($scope.currentAppointments.length, appointments.length);
+            $scope.currentAppointments = new Array();
+            shouldAdd = true;
+        }
+
        // $scope.currentAppointments = new Array();
+        if (newData == null || shouldAdd) {
+            angular.forEach(useFilter ? apts : appointments, function (appointment, key) {
+                var currentAppointment = new Object();
 
-        angular.forEach(useFilter ? apts : appointments, function (appointment, key) {
-            var currentAppointment = new Object();
+                currentAppointment.appointmentID = appointment.appointmentID;
+                currentAppointment.barberID = appointment.barberID;
+                currentAppointment.profileID = appointment.profileID;
+                currentAppointment.wasCancelled = appointment.wasCancelled;
+                currentAppointment.appointmentDate = appointment.appointmentDate;
+                currentAppointment.aptDate = formatDate(appointment.appointmentDate);
+                currentAppointment.appointmentStatus = appointment.appointmentStatus;
+                if (appointment.barber) {
+                    currentAppointment.barber = appointment.barber;
+                    currentAppointment.displayName = appointment.barber.profile.displayName;
 
-            currentAppointment.appointmentID = appointment.appointmentID;
-            currentAppointment.barberID = appointment.barberID;
-            currentAppointment.profileID = appointment.profileID;
-            currentAppointment.wasCancelled = appointment.wasCancelled;
-            currentAppointment.appointmentDate = appointment.appointmentDate;
-            currentAppointment.aptDate = formatDate(appointment.appointmentDate);
-            currentAppointment.appointmentStatus = appointment.appointmentStatus;
-            if (appointment.barber) {
-                currentAppointment.barber = appointment.barber;
-                currentAppointment.displayName = appointment.barber.profile.displayName;
+                    if (appointment.barber.profile.image && appointment.barber.profile.image.imageID > 0)
+                        appointment.barber.profile.image["defaultImage"] = appointment.barber.profile.image.fileLocation + appointment.barber.profile.image.fileName;
 
-                if (appointment.barber.profile.image && appointment.barber.profile.image.imageID > 0)
-                    appointment.barber.profile.image["defaultImage"] = appointment.barber.profile.image.fileLocation + appointment.barber.profile.image.fileName;
-
-                currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile.image, "Barber");
-            }
-            else
-                if (appointment.profile) {
-                    currentAppointment.profile = appointment.profile;
-                    currentAppointment.displayName = appointment.profile.displayName;
-
-                    if (appointment.profile.image && appointment.profile.image.imageID > 0)
-                        appointment.profile.image["defaultImage"] = appointment.profile.image.fileLocation + appointment.profile.image.fileName;
-
-                    currentAppointment.appointmentImage = getProfileImage(appointment.profile.image, "Profile");
+                    currentAppointment.appointmentImage = getProfileImage(appointment.barber.profile.image, "Barber", "background");
                 }
+                else
+                    if (appointment.profile) {
+                        currentAppointment.profile = appointment.profile;
+                        currentAppointment.displayName = appointment.profileID != 0 ? appointment.profile.displayName : appointment.clientName;
 
-            $scope.currentAppointments.push(currentAppointment);
-        });
+                        if (appointment.profile.image && appointment.profile.image.imageID > 0)
+                            appointment.profile.image["defaultImage"] = appointment.profile.image.fileLocation + appointment.profile.image.fileName;
+
+                        currentAppointment.appointmentImage = appointment.profileID != 0 ? getProfileImage(appointment.profile.image, "Profile", "background") : getProfileImage(null, "Profile", "background");
+                    }
+
+                $scope.currentAppointments.push(currentAppointment);
+            });
+        }
     }
 }
 
@@ -1864,16 +2328,30 @@ function renderUserShops($scope, profileID/*, isProfile*/) {
     return $("<div/>").append($("<label/>").text("User has no barber shops set!").css("color", "white"));
 }
 
-function getProfileImage(image, type)
+function getProfileImage(image, type, imageType)
 {
     if (image) {
         if (image.defaultImage) {
-            return IMAGE_ENDPOINT + image.defaultImage;
+
+            switch(imageType)
+            {
+                case "avatar":
+                    imageType = "_standard.png";
+                    break;
+                case "background":
+                    imageType = "_wallpaper.png";
+                    break;
+                case "thumbnail":
+                    imageType = "_mobile.png";
+                    break;
+            }
+
+            return IMAGE_ENDPOINT + (image.defaultImage.indexOf(".") > -1 ? image.defaultImage.replace(".jpg", imageType) : image.defaultImage);
         } else
-            return "images/" + (type == "barberShop" ? "barberShopPole.jpg" : "default_image.gif");
+            return "images/" + (type == "barberShop" ? (imageType == "background" ? ((new Date()).getHours() >= 15 ? "skylinenight.jpg" : "skylineday.jpg") : "barberShopPole.jpg") :  (imageType == "background" ? ((new Date()).getHours() >= 15 ? "skylinenight.jpg" : "skylineday.jpg") : "default_image.gif"));
     }
 
-    return "images/default_image.gif";
+    return "images/" + (type == "barberShop" ? (imageType == "background" ? ((new Date()).getHours() >= 15 ? "skylinenight.jpg" : "skylineday.jpg") : "barberShopPole.jpg") : (imageType == "background" ? ((new Date()).getHours() >= 15 ? "skylinenight.jpg" : "skylineday.jpg") : "default_image.gif"));
 }
 
 function getRating(rating)
@@ -1979,6 +2457,7 @@ function getReadableTime(time) {
     var amPm = "AM";
 
     switch (time.getHours()) {
+        case 12: amPm = "PM"; break;
         case 13: newHours = 1; amPm = "PM"; break;
         case 14: newHours = 2; amPm = "PM"; break;
         case 15: newHours = 3; amPm = "PM"; break;
@@ -2000,6 +2479,7 @@ function getReadableGoogleHours(time) {
     var amPm = "AM";
 
     switch (time.hours) {
+        case 12: amPm = "PM"; break;
         case 13: newHours = 1; amPm = "PM"; break;
         case 14: newHours = 2; amPm = "PM"; break;
         case 15: newHours = 3; amPm = "PM"; break;
@@ -2193,18 +2673,20 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 		if (apptDate.getTime() >= new Date().getTime()) {
 		    var hours = decodeTime(apptTime.trim());
 
-		    minutes = hours.toString().indexOf(".") > -1 ? 30 : 0;
-		    hours = hours.toString().indexOf(".") > -1 ? hours.toString().replace(".5", "") : hours;
+		    if (hours) {
+		        minutes = hours.toString().indexOf(".") > -1 ? 30 : 0;
+		        hours = hours.toString().indexOf(".") > -1 ? hours.toString().replace(".5", "") : hours;
 
-		    apptDate = moment(apptDate);
-		    
-		    apptDate.set("minute", minutes);
-		    apptDate.set("hours", hours);
+		        apptDate = moment(apptDate);
 
-		    if (ionic.Platform.isAndroid())
-		        apptDate.add(1, "hours");
+		        apptDate.set("minute", minutes);
+		        apptDate.set("hours", hours);
 
-		    tScope.createAppointment(apptDate);
+		        if (ionic.Platform.isAndroid())
+		            apptDate.add(1, "hours");
+
+		        tScope.createAppointment(apptDate);
+		    }
 		} else
 		    //postStatusMessage("Appointments can only be made for " + formatDateNoTime(new Date()) + " or later", "error");
 		    showIonicAlert($ionicPopup, null, 'Invalid Date', "Appointments can only be made for " + formatDateNoTime(new Date()) + " or later", "assertive", "button-assertive");
@@ -2823,33 +3305,8 @@ function handleImages(images)
 {
     var i = images; 
     angular.forEach(images, function (image, key) {
-        image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + image.fileName;
+        image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + (image.fileName.indexOf(".") > -1 ? image.fileName.replace(".jpg", "_wallpaper.png") : image.fileName);
     });
-
-    //angular.forEach(i, function (image, key) {
-    //    image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + image.fileName;
-
-    //    images.push(image);
-    //});
-
-    //angular.forEach(i, function (image, key) {
-    //    image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + image.fileName;
-
-    //    images.push(image);
-    //});
-
-    //angular.forEach(i, function (image, key) {
-    //    image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + image.fileName;
-
-    //    images.push(image);
-    //});
-
-
-    //angular.forEach(i, function (image, key) {
-    //    image["imageSrc"] = IMAGE_ENDPOINT + image.fileLocation + image.fileName;
-
-    //    images.push(image);
-    //});
 }
 
 function handleOpenURL(url)

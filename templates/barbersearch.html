@@ -1,4 +1,4 @@
-<ion-view view-title="" hide-nav-bar="false">
+<ion-view view-title="Search" hide-nav-bar="false">
     <ion-content>
         <div class="bar bar-header item-input-inset">
             <label class="item-input-wrapper">
@@ -8,22 +8,27 @@
         </div>
         <label id="searchingText" style="display: none; padding-left:15px;">searching...</label>
         <ion-scroll ng-style="{height: screenHeight}">
-            <ion-list type="card" ng-hide="barbersSearch.length == 0">
-                <ion-item ng-repeat="barber in barbersSearch" class="item-thumbnail-left" ng-click="loadBarber(barber)">
+            <ion-list ng-hide="barbersSearch.length == 0"> <!--class="animate-ripple"-->
+                <ion-item ng-repeat="barber in barbersSearch" class="item-avatar item-text-wrap" ng-click="loadBarber(barber)">
                     <img ng-src="{{barber.barberImage}}">
                     <h2>{{barber.profile.displayName}}</h2>
-                    <label>Appts: {{barber.doesAppointments}}</label>
-                    </br/>
-                    <label>Rating: {{barber.ratingCalc}}</label>
-                    <!--<ion-option-button class="button-balanced" ng-hide="barber.makeAppointment"
-                                       ng-click="deleteAppointment(appointment)">Make Appointment</ion-option-button>-->
+                    <label>Available: {{barber.available}}</label>
+                    <div class="card-footer text-right">
+                        <div class="pull-left">
+                            <i ng-class="appointmentIcon + (barber.acceptsAppointments == 'false' ? ' assertive' : ' balanced')"></i> {{barber.doesAppointments}}
+                            <i ng-class="starIcon + ' energized'"></i> {{barber.ratingCalc}}%
+                        </div>
+                    </div>
                 </ion-item>
             </ion-list>
-            <ion-list type="card" ng-hide="barbersSearch.length > 0">
+            <!--<ion-list type="card" ng-hide="barbersSearch.length > 0">
                 <ion-item>
-                    <textarea style="resize:none" disabled>No Barbers found.</textarea>
+                    <textarea style="resize:none; background-color: #ffffff;" disabled>No Barbers found.</textarea>
                 </ion-item>
-            </ion-list>
+            </ion-list>-->
+            <div class="centeredDiv" ng-hide="barbersSearch.length > 0">
+                <p style="text-align: center">No Barbers found.</p>
+            </div>
         </ion-scroll>
     </ion-content>
 </ion-view>

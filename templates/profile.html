@@ -1,13 +1,12 @@
-<ion-view view-title="Profile" hide-nav-bar="false">
+<ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon ' + gallryIcon" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
-        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()" ng-show="false"></button>
+        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
+        <button menu-toggle="right" ng-class="'button button-icon button-clear ' + menuIcon" ng-click="toggleRight()" ng-show="false"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content drag-content="false" scroll="false">
             <br />
             <br />
-            <br/>
             <ion-scroll ng-style="{height: screenHeight}">
                 <div id="userDiv">
                     <div class="bar bar-header bar-dark">
@@ -92,7 +91,7 @@
                         <ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left" ng-click="loadBarberShop(barbershop)">
                             <img ng-src="{{barbershop.shopImage}}" />
                             <h3>{{barbershop.shopName}}</h3>
-                            <textarea style="resize: none" disabled>{{barbershop.formattedStreet}}</textarea>
+                            <textarea style="resize: none; background-color: #ffffff;" disabled>{{barbershop.formattedStreet}}</textarea>
                             <br />
                             <label>{{barbershop.formattedCityState}}</label>
                             <br />
@@ -103,7 +102,7 @@
                     </ion-list>
                     <ion-list type="card" ng-hide="currentBarberShops.length > 0">
                         <ion-item>
-                            <textarea style="resize:none" disabled>You have no barber shops set!</textarea>
+                            <textarea style="resize:none; background-color: #ffffff;" disabled>You have no barber shops set!</textarea>
                         </ion-item>
                     </ion-list>
                 </ion-scroll>

@@ -1,19 +1,50 @@
-<ion-view view-title="{{currentBarber.profile.displayName}}" hide-nav-bar="false">
+<ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon ' + galleryIcon" ng-click="loadImages(currentBarber.barberImages)"></button>
-        <button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>
+        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarber.barberImages)"></button>
+        <!--<button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>-->
     </ion-nav-buttons>
-    <ion-side-menus>
-        <ion-side-menu-content drag-content="false" scroll="false">
-            <br />
-            <br />
-            <br />
+    <!--<ion-side-menus>-->
+        <ion-content drag-content="false" scroll="false">
+            <div class="hero slide-up" ng-style="{'background-image': shopImage}">
+                <div class="content">
+                    <div class="avatar" ng-style="{'background-image': 'url(' + barberImage + ')', 'height': '90px', 'width': '90px'}"></div>
+                
+                    <h3 class="embossedText" style="color: white;">{{currentBarber.profile.displayName}}</h3>
+                    <br/>
+                    <label class="embossedText" style="color: white;">Available: {{isAvailable}}</label>
+                    <br />
+                    <i ng-class="appointmentIcon + (currentBarber.isAppointment ? ' assertive' : ' balanced')" style="font-size: 20px" ng-click="loadAppointment(barber)"></i> <label class="embossedText" style="color:white">{{isAppointments}}</label>
+                    <!--<label class="embossedText" style="color: white;">Accepts Appointments: {{isAppointments}}</label>-->
+                    <!--<br/>-->
+                    <i ng-class="starIcon + ' energized'" style="font-size: 20px;"></i> <label class="embossedText" style="color:white">{{currentBarber.ratingCalc}}%</label>
+                </div>
+            </div>
+            <div id="bBar" class="tabs tabs-dark tabs-icon-top static">
+                <a class="tab-item">
+                    <i class="icon ion-ios-compose" ng-click="isInfo = true; isSchedule = false; isSpecialties = false; $ionicScrollDelegate.scrollTop(true)"></i>Info
+                </a>
+                <a class="tab-item">
+                    <i ng-class="clockIcon" ng-click="isInfo = false; isSchedule = true; isSpecialties = false; $ionicScrollDelegate.scrollTop(true)"></i>Schedule
+                </a>
+                <a class="tab-item">
+                    <i ng-class="listIcon" ng-click="isInfo = false; isSchedule = false; isSpecialties = true; $ionicScrollDelegate.scrollTop(true)"></i>Specialties
+                </a>
+                <a class="tab-item">
+                    <i ng-class="clientsIcon" ng-click="loadClients()"></i>Clients
+                </a>
+                <a id="clickedButton" class="tab-item" ng-hide="isAppointment">
+                    <i ng-class="appointmentIcon" ng-click="loadAppointment(currentBarber)"></i>Appointments
+                </a>
+                <a class="tab-item" ng-hide="isClient">
+                    <i ng-class="barberIcon" ng-click="createClient()"></i>Add Barber
+                </a>
+            </div>
             <ion-scroll ng-style="{height: screenHeight}">
                 <ion-list>
-                    <ion-item class="item-thumbnail-left">
+                    <!--<ion-item class="item-thumbnail-left">
                         <img ng-src="{{barberImage}}" />
                         <h2>{{currentBarber.profile.displayName}}</h2>
                         <label>Available: {{isAvailable}}</label>
@@ -22,20 +53,20 @@
                         <br />
                         <button ng-class="'button button-icon ' + appointmentIcon" ng-hide="isAppointment" ng-click="loadAppointment(currentBarber)"></button>
                         <button ng-class="'button button-icon ' + barberIcon" ng-hide="isClient" ng-click="createClient()"></button>
-                    </ion-item>
-                    <ion-item>
+                    </ion-item>-->
+                    <ion-item ng-hide="isInfo == false || hideRating">
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Rating</h2>
                         </div>
                         <br />
                         <br />
                         <br />
-                        <div id="ratingContainer">
-                            <label>Current Rating: {{currentBarber.ratingCalc}}%</label>
-                            <button class="button button-block button-positive" ng-hide="hideRating" ng-click="rateBarber()">Rate</button>
+                        <div id="ratingContainer" ng-hide="hideRating">
+                            <!--<label>Current Rating: {{currentBarber.ratingCalc}}%</label>-->
+                            <button class="button button-block button-positive" ng-click="rateBarber()">Rate</button>
                         </div>
                         <div id="ratingEditContainer" style="display:none;">
-                            <output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>
+                            <!--<output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>-->
                             <div class="range range-positive">
                                 <i ng-class="starOutlineIcon"></i>
                                 <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
@@ -44,29 +75,28 @@
                             <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
                         </div>
                     </ion-item>
-                    <ion-item>
+                    <ion-item ng-hide="isSchedule == false">
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Schedule</h2>
                         </div>
                         <br />
                         <br />
                         <div>
-                            <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
+                            <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon button-clear icon-right ion-record">On Vacation:</a>
                         </div>
                         <hr />
-                        <textarea style="resize:none; font-size: 16px;" ng-hide="isVacationing == false" ng-cloak class="ng-cloak padding-horizontal" disabled>Vacation Period: {{vacationPeriod}}</textarea>
-                        <!--<div ng-bind-html="hoursOf">
-                </div>-->
+                        <textarea style="resize:none; font-size: 16px; background-color: #ffffff;" ng-hide="isVacationing == false" ng-cloak class="ng-cloak padding-horizontal" disabled>Vacation Period: {{vacationPeriod}}</textarea>
+
                         <div class="list">
-                            <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                            <div ng-repeat="day in hoursOfImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                <!--<button class="button button-fab button-dark" style="border-radius: 100px 100px;" disabled>
                                     {{day.day.substring(0, 2)}}
-                                </button>
-                                {{day.time}}
+                                </button>-->
+                                {{day.day}}: {{day.time}}
                             </div>
                         </div>
                     </ion-item>
-                    <ion-item>
+                    <ion-item ng-hide="isInfo == false">
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Barber Status</h2>
                         </div>
@@ -81,21 +111,19 @@
                         <hr />
                         <label style="font-size: 16px">Normal Time In: {{currentBarber.normalTimeIn}}</label>
                     </ion-item>
-                    <ion-item>
+                    <ion-item ng-hide="isSpecialties == false">
                         <div class="bar bar-header bar-dark">
                             <h2 class="title">Specialties</h2>
                         </div>
                         <br />
                         <br />
                         <br />
-                        <!--<div ng-bind-html="specialties">
-                </div>-->
 
                         <div class="list">
-                            <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                            <div ng-repeat="specialty in specialtiesImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                <!--<button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
                                     {{specialty.specialty.substring(0, 1).toUpperCase()}}
-                                </button>
+                                </button>-->
                                 {{specialty.specialty}}
                             </div>
                         </div>
@@ -106,8 +134,98 @@
                 <br />
                 <br />
             </ion-scroll>
-        </ion-side-menu-content>
-        <ion-side-menu side="right">
+            <!--<ion-tabs class="tabs-dark">
+                <ion-tab title="Info" icon-on="ion-ios-compose" icon-off="ion-ios-compose-outline">
+                    <ion-scroll ng-style="{'height': '210px', 'position': 'absolute', 'top': '260px'}">
+                        <ion-list>
+                            <!--<div class="bar bar-header bar-dark">
+                                <h2 class="title">Rating</h2>
+                            </div>
+                            <ion-item>
+                                <div id="ratingContainer">
+                                    <button class="button button-block button-positive" ng-hide="hideRating" ng-click="rateBarber()">Rate</button>
+                                </div>
+                                <div id="ratingEditContainer" style="display:none;">
+                                    <output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>
+                                    <div class="range range-positive">
+                                        <i ng-class="starOutlineIcon"></i>
+                                        <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
+                                        <i ng-class="starIcon"></i>
+                                    </div>
+                                    <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
+                                </div>
+                            </ion-item>
+                            <ion-item>
+                                <div class="bar bar-header bar-dark">
+                                    <h2 class="title">Barber Status</h2>
+                                </div>
+                                <br />
+                                <br />
+                                <label style="font-size: 16px">Current Shop: {{currentBarber.barberShop.shopName}}</label>
+                                <hr style="color: #444;" />
+                                <label style="font-size: 16px">Current Clients: {{currentBarber.barberStatus.currentClients}}</label>
+                                <hr />
+                                <label style="font-size: 16px">Avg. Cut Time: {{currentBarber.avgCutTime}} min</label>
+                                <hr />
+                                <label style="font-size: 16px">Normal Time In: {{currentBarber.normalTimeIn}}</label>
+                            </ion-item>
+                        </ion-list>
+                    </ion-scroll>
+                </ion-tab>
+                <ion-tab title="Schedule" icon-on="{{clockIcon}}" icon-off="{{clockOutlineIcon}}">
+                    <ion-scroll ng-style="{'height': '210px', 'position': 'absolute', 'top': '260px'}">
+                        <ion-list>
+                            <div class="bar bar-header bar-dark">
+                                <h2 class="title">Schedule</h2>
+                            </div>
+                            <ion-item>
+                                <br />
+                                <br />
+                                <div>
+                                    <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
+                                </div>
+                                <hr />
+                                <textarea style="resize:none; font-size: 16px; background-color: #ffffff;" ng-hide="isVacationing == false" ng-cloak class="ng-cloak padding-horizontal" disabled>Vacation Period: {{vacationPeriod}}</textarea>
+
+                                <div class="list">
+                                    <div ng-repeat="day in hoursOfImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                        <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                            {{day.day.substring(0, 2)}}
+                                        </button>
+                                        {{day.time}}
+                                    </div>
+                                </div>
+                            </ion-item>
+                        </ion-list>
+                    </ion-scroll>
+                </ion-tab>
+                <ion-tab title="Specialties" icon-on="{{listIcon}}" icon-off="{{listOutlineIcon}}">
+                    <ion-scroll ng-style="{'height': '210px', 'position': 'absolute', 'top': '260px'}">
+                        <ion-list>
+                            <div class="bar bar-header bar-dark">
+                                <h2 class="title">Specialties</h2>
+                            </div>
+                            <ion-item ng-hide="specialtiesImp.length == 0">
+                                <br />
+                                <br />
+                                <div class="list">
+                                    <div ng-repeat="specialty in specialtiesImp" class="item item-button-left" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                                        <button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                                            {{specialty.specialty.substring(0, 1).toUpperCase()}}
+                                        </button>
+                                        {{specialty.specialty}}
+                                    </div>
+                                </div>
+                            </ion-item>
+                            <ion-item ng-hide="specialtiesImp.length > 0">
+                                <textarea style="resize:none; background-color: #ffffff;" disabled>No specialties Posted!</textarea>
+                            </ion-item>
+                        </ion-list>
+                    </ion-scroll>
+                </ion-tab>
+            </ion-tabs>-->
+        </ion-content>
+        <!--<ion-side-menu side="right">
             <div class="list">
                 <ion-scroll ng-style="{height: screenHeight}">
                     <div class="bar bar-subheader bar-dark">
@@ -122,17 +240,17 @@
                         <ion-item ng-repeat="client in currentBarber.barberClients" class="item-thumbnail-left" ng-click="loadClient(client)">
                             <img ng-src="{{client.clientImage}}" />
                             <h3>{{client.profile.displayName}}</h3>
-                            <textarea style="resize:none" disabled>Client Since: {{client.clientSince}}</textarea>
+                            <textarea style="resize:none; background-color: #ffffff;" disabled>Client Since: {{client.clientSince}}</textarea>
                         </ion-item>
                     </ion-list>
                     <ion-list type="card" ng-hide="currentBarber.barberClients.length > 0">
                         <ion-item>
-                            <textarea style="resize:none" disabled>No Clients for this barber currently.</textarea>
+                            <textarea style="resize:none; background-color: #ffffff;" disabled>No Clients for this barber currently.</textarea>
                         </ion-item>
                     </ion-list>
                 </ion-scroll>
             </div>
         </ion-side-menu>
-    </ion-side-menus>
+    </ion-side-menus>-->
 </ion-view>
 <!--ng-style="{height: getContainerHeight(this)}"-->

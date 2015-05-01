@@ -1,10 +1,10 @@
 ﻿<ion-view view-title="Notifications" hide-nav-bar="false">
     <ion-content>
         <div id="notificationsView">
-            <ion-list type="card" class="item-thumbnail-left">
-                <ion-item ng-repeat="notification in notificationInfo" ng-click="handleNotificationClicked(notification)">
+            <ion-list class="animate-blinds">
+                <ion-item class="item item-thumbnail-left item-text-wrap" ng-repeat="notification in notificationInfo" ng-click="handleNotificationClicked(notification)">
                     <h3>{{notification.title}}</h3>
-                    <textarea style="resize:none" disabled>{{notification.message}}</textarea>
+                    <p>{{notification.message}}</p>
                 </ion-item>
             </ion-list>
         </div>

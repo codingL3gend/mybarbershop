@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 'ngRoute', 'ngSanitize', 'ui.calendar', /*, 'ui.bootstrap' 'ngTouch', 'mobile-angular-ui', 'mobile-angular-ui.scrollable', 'mobile-angular-ui.directives.toggle', 'mobile-angular-ui.directives.overlay'*/]) //'mobile-angular-ui.touch',
+angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 'mbs.directives', 'ngRoute', 'ngSanitize', 'ui.calendar', 'oitozero.ngSweetAlert', /*, 'ui.bootstrap' 'ngTouch', 'mobile-angular-ui', 'mobile-angular-ui.scrollable', 'mobile-angular-ui.directives.toggle', 'mobile-angular-ui.directives.overlay'*/]) //'mobile-angular-ui.touch',
                       //'mobile-angular-ui.scrollable'])//  'mbs.blueimp', ])
 	      .run(function ($ionicPlatform, $rootScope, $state, $stateParams, $cordovaPush, MbsAPI/*, $cordovaSplashscreen*/){
 	          $rootScope.$state = $state;
@@ -9,14 +9,14 @@ angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 
               $ionicPlatform.ready(function() {
                 // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
                   // for form inputs)
-                if(window.cordova && window.cordova.plugins.Keyboard) {
+                if(window.cordova && cordova.plugins.Keyboard) {
                   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
-                if(window.StatusBar) {
+                /*if(window.StatusBar) {
                   // org.apache.cordova.statusbar required
                     StatusBar.styleDefault();
                     var sc = screen;
-                }
+                }*/
 
                 var config;
 
@@ -96,7 +96,7 @@ angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 
                    templateUrl: 'templates/barbersetup.html',
                    controller: 'barberSetupController'
                }).state('appointment', {
-                   url: '/barbershop/appointment/:barberID/:barberProfileID',
+                   url: '/barbershop/appointment/:barberID/:barberProfileID/:apptType',
                    templateUrl: 'templates/appointment.html',
                    controller: 'appointmentController'
                }).state('userprofile', {
@@ -127,6 +127,14 @@ angular.module('mbs', ['ionic', 'ngCordova', 'mbs.controllers', 'mbs.services', 
                    url: '/barbershop/payment/square',
                    templateUrl: 'templates/square.html',
                    controller: 'squarePaymentController'
+               }).state('sideview', {
+                   url: '/barbershop/side/view/:type',
+                   templateUrl: 'templates/sideview.html',
+                   controller: 'sideViewController'
+               }).state('createappointment', {
+                   url: '/barbershop/create/appointment/:barberID/:barberProfileID/:apptType',
+                   templateUrl: 'templates/createappointment.html',
+                   controller: 'createAppointmentController'
                });
 
 	        	// if none of the above states are matched, use this as the fallback

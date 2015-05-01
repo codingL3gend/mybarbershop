@@ -1,10 +1,44 @@
 <ion-view view-title="Profile" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content drag-content="false" scroll="false">
+        <div class="hero slide-up" ng-style="{'background-image': shopImage}">
+            <div class="content">
+                <div class="avatar" ng-style="{'background-image': 'url(' + barberImage + ')', 'height': '90px', 'width': '90px'}"></div>
+
+                <h3 class="embossedText" style="color: white;">{{currentBarber.profile.displayName}}</h3>
+                <!--<br />
+                <label class="embossedText" style="color: white;">Available: {{isAvailable}}</label>
+                <br />-->
+                <!--<i ng-class="appointmentIcon + (currentBarber.isAppointment ? ' assertive' : ' balanced')" style="font-size: 20px" ng-click="loadAppointment(barber)"></i> <label class="embossedText" style="color:white">{{isAppointments}}</label>-->
+                <!--<label class="embossedText" style="color: white;">Accepts Appointments: {{isAppointments}}</label>-->
+                <!--<br/>-->
+                <!--<i ng-class="starIcon + ' energized'" style="font-size: 20px;"></i> <label class="embossedText" style="color:white">{{currentBarber.ratingCalc}}%</label>-->
+            </div>
+        </div>
+        <div id="bBar" class="tabs tabs-dark tabs-icon-top static">
+            <a class="tab-item">
+                <i class="icon ion-ios-compose" ng-click="isInfo = true; isSchedule = false; isSpecialties = false; isStatus = false; $ionicScrollDelegate.scrollTop(true)"></i>Info
+            </a>
+            <a class="tab-item">
+                <i class="icon ion-clipboard" ng-click="isInfo = false; isSchedule = false; isSpecialties = false; isStatus = true; $ionicScrollDelegate.scrollTop(true)"></i>Status
+            </a>
+            <a class="tab-item">
+                <i ng-class="clockIcon" ng-click="isInfo = false; isSchedule = true; isSpecialties = false; isStatus = false; $ionicScrollDelegate.scrollTop(true)"></i>Schedule
+            </a>
+            <a class="tab-item">
+                <i ng-class="listIcon" ng-click="isInfo = false; isSchedule = false; isSpecialties = true; isStatus = false; $ionicScrollDelegate.scrollTop(true)"></i>Specialties
+            </a>
+            <!--<a class="tab-item" ng-hide="isAppointment">
+                <i ng-class="appointmentIcon" ng-click="loadAppointment(currentBarber)"></i>Appointments
+            </a>
+            <a class="tab-item" ng-hide="isClient">
+                <i ng-class="barberIcon" ng-click="createClient()"></i>Add Barber
+            </a>-->
+        </div>
         <ion-scroll ng-style="{height: screenHeight}">
-            <div id="barberDiv">
+            <div id="barberDiv" ng-hide="isInfo == false">
                 <div class="bar bar-header bar-dark">
                     <h1 class="title">Barber Info</h1>
                 </div>
@@ -31,6 +65,10 @@
                     <label class="item item-input">
                         <span class="input-label">Accepts Appointments?</span>
                         <label>{{currentBarber.acceptsAppointmentsFlag}}</label>
+                    </label>
+                    <label class="item item-input">
+                        <span class="input-label">Freelancer?</span>
+                        <label>{{currentBarber.isFreelancerFlag}}</label>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Current Rating:</span>
@@ -83,6 +121,7 @@
                             </label>
                         </li>
                     </ul>
+                    <br />
                     <div style="float:right;" class="padding-right">
                         <button class="button button-assertive" ng-click="cancelEditBarberInfo()">Cancel</button>
                         <button class="button button-balanced" ng-click="updateBarberInfo()">Save</button>
@@ -92,7 +131,7 @@
                     <br />
                 </div>
             </div>
-            <div id="barberStatusDiv">
+            <div id="barberStatusDiv" ng-hide="isStatus == false">
                 <div class="bar bar-sub-header bar-dark">
                     <h1 class="title">Barber Status</h1>
                 </div>
@@ -104,12 +143,12 @@
                         <label>{{currentBarber.barberStatus.currentClients}}</label>
                     </label>
                     <label class="item item-input">
-                        <!--<span class="input-label">Available:</span>-->
-                        <a ng-class="availableClass" ng-style="{color: availableColor}" class="button button-icon icon-right ion-record">Available:</a>
+                        <span class="input-label">Available:</span>
+                        <a ng-class="availableClass" ng-style="{color: availableColor}" class="button button-icon button-clear icon-left ion-record"></a>
                     </label>
                     <label class="item item-input">
                         <!--<span class="input-label">At Lunch:</span>-->
-                        <a ng-class="lunchClass" ng-style="{color: eatingColor}" class="button button-icon icon-right ion-record">At Lunch:</a>
+                        <a ng-class="lunchClass" ng-style="{color: eatingColor}" class="button button-icon button-clear icon-right ion-record">At Lunch:</a>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Time In:</span>
@@ -121,7 +160,7 @@
                     </label>
                     <label class="item item-input">
                         <!--<span class="input-label">On Vacation:</span>-->
-                        <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon icon-right ion-record">On Vacation:</a>
+                        <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon button-clear icon-right ion-record">On Vacation:</a>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">Vacation Start:</span>
@@ -198,7 +237,7 @@
                     <br />
                 </div>
             </div>
-            <div id="barberScheduleDiv">
+            <div id="barberScheduleDiv" ng-hide="isSchedule == false">
                 <div class="bar bar-sub-header bar-dark">
                     <h1 class="title">Barber Schedule</h1>
                 </div>
@@ -363,8 +402,8 @@
                     <br />
                 </div>
             </div>
-            <div id="barberSpecialtiesDivContainer">
-                <div class="bar bar-sub-header bar-dark">
+            <div id="barberSpecialtiesDivContainer" ng-hide="isSpecialties == false">
+                <div id="specialtyHeader" class="bar bar-sub-header bar-dark" tabindex="100">
                     <h1 class="title">Barber Specialties</h1>
                 </div>
                 <br />
@@ -382,6 +421,8 @@
                         <button class="button button-balanced" ng-click="saveBarberSpecialties()">Save</button>
                     </div>
                 </div>
+                <br />
+                <br />
                 <br />
                 <br />
                 <br />
