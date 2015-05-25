@@ -52006,7 +52006,7 @@ IonicModule
       '<span class="badge {{badgeStyle}}" ng-if="badge">{{badge}}</span>' +
       '<i class="icon {{getIconOn()}}" ng-if="getIconOn() && isTabActive()"></i>' +
       '<i class="icon {{getIconOff()}}" ng-if="getIconOff() && !isTabActive()"></i>' +
-      '<span class="tab-title" ng-bind-html="title"></span>' +
+      '<span class="tab-title" style="font-weight: bold;" ng-bind-html="title"></span>' +
     '</a>',
     scope: {
       title: '@',

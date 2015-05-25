@@ -1,9 +1,9 @@
 <ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" style="color: #ef473a;" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarberShops[0].images)"></button>
+        <button style="color: #ef473a;" ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarberShops[0].images)"></button>
         <!--<button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>-->
     </ion-nav-buttons>
     <!--<ion-side-menus>-->
@@ -33,7 +33,7 @@
                 <i ng-class="clientsIcon" ng-click="loadClients()"></i>Customers
             </a>
         </div>
-        <ion-scroll ng-style="{height: screenHeight}">
+        <ion-scroll ng-style="{'height': screenHeight}" class="mbsbackground">
             <ion-list>
                 <!--<ion-item ng-repeat="barbershop in currentBarberShops" class="item-thumbnail-left">
                     <img ng-src="{{shopImage}}" />
@@ -46,31 +46,38 @@
                 </ion-item>-->
                 <ion-item ng-hide="isHours == false">
                     <div class="bar bar-header bar-dark">
-                        <h2 class="title">Shop Hours</h2>
+                        <h2 class="title" style="color: #ef473a; font-weight: bold">Shop Hours</h2>
                     </div>
                     <br />
                     <br />
                     <div class="list">
-                        <div ng-repeat="day in hoursOfImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                        <div ng-repeat="day in hoursOfImp" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
                             <!--<button class="button button-fab button-outline button-dark" style="border-radius: 100px 100px;" disabled>
                                 {{day.day.substring(0, 2)}}
                             </button>-->
-                            {{day.day}}: {{day.time}}
+                            <a class="item item-icon-left" style="color: #ef473a; font-weight: bold; font-size: 16px">
+                                <!--<img ng-src="{{weatherIcon}}">-->
+                                <i class="icon"></i>
+                                {{day.day}}:
+                                <span class="item-note" style="font-weight: normal">{{day.time}}</span>
+                            </a>
+                            <!--<label style="color: red"></label>-->
+                            <!--{{day.day}}: {{day.time}}-->
                         </div>
                     </div>
                 </ion-item>
                 <ion-item ng-hide="isSpecialties == false">
                     <div class="bar bar-header bar-dark">
-                        <h2 class="title">Shop Specialties</h2>
+                        <h2 class="title" style="color: #ef473a; font-weight: bold">Shop Specialties</h2>
                     </div>
                     <br />
                     <br />
                     <div class="list">
-                        <div ng-repeat="specialty in specialtiesImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                            <!--<button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                        <div ng-repeat="specialty in specialtiesImp" class="item">
+                            <button class="button button-dark" style="border-radius: 20px 20px; color:#444; background-color: #ef473a" disabled>
                                 {{specialty.specialty.substring(0, 1).toUpperCase()}}
-                            </button>-->
-                            {{specialty.specialty}}
+                            </button>
+                            <label class="mbsnote" style="padding-left: 10px; padding-top: 30px">{{specialty.specialty}}</label>
                         </div>
                     </div>
                 </ion-item>

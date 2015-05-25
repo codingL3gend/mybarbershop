@@ -58,6 +58,13 @@ angular.module('mbs.services', ['ngRoute', 'ngResource'])
                                         registerForPushNotifications: { method: 'GET'}
                                     });
 			   })
+	   .factory('WeatherAPI',
+			   function ($resource) {
+			       return $resource('http://api.wunderground.com/api/d91c6ab3f5556724/:call/:values', { call: '', values: '' },
+                                    {
+                                        getCurrentConditions: { method: 'GET' }
+                                    });
+			   })
         .factory('camera', ['$rootScope', '$q', function ($rootScope, $q) {
             return {
                 getPicture: function (options) {

@@ -1,9 +1,12 @@
-<ion-view view-title="Search" hide-nav-bar="false">
+<ion-view hide-nav-bar="false">
+    <ion-nav-title>
+        <label class="mbsfont">Search</label>
+    </ion-nav-title>
     <ion-content>
-        <div class="bar bar-header item-input-inset">
-            <label class="item-input-wrapper">
-                <i ng-class="searchIcon + ' placeholder-icon'"></i>
-                <input id="barberName" ng-model="searchName" type="search" placeholder="Search Barbers" ng-keyup="searchBarbers()"/>
+        <div class="bar bar-header item-input-inset mbsbackground">
+            <label class="item-input-wrapper" style="background-color: #444">
+                <i ng-class="searchIcon + ' placeholder-icon'" style="color: #ef473a; background-color: #444"></i>
+                <input id="barberName" style="color: #aaa; font-weight: bold; background-color: #444" ng-model="searchName" type="search" placeholder="Search Barbers" ng-keyup="searchBarbers()" />
             </label>
         </div>
         <label id="searchingText" style="display: none; padding-left:15px;">searching...</label>

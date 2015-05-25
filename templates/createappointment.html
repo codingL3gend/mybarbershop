@@ -1,16 +1,22 @@
-﻿<ion-view view-title="{{selectedDateOnly}}" hide-nav-bar="false">
+﻿<ion-view hide-nav-bar="false">
+    <!--<ion-nav-title>
+        <label style="color: #ef473a; width:300px">{{selectedDateOnly}}</label>
+    </ion-nav-title>-->
     <ion-nav-buttons side="right">
-        <button id="apptButton" ng-class="'button button-icon button-clear ' + clockIcon" ng-click="toggleAppointments()"></button>
+        <button id="apptButton" style="color:#ef473a" ng-class="'button button-icon button-clear ' + clockIcon" ng-click="toggleAppointments()"></button>
     </ion-nav-buttons>
     <!--<ion-nav-buttons side="right">
         <button ng-class="'button button-icon button-clear ' + closeIcon" ng-click="toggleAppointments()"></button>
     </ion-nav-buttons>-->
     <ion-content>
-        <!--<div class="bar bar-header bar-stable" ng-style="{width: screenWidth}">
-            <button ng-class="'button button-icon ' + appointmentIcon" ng-click="toggleAppointments()"></button>
-            <button ng-class="'button button-clear ' + closeIcon" ng-click="appointmentPopup.close()"></button>
-            <h3 id="headerTitle" class="title">{{selectedDateOnly}}</h3>
-        </div>-->
+        <div class="bar bar-sub-header bar-dark">
+            <!--<button ng-class="'button button-icon ' + appointmentIcon" ng-click="toggleAppointments()"></button>
+            <button ng-class="'button button-clear ' + closeIcon" ng-click="appointmentPopup.close()"></button>-->
+            <h1 class="title" style="color:#ef473a">{{selectedDateOnly}}</h1>
+        </div>
+        <br/>
+        <br />
+        <br />
         <div id="appointmentsView">
             <ion-list class="animate-ripple">
                 <ion-item ng-repeat="appointment in apts" class="card item-avatar item-text-wrap" ng-click="loadClient(client)"

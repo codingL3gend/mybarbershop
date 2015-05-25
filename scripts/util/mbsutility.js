@@ -1136,9 +1136,12 @@ function buildBarberProfile(barber, $scope)
         currentBarber.isOwner = barber.isOwner;
         currentBarber.isFreelancer = barber.isFreelancer;
         currentBarber.profile = barber.profile;
+        currentBarber.backgroundImage = barber.backgroundImage;
 
         if (barber.profile.image.imageID > 0)
             currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
+        if (barber.backgroundImage.imageID > 0)
+            currentBarber.backgroundImage.defaultImage = barber.backgroundImage.fileLocation + barber.backgroundImage.fileName;
 
         currentBarber.barberShop = barber.barberShop;
         currentBarber.barberStatus = barber.barberStatus;
@@ -1170,12 +1173,16 @@ function buildBarberSearchProfile(barber) {
         currentBarber.isOwner = barber.isOwner;
         currentBarber.isFreelancer = barber.isFreelancer;
         currentBarber.profile = barber.profile;
+        currentBarber.backgroundImage = barber.backgroundImage;
 
         if (barber.profile.image.imageID > 0) {
             barber.profile.image.defaultImage = currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
         }
+        if (barber.backgroundImage.imageID > 0)
+            currentBarber.backgroundImage.defaultImage = barber.backgroundImage.fileLocation + barber.backgroundImage.fileName;
         
         currentBarber.barberImage = getProfileImage(barber.profile.image, "barber", "avatar");
+        currentBarber.barberBackgroundImage = getProfileImage(barber.backgroundImage, "barber", "background");
 
         currentBarber.barberShop = barber.barberShop;
         currentBarber.barberStatus = barber.barberStatus;
@@ -1210,11 +1217,15 @@ function buildUserBarbers(barbers, $scope) {
             currentBarber.isOwner = barber.isOwner;
             currentBarber.isFreelancer = barber.isFreelancer;
             currentBarber.profile = barber.profile;
+            currentBarber.backgroundImage = barber.backgroundImage;
 
             if (barber.profile.image.imageID > 0)
                 currentBarber.profile.image.defaultImage = barber.profile.image.fileLocation + barber.profile.image.fileName;
+            if (barber.backgroundImage.imageID > 0)
+                currentBarber.backgroundImage.defaultImage = barber.backgroundImage.fileLocation + barber.backgroundImage.fileName;
 
             currentBarber.barberImage = getProfileImage(barber.profile.image, "barber", "avatar");
+            currentBarber.barberBackgroundImage = getProfileImage(barber.backgroundImage, "barber", "background");
 
             currentBarber.barberShop = barber.barberShop;
             currentBarber.barberStatus = barber.barberStatus;
@@ -1404,7 +1415,7 @@ function buildBarberShopDetail(barberShop, $scope) {
     }
 }
 
-function buildAppointments(appointments, $scope, $filter, useFilter, newData) {
+function buildAppointments(appointments, $scope, $filter, useFilter, newData, isMain) {
     if (appointments) {
         var shouldAdd = false;
         $scope.currentAppointments = newData == null ? new Array() : $scope.currentAppointments;
@@ -1455,7 +1466,7 @@ function buildAppointments(appointments, $scope, $filter, useFilter, newData) {
                         if (appointment.profile.image && appointment.profile.image.imageID > 0)
                             appointment.profile.image["defaultImage"] = appointment.profile.image.fileLocation + appointment.profile.image.fileName;
 
-                        currentAppointment.appointmentImage = appointment.profileID != 0 ? getProfileImage(appointment.profile.image, "Profile", "background") : getProfileImage(null, "Profile", "background");
+                        currentAppointment.appointmentImage = appointment.profileID != 0 ? getProfileImage(appointment.profile.image, "Profile", "background") : getProfileImage(null, "Profile", isMain ? "background" : "avatar");
                     }
 
                 $scope.currentAppointments.push(currentAppointment);
@@ -2669,8 +2680,9 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 	{
 	    apptDate = splitDate(apptDate);		
 		//apptDate.setDate(apptDate.getDate() + 1);
-		
-		if (apptDate.getTime() >= new Date().getTime()) {
+	    var date = new Date();
+
+		if (apptDate.getDay() >=  date.getDay() && apptDate.getYear() >= date.getYear() && apptDate.getMonth() >= date.getMonth()) {
 		    var hours = decodeTime(apptTime.trim());
 
 		    if (hours) {
@@ -2682,8 +2694,8 @@ function scheduleAppointment(apptDate, apptTime, $ionicPopup)
 		        apptDate.set("minute", minutes);
 		        apptDate.set("hours", hours);
 
-		        if (ionic.Platform.isAndroid())
-		            apptDate.add(1, "hours");
+		        //if (ionic.Platform.isAndroid())
+		            //apptDate.add(1, "hours");
 
 		        tScope.createAppointment(apptDate);
 		    }
@@ -2960,6 +2972,9 @@ function showIonicActionSheet($ionicActionSheet, buttons, titleText, destructive
 
 function showCordovaActionSheet($cordovaActionSheet, buttons, titleText, destructiveText, destructiveButtonClicked, buttonClicked) {
     var options = {};
+
+    if (buttons.indexOf("") > -1)
+        buttons.pop();
 
     options.buttonLabels = buttons;
     options.title = titleText;
@@ -3286,9 +3301,12 @@ function getPageView(oldPage, newPage, params, isBack)
 		}
 }
 
-function createJavaDate(dateToConvert)
+function createJavaDate(dateToConvert, useOffset)
 {
-    return splitDate(dateToConvert).toUTCString()
+    if (useOffset)
+        return moment(splitDate(dateToConvert)).format("ddd, DD MMM YYYY HH:mm:ss ZZ");
+    else
+        return splitDate(dateToConvert).toUTCString();
 }
 
 function updateNavLeft(ngClick, child)

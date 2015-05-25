@@ -1,9 +1,9 @@
 <ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" style="color: #ef473a;" ng-class="'button button-icon button-clear ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarber.barberImages)"></button>
+        <button style="color: #ef473a;" ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentBarber.barberImages)"></button>
         <!--<button menu-toggle="right" ng-class="'button button-icon ' + menuIcon" ng-click="toggleRight()"></button>-->
     </ion-nav-buttons>
     <!--<ion-side-menus>-->
@@ -42,7 +42,7 @@
                     <i ng-class="barberIcon" ng-click="createClient()"></i>Add Barber
                 </a>
             </div>
-            <ion-scroll ng-style="{height: screenHeight}">
+            <ion-scroll ng-style="{height: screenHeight}" class="mbsbackground">
                 <ion-list>
                     <!--<ion-item class="item-thumbnail-left">
                         <img ng-src="{{barberImage}}" />
@@ -56,80 +56,99 @@
                     </ion-item>-->
                     <ion-item ng-hide="isInfo == false || hideRating">
                         <div class="bar bar-header bar-dark">
-                            <h2 class="title">Rating</h2>
+                            <h2 class="title" style="color: #ef473a; font-weight: bold">Rating</h2>
                         </div>
                         <br />
                         <br />
                         <br />
                         <div id="ratingContainer" ng-hide="hideRating">
                             <!--<label>Current Rating: {{currentBarber.ratingCalc}}%</label>-->
-                            <button class="button button-block button-positive" ng-click="rateBarber()">Rate</button>
+                            <button class="button button-block button-assertive" ng-click="rateBarber()">Rate</button>
                         </div>
                         <div id="ratingEditContainer" style="display:none;">
                             <!--<output for="barberRating" id="barberRatingOutput">Rating: {{currentBarber.ratingCalc}}%</output>-->
-                            <div class="range range-positive">
-                                <i ng-class="starOutlineIcon"></i>
+                            <div class="range range-assertive">
+                                <i ng-class="starOutlineIcon" style="color:#ef473a"></i>
                                 <input id="barberRating" type="range" min="0" max="100" value="{{currentBarber.ratingCalc}}" step="1" />
-                                <i ng-class="starIcon"></i>
+                                <i ng-class="starIcon" style="color:#ef473a"></i>
                             </div>
                             <button class="button button-block button-assertive" ng-click="cancelRateBarber()">Cancel</button>
                         </div>
                     </ion-item>
                     <ion-item ng-hide="isSchedule == false">
                         <div class="bar bar-header bar-dark">
-                            <h2 class="title">Schedule</h2>
+                            <h2 class="title" style="color: #ef473a; font-weight: bold">Schedule</h2>
                         </div>
                         <br />
                         <br />
                         <div>
-                            <a ng-class="vacationingClass" ng-style="{color: vacationColor}" class="button button-icon button-clear icon-right ion-record">On Vacation:</a>
+                            <a ng-class="vacationingClass" ng-style="{'color': vacationColor, 'font-weight': 'bold'}" class="button button-icon button-clear icon-right ion-record">On Vacation:</a>
                         </div>
-                        <hr />
-                        <textarea style="resize:none; font-size: 16px; background-color: #ffffff;" ng-hide="isVacationing == false" ng-cloak class="ng-cloak padding-horizontal" disabled>Vacation Period: {{vacationPeriod}}</textarea>
+                        <!--<hr />-->
+                        <!--<textarea style="resize:none; font-size: 16px; background-color: #444; color: #ef473a" ng-hide="isVacationing == false" ng-cloak class="ng-cloak padding-horizontal" disabled>Vacation Period: {{vacationPeriod}}</textarea>-->
+
+                        <label class="ng-cloak item item-input" ng-cloak ng-hide="isVacationing == false">
+                            <span class="input-label mbsfont">Vacation Period:</span>
+                            <label class="mbsnote">{{vacationPeriod}}</label>
+                        </label>
 
                         <div class="list">
-                            <div ng-repeat="day in hoursOfImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
+                            <div ng-repeat="day in hoursOfImp" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
                                 <!--<button class="button button-fab button-dark" style="border-radius: 100px 100px;" disabled>
                                     {{day.day.substring(0, 2)}}
                                 </button>-->
-                                {{day.day}}: {{day.time}}
+                                <a class="item item-icon-left" style="color: #ef473a; font-weight: bold; font-size: 16px">
+                                    <i class="icon"></i>
+                                    {{day.day}}:
+                                    <span class="item-note" style="font-weight: normal">{{day.time}}</span>
+                                </a>
+                                <!--{{day.day}}: {{day.time}}-->
                             </div>
                         </div>
                     </ion-item>
                     <ion-item ng-hide="isInfo == false">
                         <div class="bar bar-header bar-dark">
-                            <h2 class="title">Barber Status</h2>
+                            <h2 class="title" style="color: #ef473a; font-weight: bold">Barber Status</h2>
                         </div>
                         <br />
                         <br />
-                        <br />
-                        <label style="font-size: 16px">Current Shop: {{currentBarber.barberShop.shopName}}</label>
-                        <hr style="color: #444;" />
-                        <label style="font-size: 16px">Current Clients: {{currentBarber.barberStatus.currentClients}}</label>
-                        <hr />
-                        <label style="font-size: 16px">Avg. Cut Time: {{currentBarber.avgCutTime}} min</label>
-                        <hr />
-                        <label style="font-size: 16px">Normal Time In: {{currentBarber.normalTimeIn}}</label>
+                        <label class="item item-input">
+                            <span class="input-label mbsfont">Current Shop:</span>
+                            <label class="mbsnote">{{currentBarber.barberShop.shopName}}</label>
+                        </label>
+                        <!--<label style="font-size: 16px; color: #ef473a;">Current Shop: </label>-->
+                        <label class="item item-input">
+                            <span class="input-label mbsfont">Current Clients:</span>
+                            <label class="mbsnote">{{currentBarber.barberStatus.currentClients}}</label>
+                        </label>
+                        <!--<label style="font-size: 16px; color: #ef473a;">Current Clients: {{currentBarber.barberStatus.currentClients}}</label>-->
+                        <label class="item item-input">
+                            <span class="input-label mbsfont">Avg. Cut Time:</span>
+                            <label class="mbsnote">{{currentBarber.avgCutTime}} min</label>
+                        </label>
+                        <!--<label style="font-size: 16px; color: #ef473a;">Avg. Cut Time: {{currentBarber.avgCutTime}} min</label>-->
+                        <label class="item item-input">
+                            <span class="input-label mbsfont">Normal Time In:</span>
+                            <label class="mbsnote">{{currentBarber.normalTimeIn}}</label>
+                        </label>
+                        <!--<label style="font-size: 16px; color: #ef473a;">Normal Time In: {{currentBarber.normalTimeIn}}</label>-->
                     </ion-item>
                     <ion-item ng-hide="isSpecialties == false">
                         <div class="bar bar-header bar-dark">
-                            <h2 class="title">Specialties</h2>
+                            <h2 class="title" style="color: #ef473a; font-weight: bold">Specialties</h2>
                         </div>
                         <br />
                         <br />
-                        <br />
-
                         <div class="list">
-                            <div ng-repeat="specialty in specialtiesImp" class="item" style="border-top: 1px solid; border-right: none; border-bottom: 1px solid; border-left: none">
-                                <!--<button class="button button-outline button-dark" style="border-radius: 100px 100px;" disabled>
+                            <div ng-repeat="specialty in specialtiesImp" class="item">
+                                <button class="button button-dark" style="border-radius: 20px 20px; background-color: #ef473a; color: #444" disabled>
                                     {{specialty.specialty.substring(0, 1).toUpperCase()}}
-                                </button>-->
-                                {{specialty.specialty}}
+                                </button>
+                                <label class="mbsnote" style="padding-left: 10px; padding-top: 30px">{{specialty.specialty}}</label>
                             </div>
                         </div>
                     </ion-item>
                 </ion-list>
-                <br />
                 <br />
                 <br />
                 <br />

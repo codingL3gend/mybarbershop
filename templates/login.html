@@ -27,7 +27,7 @@
                 </div>
 
                 <div class="padding">
-                    <button id="loginButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="authUser(true)">Login</button>
+                    <button id="loginButton" class="button button-block button-dark button-positive ladda-button" data-style="expand-right" ng-click="authUser(true)">Login</button>
                     <br /><br />
                     <button class="padding-vertical button button-block button-dark" ng-click="toggleLoginRegister()">Sign Up!</button>
                 </div>
@@ -88,7 +88,7 @@
                 </div>
 
                 <div class="padding">
-                    <button id="registerButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="createUser()">Register</button>
+                    <button id="registerButton" class="button button-block button-dark button-positive ladda-button" data-style="expand-right" ng-click="createUser()">Register</button>
                     <br /><br />
                     <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister()">Cancel</button>
                 </div>
@@ -101,20 +101,20 @@
                         <br />
 
                         <div class="padding">
-                            <button class="button button-block button-positive button-positive" ng-click="checkPasswordQuestion()">Get Question</button>
+                            <button class="button button-block button-positive button-dark" ng-click="checkPasswordQuestion()">Get Question</button>
                             <br /><br />
                             <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
                         </div>
                     </div>
 
                     <div ng-hide="showQuestion == false || showNewPassword == true">
-                        <p id="forgotQuestion" class="padding embossedText" style="font-weight: bold; font-size: 20px">Question: {{passwordQuestion}}</p>
+                        <p id="forgotQuestion" class="padding" style="font-weight: bold; font-size: 20px">Question: {{passwordQuestion}}</p>
                         <ion-md-input id="forgotAnswer" class="assertive" placeholder="Answer" highlight-color="positive"></ion-md-input>
 
                         <br />
 
                         <div class="padding">
-                            <button class="button button-block button-positive button-positive" ng-click="checkAnswer()">Answer</button>
+                            <button class="button button-block button-positive button-dark" ng-click="checkAnswer()">Answer</button>
                             <br /><br />
                             <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
                         </div>
@@ -128,7 +128,7 @@
                         <br />
 
                         <div class="padding">
-                            <button id="forgotButton" class="button button-block button-positive button-positive ladda-button" data-style="expand-right" ng-click="updatePassword()">Submit</button>
+                            <button id="forgotButton" class="button button-block button-dark button-positive ladda-button" data-style="expand-right" ng-click="updatePassword()">Submit</button>
                             <br /><br />
                             <button class="button button-block button-positive button-assertive" ng-click="toggleLoginRegister('Login')">Cancel</button>
                         </div>

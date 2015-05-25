@@ -1,49 +1,49 @@
 <ion-view view-title="" hide-nav-bar="false">
     <ion-nav-buttons side="right">
-        <button ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
-        <button menu-toggle="right" ng-class="'button button-icon button-clear ' + menuIcon" ng-click="toggleRight()" ng-show="false"></button>
+        <button style="color:red" ng-class="'button button-icon button-clear ' + galleryIcon" ng-click="loadImages(currentProfile.images)" ng-show="false"></button>
+        <button style="color:red" menu-toggle="right" ng-class="'button button-icon button-clear ' + menuIcon" ng-click="toggleRight()" ng-show="false"></button>
     </ion-nav-buttons>
     <ion-side-menus>
         <ion-side-menu-content drag-content="false" scroll="false">
             <br />
             <br />
-            <ion-scroll ng-style="{height: screenHeight}">
-                <div id="userDiv">
+            <ion-scroll class="mbsbackground" ng-style="{'height': screenHeight}">
+                <!--<div id="userDiv">
                     <div class="bar bar-header bar-dark">
-                        <h1 class="title">{{currentProfile.displayName}}'s Info</h1>
+                        <h1 class="title" style="color:red">{{currentProfile.displayName}}'s Info</h1>
                     </div>
                 </div>
                 <br />
                 <br />
-                <br/>
+                <br />-->
                 <div id="userInfoStatic" class="list">
                     <div class="item">
                         <img class="full-image" ng-src="{{userImage}}" />
                     </div>
                     <label class="item item-input">
-                        <span class="input-label">Display Name:</span>
-                        <label>{{currentProfile.displayName}}</label>
+                        <span class="input-label mbsfont">Display Name:</span>
+                        <label class="mbsnote">{{currentProfile.displayName}}</label>
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">First Name:</span>
-                        <label>{{currentProfile.firstName}}</label>
+                        <span class="input-label mbsfont">First Name:</span>
+                        <label class="mbsnote">{{currentProfile.firstName}}</label>
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">Last Name:</span>
-                        <label>{{currentProfile.lastName}}</label>
+                        <span class="input-label mbsfont">Last Name:</span>
+                        <label class="mbsnote">{{currentProfile.lastName}}</label>
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">Phone Number:</span>
-                        <label>{{currentProfile.phoneNumber}}</label>
+                        <span class="input-label mbsfont">Phone Number:</span>
+                        <label class="mbsnote">{{currentProfile.phoneNumber}}</label>
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">Member Since:</span>
-                        <label>{{memberSince}}</label>
+                        <span class="input-label mbsfont">Member Since:</span>
+                        <label class="mbsnote">{{memberSince}}</label>
                     </label>
-                    <button class="button button-positive button-block" ng-click="editUserInfo()">Edit</button>
-                    <br/>
-                    <br/>  
-                    <br />              
+                    <button class="button button-assertive button-block" ng-click="editUserInfo()">Edit</button>
+                    <br />
+                    <br />
+                    <br />
                 </div>
                 <div id="userInfoEdit" class="list" style="display:none;">
                     <div class="item">
@@ -51,28 +51,28 @@
                         <button style="position:absolute; left:10px; display: none;" class="button button-icon button-assertive icon ion-edit">Edit</button>
                     </div>
                     <label class="item item-input">
-                        <span class="input-label">Display Name:</span>
-                        <input type="text" id="newDisplayName" maxlength="50" ng-value="{{currentProfile.displayName}}">
+                        <span class="input-label mbsfont">Display Name:</span>
+                        <input type="text" id="newDisplayName" style="color: #aaa; font-weight: bold" maxlength="50" ng-value="{{currentProfile.displayName}}" class="mbsnote">
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">First Name:</span>
-                        <input type="text" id="newFirstName" maxlength="100" ng-value="{{currentProfile.firstName}}">
+                        <span class="input-label mbsfont">First Name:</span>
+                        <input type="text" id="newFirstName" style="color: #aaa; font-weight: bold" maxlength="100" ng-value="{{currentProfile.firstName}}" class="mbsnote">
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">Last Name:</span>
-                        <input type="text" id="newLastName" maxlength="100" ng-value="{{currentProfile.lastName}}">
+                        <span class="input-label mbsfont">Last Name:</span>
+                        <input type="text" id="newLastName" style="color: #aaa; font-weight: bold" maxlength="100" ng-value="{{currentProfile.lastName}}" class="mbsnote">
                     </label>
                     <label class="item item-input">
-                        <span class="input-label">Phone Number:</span>
-                        <input type="text" id="newPhoneNumber" maxlength="12" ng-value="{{currentProfile.phoneNumber}}">
+                        <span class="input-label mbsfont">Phone Number:</span>
+                        <input type="text" id="newPhoneNumber" style="color: #aaa; font-weight: bold" maxlength="12" ng-value="{{currentProfile.phoneNumber}}" class="mbsnote">
                     </label>
                     <br />
                     <div style="float:right;" class="padding-right">
                         <button class="button button-assertive" ng-click="cancelEditUserInfo()">Cancel</button>
-                        <button class="button button-balanced" ng-click="updateUserInfo()">Save</button>
+                        <button class="button button-dark" ng-click="updateUserInfo()">Save</button>
                     </div>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <br />
                 </div>
             </ion-scroll>
@@ -81,7 +81,7 @@
             <div class="list">
                 <ion-scroll ng-style="{height: screenHeight}">
                     <div class="bar bar-subheader bar-dark">
-                        <h1 class="title">{{currentProfile.displayName}}'s BarberShops</h1>
+                        <h1 class="title" style="color:red">{{currentProfile.displayName}}'s BarberShops</h1>
                     </div>
                     <br />
                     <br />

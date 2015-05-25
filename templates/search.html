@@ -1,11 +1,14 @@
-<ion-view view-title="Shops" hide-nav-bar="false">
+<ion-view hide-nav-bar="false">
+    <ion-nav-title>
+        <label class="mbsfont">Shops</label>
+    </ion-nav-title>
     <ion-nav-buttons side="left">
-        <button id="notificationsButton" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
+        <button id="notificationsButton" style="color:#ef473a" ng-class="'button button-icon ' + notificationsIcon" ng-hide="hasNotifications == false" ng-click="handleNotificationsClick()"></button>
     </ion-nav-buttons>
     <ion-content>
         <div id="maps"></div>
         <ion-scroll ng-style="{height: screenHeight}">
-            <button class="button button-positive button-block padding-horizontal" ng-click="handleFreelanceClicked()" ng-hide="showFreelance == false">I'm A Freelance Barber</button>
+            <button class="button button-dark button-block padding-horizontal" ng-click="handleFreelanceClicked()" ng-hide="showFreelance == false">I'm A Freelance Barber</button>
             <br ng-hide="showFreelance == false" />
             <!--<ion-list id="conDiv">
             </ion-list>-->
@@ -19,7 +22,7 @@
                         <img ng-src="{{shop.shopImage}}">
                     </a>
                     <div class="item tabs tabs-secondary tabs-icon-left dark-bg">
-                        <button style="color: white" class="waves-effect button button-clear button-block" ng-click="handleNearbyShopClicked(shop)">Set as your shop</button>
+                        <button style="color: #ef473a" class="waves-effect button button-clear button-block" ng-click="handleNearbyShopClicked(shop)">Set as your shop</button>
                     </div>
                 </div>
                 <div class="card dark-bg" ng-repeat="shop in newResults" ng-hide="newResults.length == 0">
@@ -31,7 +34,7 @@
                         <img ng-src="{{shop.shopImage}}">
                     </a>
                     <div class="item tabs tabs-secondary tabs-icon-left dark-bg">
-                        <button style="color: white" class="waves-effect button button-clear button-block" ng-click="newResultsShopClicked(shop)">Set as your shop</button>
+                        <button style="color: #ef473a" class="waves-effect button button-clear button-block" ng-click="newResultsShopClicked(shop)">Set as your shop</button>
                     </div>
                 </div>
             </div>

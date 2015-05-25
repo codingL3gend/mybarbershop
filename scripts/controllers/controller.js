@@ -290,7 +290,7 @@ angular.module('mbs.controllers', [])
                         }
                     });
 
-                    //toggleIonicLoading($ionicLoading, "Creating account ...", true, false, "positive");
+                    //toggleIonicLoading($ionicLoading, "Creating account ...", true, false, "assertive");
                     //showCordovaLoading($cordovaSpinnerDialog, "Account Creation", "Creating account ...", true, true);
                     //$("#registerButton").text("Creating account");
                     registerButton.ladda("start");
@@ -354,7 +354,7 @@ angular.module('mbs.controllers', [])
                     localStorage.removeItem("notificationInfo");
                     localStorage.removeItem("imageInfo");
                     
-                    //toggleIonicLoading($ionicLoading, "Logging in ...", true, false, "positive");
+                    //toggleIonicLoading($ionicLoading, "Logging in ...", true, false, "assertive");
                     //showCordovaLoading($cordovaSpinnerDialog, "Login", "Logging in ...", true, true);
                     //$("#loginButton").text("Logging in");
                     loginButton.ladda("start");
@@ -546,7 +546,7 @@ angular.module('mbs.controllers', [])
             else
                 $scope.backgroundImage = "images/skylineday.jpg";
         }])
-	   .controller('siteController', ['$scope', '$location', 'MbsAPI', '$routeParams', '$ionicLoading', '$filter', '$sce', '$ionicSideMenuDelegate', '$state', '$ionicPopup', '$rootScope', '$cordovaAppAvailability', '$cordovaSpinnerDialog', '$ionicListDelegate'/*, '$cordovaAdMobPro'*/, '$ionicNavBarDelegate', '$ionicScrollDelegate', function ($scope, $location, MbsAPI, $routeParams, $ionicLoading, $filter, $sce, $ionicSideMenuDelegate, $state, $ionicPopup, $rootScope, $cordovaAppAvailability, $cordovaSpinnerDialog, $ionicListDelegate/*, $cordovaAdMobPro*/, $ionicNavBarDelegate, $ionicScrollDelegate) {
+	   .controller('siteController', ['$scope', '$location', 'MbsAPI', '$routeParams', '$ionicLoading', '$filter', '$sce', '$ionicSideMenuDelegate', '$state', '$ionicPopup', '$rootScope', '$cordovaAppAvailability', '$cordovaSpinnerDialog', '$ionicListDelegate'/*, '$cordovaAdMobPro'*/, '$ionicNavBarDelegate', '$ionicScrollDelegate', '$ionicTabsDelegate', function ($scope, $location, MbsAPI, $routeParams, $ionicLoading, $filter, $sce, $ionicSideMenuDelegate, $state, $ionicPopup, $rootScope, $cordovaAppAvailability, $cordovaSpinnerDialog, $ionicListDelegate/*, $cordovaAdMobPro*/, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicTabsDelegate) {
 	       
 	       //showCordovaLoading($cordovaSpinnerDialog, "Loading", "Loading information ...", true, true);
 	       getUserData($scope);
@@ -565,7 +565,7 @@ angular.module('mbs.controllers', [])
 		   };
 		   $scope.getUser = function()
 		   {
-		       toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
+		       toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "assertive");
 
 		       $ionicNavBarDelegate.showBar(true);
 
@@ -590,10 +590,12 @@ angular.module('mbs.controllers', [])
                                     buildBarberShop(data.barberShop, $scope, $sce);
 
                                 if (data.appointment)
-                                    buildAppointments(data.appointment, $scope, $filter, true);
+                                    buildAppointments(data.appointment, $scope, $filter, true, null, true);
 
                                 if (data.barbers) {
-                                    $scope.hasBarbers = true;
+                                    if (data.barbers.length > 0)
+                                        $scope.hasBarbers = true;
+
                                     $scope.tabTitle = "Barbers";
                                     $scope.miscIcon = $scope.barbersIcon;
 
@@ -601,7 +603,9 @@ angular.module('mbs.controllers', [])
                                 }
                                 else
                                     if (data.client) {
-                                        $scope.hasClients = true;
+                                        if (data.client.length > 0)
+                                            $scope.hasClients = true;
+
                                         $scope.tabTitle = "Clients";
                                         $scope.miscIcon = $scope.clientsIcon;
 
@@ -652,7 +656,7 @@ angular.module('mbs.controllers', [])
                             //error getting user data
                             toggleIonicLoading($ionicLoading, "Could not load profile", true, true, "assertive");
                             //showCordovaLoading($cordovaSpinnerDialog, "Profile Loading Failed", "Could not load profile", false, true);
-                            toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "positive");
+                            toggleIonicLoading($ionicLoading, "Loading information ...", true, false, "assertive");
                             $scope.getUser();
                         }
 
@@ -708,7 +712,7 @@ angular.module('mbs.controllers', [])
 		   $scope.deleteAppointment = function (appt) {
 
 		       //postStatusMessage("Cancelling Appointment", "info");
-		       toggleIonicLoading($ionicLoading, "Cancelling appointment ...", true, false, "positive");
+		       toggleIonicLoading($ionicLoading, "Cancelling appointment ...", true, false, "assertive");
 		       //showCordovaLoading($cordovaSpinnerDialog, "Cancel Appointment", "Cancelling appointment ...", true, true);
 
 		       $scope.cancelAppt = MbsAPI.deleteAppointment({
@@ -880,6 +884,13 @@ angular.module('mbs.controllers', [])
 	           getNewData($scope);
 
 	           if ($scope.currentBarberShops && $scope.currentAppointments) {
+	               $scope.isCustomer = isBarber($scope.mbsAccountType) ? false : true;
+
+	               if ($ionicTabsDelegate.selectedIndex() > 0) {
+	                    $("#createApptButton").css("display", "none");
+	               }
+
+
 	               $scope.newInfo = MbsAPI.getUserProfile({
 	                   call: "login/gather", values: $scope.mbsProfileID,
 	                   accountType: getAccountType($scope.mbsAccountType)
@@ -889,11 +900,19 @@ angular.module('mbs.controllers', [])
                             if (data.barberShop)
                                 buildBarberShop(data.barberShop, $scope, $sce, true);
 
+                            if ($scope.currentBarberShops.length > 0)
+                                $scope.hasBarberShops = true;
+
                             if (data.appointment)
-                                buildAppointments(data.appointment, $scope, $filter, true, true);
+                                buildAppointments(data.appointment, $scope, $filter, true, true, true);
+
+                            if ($scope.currentAppointments.length > 0)
+                                $scope.hasAppointments = true;
 
                             if (data.barbers) {
-                                $scope.hasBarbers = true;
+                                if (data.barbers.length > 0)
+                                    $scope.hasBarbers = true;
+
                                 $scope.tabTitle = "Barbers";
                                 $scope.miscIcon = $scope.barbersIcon;
 
@@ -901,7 +920,9 @@ angular.module('mbs.controllers', [])
                             }
                             else
                                 if (data.client) {
-                                    $scope.hasClients = true;
+                                    if(data.client.length > 0)
+                                        $scope.hasClients = true;
+
                                     $scope.tabTitle = "Clients";
                                     $scope.miscIcon = $scope.clientsIcon;
 
@@ -1110,7 +1131,7 @@ angular.module('mbs.controllers', [])
                 }, 500);
 	       }
 	       $scope.getUser = function () {
-	           toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "assertive");
 	           
 	           $scope.userInfo = MbsAPI.getUserProfile({
 	               call: "login/gather", values: $scope.mbsProfileID,
@@ -1207,7 +1228,7 @@ angular.module('mbs.controllers', [])
                    });
 	       }
 	       $scope.createBarberShopCustomer = function (shop) {
-	           toggleIonicLoading($ionicLoading, "Setting " + shop.shopName + " as your barber shop...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Setting " + shop.shopName + " as your barber shop...", true, false, "assertive");
 
 	           $scope.customerInfo = MbsAPI.createBarberShop({
 	               call: "customer/create", values: $scope.mbsProfileID, barberShopID: shop.barberShopID
@@ -1341,7 +1362,7 @@ angular.module('mbs.controllers', [])
 	       }
 	       $scope.updateBarberInfo = function(){	    
 	    	   
-	    	toggleIonicLoading($ionicLoading, "Saving barber shop info", true, false, "positive");
+	    	toggleIonicLoading($ionicLoading, "Saving barber shop info", true, false, "assertive");
 	    	
     	   if($scope.barberInfo != null)
     	   {
@@ -1434,7 +1455,7 @@ angular.module('mbs.controllers', [])
 	       //gather the users profile information
 	      
 	       $scope.getUser = function () {
-	           //toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "positive");
+	           //toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "assertive");
 
 	           $scope.userInfo = MbsAPI.getUserProfile({
 	               call: "login/gather", values: $scope.mbsProfileID,
@@ -1454,7 +1475,7 @@ angular.module('mbs.controllers', [])
                    });
 	       };
 	       $scope.searchBarbers = function () {
-	           //toggleIonicLoading($ionicLoading, "Searching for barbers...", true, false, "positive");
+	           //toggleIonicLoading($ionicLoading, "Searching for barbers...", true, false, "assertive");
 
 	           if ($("#barberName").val().length > 0 && $("#barberName").val() != "") {
 	               $("#searchingText").css("display", "block");
@@ -1527,7 +1548,7 @@ angular.module('mbs.controllers', [])
 	           $scope.hasNotifications = true;
 	       });
 	   }])
-	   .controller('barberShopController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$rootScope', '$ionicSideMenuDelegate', '$ionicScrollDelegate', '$timeout', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, $timeout) {
+	   .controller('barberShopController', ['$scope', 'MbsAPI', '$stateParams', '$location', '$state', '$ionicLoading', '$rootScope', '$ionicSideMenuDelegate', '$ionicScrollDelegate', '$timeout', 'WeatherAPI', function ($scope, MbsAPI, $stateParams, $location, $state, $ionicLoading, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, $timeout, WeatherAPI) {
            if($scope.backButtonPressed)
 	            getNavData($scope);
            
@@ -1571,7 +1592,7 @@ angular.module('mbs.controllers', [])
 	       }
 	       $scope.getBarberShopDetails = function () {
 
-	           toggleIonicLoading($ionicLoading, "Loading barber shop information", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading barber shop information", true, false, "assertive");
 
 	           $scope.shopInfo = MbsAPI.getBarberShopDetails({
 	               call: "barbershop/gather/details", barberShopID: barberShopID
@@ -1580,6 +1601,15 @@ angular.module('mbs.controllers', [])
                        if (data && data.response.success) {
                            if (data.barberShop) {
                                buildBarberShopDetail(data.barberShop, $scope);
+
+                               //WeatherAPI.getCurrentConditions({
+                               //    call: "conditions/q/", values: $scope.currentBarberShops[0].address.abbreviatedStateProvince + "/" + $scope.currentBarberShops[0].address.city.replace(" ", "_") + ".json" 
+                               //}, function(weatherData){
+                               //    if(weatherData)
+                               //    {
+                               //        $scope.weatherIcon = weatherData.current_observation.icon_url;
+                               //    }
+                               //});
 
                                if ($scope.currentBarberShops[0].image && $scope.currentBarberShops[0].image.imageID) {
                                    $scope.shopImage = "url(" + getProfileImage($scope.currentBarberShops[0].image, "barberShop", "background") + ")";
@@ -1824,7 +1854,7 @@ angular.module('mbs.controllers', [])
 	       $scope.isInfo = true;
 	       $scope.isSpecialties = false;
 	       $scope.isSchedule = false;
-	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 200 - parseInt($("#bBar").css("height"))) + "px";
+	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 220 - parseInt($("#bBar").css("height"))) + "px";
 
 	       $scope.toggleRight = function () {
 	           $ionicSideMenuDelegate.toggleRight();
@@ -1853,7 +1883,7 @@ angular.module('mbs.controllers', [])
                    });
 	       };
 	       $scope.getBarberDetails = function () {
-	    	   toggleIonicLoading($ionicLoading, "Loading barber information...", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Loading barber information...", true, false, "assertive");
 	    	   
 	           $scope.shopInfo = MbsAPI.getBarberShopDetails({
 	               call: "barber/gather/details", barberID: barberID
@@ -1869,7 +1899,7 @@ angular.module('mbs.controllers', [])
                     	       $scope.isAppointment = $scope.currentBarber.acceptsAppointments == "false" || $scope.currentBarber.profile.profileID == $scope.mbsProfileID ? true : false;                               
                     	       $scope.isVacationing = convertBoolean($scope.currentBarber.barberStatus.isOnVacation);
                     	       //$scope.vacationingClass = $scope.isVacationing == 'No' ?  "button button-icon icon ion-record" : "button button-balanced";
-                    	       $scope.vacationColor = $scope.isVacationing == 'No' ? "red" : "green";
+                    	       $scope.vacationColor = $scope.isVacationing == 'No' ? "#ef473a" : "green";
 
                     	       if($scope.currentBarber.barberStatus.vacationStartDate && $scope.currentBarber.barberStatus.vacationEndDate)
                         	   {
@@ -1912,28 +1942,27 @@ angular.module('mbs.controllers', [])
                                        $scope.isClient = true;
                                });
 
-                               if ($scope.currentBarber.barberShop.image && $scope.currentBarber.barberShop.image.imageID) {
-                                   $scope.currentBarber.barberShop.image.defaultImage = $scope.currentBarber.barberShop.image.fileLocation + $scope.currentBarber.barberShop.image.fileName;
+                               if ($scope.currentBarber.backgroundImage && $scope.currentBarber.backgroundImage.imageID) {
+                                   //$scope.currentBarber.barberShop.image.defaultImage = $scope.currentBarber.barberShop.image.fileLocation + $scope.currentBarber.barberShop.image.fileName;
 
-                                   $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.barberShop.image, "barberShop", "background") + ")";
+                                   $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.backgroundImage, "barber", "background") + ")";
 
                                    $scope.playEffect();
                                }
                                else {
-                                   $.ajax({
-                                       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
-                                             $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw",
-                                       success: function (response) {
-                                           if (response.length < 5000)
-                                               $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.barberShop.image, "barberShop", "background") + ")";
-                                           else
-                                               $scope.shopImage = "url(" + "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
-                                                                  $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw"
-                                                                  + ")";
+                                   //$.ajax({
+                                   //    url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
+                                   //          $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw",
+                                   //    success: function (response) {
+                                   //        if (response.length < 5000)
+                                               $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.backgroundImage, "barber", "background") + ")";
+                                           //else
+                                           //    $scope.shopImage = "url(" + "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
+                                           //                       $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw"
+                                           //                       + ")";
                                
                                            $scope.playEffect();
-                                       }
-                                   });
+                                   //});
                                }
 
                                 /*$("#shopBarbers").append(renderBarbers($scope.currentBarberShops[0].barbers));
@@ -1959,7 +1988,7 @@ angular.module('mbs.controllers', [])
                    });
 	       };
 	       $scope.createBarberRating = function (ratedValue) {
-	    	   toggleIonicLoading($ionicLoading, "Rating barber...", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Rating barber...", true, false, "assertive");
 	    	   
 	    	   var isUp = false;
 	    	   var currentRating = $scope.currentBarber.rating.rating;
@@ -2039,7 +2068,7 @@ angular.module('mbs.controllers', [])
 	       }
 
 	       $scope.createClient = function () {
-	           toggleIonicLoading($ionicLoading, "Setting " + $scope.currentBarber.profile.displayName + " as your barber..", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Setting " + $scope.currentBarber.profile.displayName + " as your barber..", true, false, "assertive");
 
 	           MbsAPI.createBarberClient({
 	               call: "client/create", values: $scope.mbsProfileID,
@@ -2188,7 +2217,7 @@ angular.module('mbs.controllers', [])
 	       $scope.getUser = function () {
 
 	           //showLoadingBar("Loading Profile...");
-	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "assertive");
 
 	           $scope.profileInfo = MbsAPI.getUserProfile({
 	               call: "profile/gather/details", profileID: profileID
@@ -2246,7 +2275,7 @@ angular.module('mbs.controllers', [])
 	           $("#userInfoEdit").css("display", "none");
 	       }
 	       $scope.updateUserInfo = function () {
-	           toggleIonicLoading($ionicLoading, "Saving user info", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Saving user info", true, false, "assertive");
 
 	           $scope.updateUserInfo = MbsAPI.updateUserInfo({
 	               call: "profile/save/userinfo", values: $scope.mbsProfileID,
@@ -2318,7 +2347,7 @@ angular.module('mbs.controllers', [])
 	       $scope.vacationPeriod;
 	       $scope.memberSince;
 	       $scope.$ionicScrollDelegate = $ionicScrollDelegate;
-	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 200 - parseInt($("#bBar").css("height"))) + "px";
+	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 260 - parseInt($("#bBar").css("height"))) + "px";
 
 	       $scope.toggleRight = function () {
 	           $ionicSideMenuDelegate.toggleRight();
@@ -2327,7 +2356,7 @@ angular.module('mbs.controllers', [])
 	       $scope.getUser = function () {
 
 	           //showLoadingBar("Loading Profile...");
-	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "assertive");
 
 	           $scope.profileInfo = MbsAPI.getUserProfile({
 	               call: "profile/gather/details", profileID: profileID
@@ -2478,7 +2507,7 @@ angular.module('mbs.controllers', [])
                                                $("#barberSpecialtiesDivContainer").css("display", "block");
 
                                                //showLoadingBar("Loading specialties...");
-                                               toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
+                                               toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "assertive");
 
                                                $scope.getSpecialties();
                                            }
@@ -2503,7 +2532,7 @@ angular.module('mbs.controllers', [])
 	       $scope.saveBarberSchedule = function()
 	       {
 	           //postStatusMessage("Saving schedule", "info");
-	           toggleIonicLoading($ionicLoading, "Saving schedule", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Saving schedule", true, false, "assertive");
 	    	   
 	    	   var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "freetime"];
 	    	   var err = "Please select hours for these days: ";
@@ -2596,7 +2625,7 @@ angular.module('mbs.controllers', [])
                                        $("#barberSpecialtiesDivContainer").css("display", "block");
 
                                        //showLoadingBar("Loading specialties...");
-                                       toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
+                                       toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "assertive");
 
                                        $scope.getSpecialties();
                                    }
@@ -2615,7 +2644,7 @@ angular.module('mbs.controllers', [])
 	       $scope.saveBarberSpecialties = function()
 	       {
 	          // postStatusMessage("Saving specialties", "info")
-	           toggleIonicLoading($ionicLoading, "Saving specialties", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Saving specialties", true, false, "assertive");
 
 	    	   var _specialties = "";
 	    		   
@@ -2691,9 +2720,9 @@ angular.module('mbs.controllers', [])
 	    					   $scope.specialties.push(specialty);
 	    					   
 	    					   $("#barberSpecialtiesDiv").append(
-                                    $("<li/>").addClass("item item-checkbox item-checkbox-right").append(
+                                    $("<li/>").addClass("item item-checkbox item-checkbox-right mbsfont").append(
                                         specialty.specialty,
-			   						    $("<label/>").addClass("checkbox checkbox-balanced")
+			   						    $("<label/>").addClass("checkbox checkbox-assertive")
 			   									     .append(
                                             $("<input>").prop("type", "checkbox")
     							   				        .prop("name", specialty.specialty)
@@ -2726,7 +2755,7 @@ angular.module('mbs.controllers', [])
 	       $scope.saveBarberInfo = function(){
 	    	   
 	           //postStatusMessage("Saving barber info", "info");
-	           toggleIonicLoading($ionicLoading, "Saving barber info", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Saving barber info", true, false, "assertive");
 	    	   
 	    	   barberInfo.acceptsAppointments = $("#acceptAppt").is(":checked");
 	    	   barberInfo.barberID = barberID;
@@ -2943,7 +2972,7 @@ angular.module('mbs.controllers', [])
 	       $scope.isSpecialties = false;
 	       $scope.isSchedule = false;
 	       $scope.$ionicScrollDelegate = $ionicScrollDelegate;
-	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 260 - parseInt($("#bBar").css("height"))) + "px";
+	       $scope.screenHeight = ((screen.height - (hasAds ? 50 : 0)) - 240 - parseInt($("#bBar").css("height"))) + "px";
 		   
 	       $scope.toggleRight = function () {
 	           $ionicSideMenuDelegate.toggleRight();
@@ -2952,7 +2981,7 @@ angular.module('mbs.controllers', [])
 	       $scope.getUser = function () {
 	    	   
 	    	   //showLoadingBar("Loading barber profile...");
-	    	   toggleIonicLoading($ionicLoading, "Loading barber profile", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Loading barber profile", true, false, "assertive");
 	    	   
 	           $scope.userInfo = MbsAPI.getUserProfile({
 	               call: "login/gather", values: $scope.mbsProfileID,
@@ -2994,32 +3023,22 @@ angular.module('mbs.controllers', [])
                                $scope.currentBarber.ratingCalc = calculateRating(data.member.rating, 100);
 
                                $scope.isVacationing = convertBoolean($scope.currentBarber.barberStatus.isOnVacation);
-                               $scope.vacationColor = $scope.isVacationing == 'No' ? "red" : "green";
+                               $scope.vacationColor = $scope.isVacationing == 'No' ? "#ef473a" : "green";
                                $scope.isEating = convertBoolean($scope.currentBarber.barberStatus.isAtLunch);
-                               $scope.eatingColor = $scope.isEating == 'No' ? "red" : "green";
+                               $scope.eatingColor = $scope.isEating == 'No' ? "#ef473a" : "green";
                                $scope.isAvailable = convertBoolean($scope.currentBarber.barberStatus.isAvailable);
-                               $scope.availableColor = $scope.isAvailable == 'No' ? "red" : "green";
+                               $scope.availableColor = $scope.isAvailable == 'No' ? "#ef473a" : "green";
                                //$scope.isAppointments = convertBoolean($scope.currentBarber.acceptsAppointments);
                                //$scope.isAppointment = $scope.currentBarber.acceptsAppointments == "false" || $scope.currentBarber.profile.profileID == $scope.mbsProfileID ? true : false;
 
-                               if ($scope.currentBarber.barberShop.image && $scope.currentBarber.barberShop.image.imageID) {
-                                   $scope.currentBarber.barberShop.image.defaultImage = $scope.currentBarber.barberShop.image.fileLocation + $scope.currentBarber.barberShop.image.fileName;
+                               if ($scope.currentBarber.bacgroundImage && $scope.currentBarber.backgroundImage.imageID) {
+                                   //$scope.currentBarber.barberShop.image.defaultImage = $scope.currentBarber.barberShop.image.fileLocation + $scope.currentBarber.barberShop.image.fileName;
 
-                                   $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.barberShop.image, "barberShop", "background") + ")";
+                                   $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.backgroundImage, "barber", "background") + ")";
                                }
                                else {
-                                   $.ajax({
-                                       url: "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
-                                             $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw",
-                                       success: function (response) {
-                                           if (response.length < 5000)
-                                               $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.barberShop.image, "barberShop", "background") + ")";
-                                           else
-                                               $scope.shopImage = "url(" + "https://maps.googleapis.com/maps/api/streetview?size=400x400&location=" +
-                                                                  $scope.currentBarber.barberShop.address.latitude + "," + $scope.currentBarber.barberShop.address.longitude + "&key=AIzaSyD2v3QTJPuxDdommKlyJsvEyBphAJtJ1Gw"
-                                                                  + ")";
-                                       }
-                                   });
+
+                                   $scope.shopImage = "url(" + getProfileImage($scope.currentBarber.backgroundImage, "barber", "background") + ")";
                                }
 
                                setTimeout(function () {
@@ -3075,7 +3094,7 @@ angular.module('mbs.controllers', [])
 	       }
 	       $scope.updateBarberInfo = function(){	    	  
 	    	   //postStatusMessage("Saving barber info", "info");
-	    	   toggleIonicLoading($ionicLoading, "Saving barber info", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Saving barber info", true, false, "assertive");
 	    	   
 	    	   $scope.updateBarberInfo = MbsAPI.updateBarberInfo({
 	    		   call: "barber/save/barberinfo", values: barberID,
@@ -3145,7 +3164,7 @@ angular.module('mbs.controllers', [])
 	       $scope.updateBarberStatus = function () {
 	           var invalid = false, invalidVacation = false, vacationMessage;
 
-	           toggleIonicLoading($ionicLoading, "Updating barber status...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Updating barber status...", true, false, "assertive");
 
 	           if((barberStatus.timeOut && barberStatus.timeIn) && (decodeTime(barberStatus.timeOut) <= decodeTime(barberStatus.timeIn))) 
 	               invalid = true;
@@ -3222,7 +3241,7 @@ angular.module('mbs.controllers', [])
                                     $scope.currentBarber.barberStatus.isAtLunch = $("#atLunch").is(":checked");
                                     $scope.eatingColor = $("#atLunch").is(":checked") ? "green" : "red";
                                     $scope.currentBarber.barberStatus.isOnVacation = $("#onVacation").is(":checked");
-                                    $scope.vacationColor = $("#onVacation").is(":checked")  ? "green" : "red";
+                                    $scope.vacationColor = $("#onVacation").is(":checked") ? "green" : "#ef473a";
                                     $scope.currentBarber.barberStatus.timeIn = barberStatus.timeIn != undefined ? barberStatus.timeIn : "";
                                     $scope.currentBarber.barberStatus.timeOut = barberStatus.timeOut != undefined ? barberStatus.timeOut : "";
                                     if (ionic.Platform.isAndroid()) {
@@ -3308,7 +3327,7 @@ angular.module('mbs.controllers', [])
 	       $scope.saveBarberSchedule = function()
 	       {
 	    	   //postStatusMessage("Saving schedule", "info");
-	    	   toggleIonicLoading($ionicLoading, "Saving schedule", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Saving schedule", true, false, "assertive");
 	    	   
 	    	   var days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "freetime"];
 	    	   var err = "Please select hours for these days: ";
@@ -3410,7 +3429,7 @@ angular.module('mbs.controllers', [])
     		   $("#barberSpecialtiesEdit").css("display", "block");
     		   
     		   //showLoadingBar("Loading specialties...");
-    		   toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "positive");
+    		   toggleIonicLoading($ionicLoading, "Loading specialties...", true, false, "assertive");
     		   
     		   $scope.getSpecialties();
 	       }
@@ -3423,7 +3442,7 @@ angular.module('mbs.controllers', [])
 	       $scope.saveBarberSpecialties = function()
 	       {
 	    	   //postStatusMessage("Saving specialties", "info")
-	    	   toggleIonicLoading($ionicLoading, "Saving specialties", true, false, "positive");
+	    	   toggleIonicLoading($ionicLoading, "Saving specialties", true, false, "assertive");
 	    	   
 	    	   var _specialties = "";
 	    		   
@@ -3506,9 +3525,9 @@ angular.module('mbs.controllers', [])
 	    	   	                $scope.specialties.push(specialty);
 
 	    	   	                $("#barberSpecialtiesDiv").append(
-                                     $("<li/>").addClass("item item-checkbox item-checkbox-right specialtyBreak").append(
+                                     $("<li/>").addClass("item item-checkbox item-checkbox-right specialtyBreak mbsfont").append(
                                          specialty.specialty,
-                                         $("<label/>").addClass("checkbox checkbox-balanced specialtyLabel")
+                                         $("<label/>").addClass("checkbox checkbox-assertive specialtyLabel")
                                                       .append(
                                              $("<input>").prop("type", "checkbox")
                                                          .prop("name", specialty.specialty)
@@ -3747,7 +3766,7 @@ angular.module('mbs.controllers', [])
 	       //gather the users profile information
 
 	       $scope.getUser = function () {
-	           //toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "positive");
+	           //toggleIonicLoading($ionicLoading, "Loading shops...", true, false, "assertive");
 
 	           $scope.userInfo = MbsAPI.getUserProfile({
 	               call: "login/gather", values: $scope.mbsProfileID,
@@ -3890,7 +3909,7 @@ angular.module('mbs.controllers', [])
                     });
 	       }
 	       $scope.getBarberAppointments = function () {
-	           toggleIonicLoading($ionicLoading, "Loading appointments...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading appointments...", true, false, "assertive");
 
 	           $scope.barberAppointments = MbsAPI.getBarberAppointments({
 	               call: "appointment/gather/barber", barberID: barberID
@@ -3959,7 +3978,7 @@ angular.module('mbs.controllers', [])
                             	   vacation.class = "event-info";
                             	   vacation.start = splitDate($scope.currentBarber.barberStatus.vacationStartDate);
                                    vacation.status = "Vacation";
-                                   vacation.end = moment(splitDate($scope.currentBarber.barberStatus.vacationEndDate)).add(1, "days");
+                                   vacation.end = moment(splitDate($scope.currentBarber.barberStatus.vacationEndDate));//.add(1, "days");
 
                                    $scope.calendarEvents.push(vacation);
                         	   }
@@ -3981,11 +4000,11 @@ angular.module('mbs.controllers', [])
 	       $scope.createAppointment = function (apptDate) {
 	          // $scope.appointmentPopup.close();
 	           //postStatusMessage("Creating Appointment", "info");
-	           toggleIonicLoading($ionicLoading, "Creating appointment", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Creating appointment", true, false, "assertive");
 	    	   
 	           $scope.userAppt = MbsAPI.createAppointment({
 	               call: "appointment/create", values: $scope.mbsProfileID,
-	               appointmentDate: createJavaDate(apptDate),
+	               appointmentDate: createJavaDate(apptDate, true),
 	               appointmentStatus: "Accepted", 
 	               barberID: $scope.currentBarber.barberID,
 	               barberProfileID: barberProfileID,
@@ -4038,7 +4057,7 @@ angular.module('mbs.controllers', [])
 	           $scope.appointmentPopup.close();
 
 	           //postStatusMessage("Cancelling Appointment", "info");
-	           toggleIonicLoading($ionicLoading, "Cancelling appointment", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Cancelling appointment", true, false, "assertive");
 
 	           $scope.cancelAppt = MbsAPI.deleteAppointment({
 	               call: "appointment/delete", values: $scope.mbsProfileID,
@@ -4279,7 +4298,7 @@ angular.module('mbs.controllers', [])
                     });
 	       }
 	       $scope.getBarberAppointments = function () {
-	           toggleIonicLoading($ionicLoading, "Loading appointments...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading appointments...", true, false, "assertive");
 
 	           $scope.barberAppointments = MbsAPI.getBarberAppointments({
 	               call: "appointment/gather/barber", barberID: barberID
@@ -4362,11 +4381,11 @@ angular.module('mbs.controllers', [])
 	       }
 	       $scope.createAppointment = function (apptDate) {
 	           //$scope.appointmentPopup.close();
-	           toggleIonicLoading($ionicLoading, "Creating appointment", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Creating appointment", true, false, "assertive");
 
 	           $scope.userAppt = MbsAPI.createAppointment({
 	               call: "appointment/create", values: $scope.clientName != null ? 0 : $scope.mbsProfileID,
-	               appointmentDate: createJavaDate(apptDate),
+	               appointmentDate: createJavaDate(apptDate, true),
 	               appointmentStatus: "Accepted",
 	               barberID: barberID,
 	               barberProfileID: barberProfileID,
@@ -4430,7 +4449,7 @@ angular.module('mbs.controllers', [])
 	       $scope.deleteAppointment = function (appt) {
 	          // $scope.appointmentPopup.close();
 
-	           toggleIonicLoading($ionicLoading, "Cancelling appointment", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Cancelling appointment", true, false, "assertive");
 
 	           $scope.cancelAppt = MbsAPI.deleteAppointment({
 	               call: "appointment/delete", values: $scope.mbsProfileID,
@@ -4505,6 +4524,7 @@ angular.module('mbs.controllers', [])
 	               var confirmPopup = $cordovaDialogs.confirm('Set appointment for this time? ' + apptTime,
                    'Confirm Appointment', ["OK", "Cancel"]).then(function (res) {
                        if (res == 1) {
+                           $scope.clientName = null;
                            scheduleAppointment($scope.selectedDate, apptTime, $ionicPopup, $timeout);
                        }
                    });
@@ -4549,7 +4569,7 @@ angular.module('mbs.controllers', [])
             $scope.getUser = function () {
 
                 //showLoadingBar("Loading Profile...");
-                toggleIonicLoading($ionicLoading, "Loading gallery...", true, false, "positive");
+                toggleIonicLoading($ionicLoading, "Loading gallery...", true, false, "assertive");
 
                 if (type == "Barber" || isBarber($scope.mbsAccountType))
                 {
@@ -4723,7 +4743,7 @@ angular.module('mbs.controllers', [])
                 }
 
                 hideSheet = showCordovaActionSheet($cordovaActionSheet,
-            			            [ type == "BarberShop" ? "Set as Shop Profile Image" : "Set as Profile Image"],
+            			            [ type == "BarberShop" ? "Set as Shop Profile Image" : "Set as Profile Image", type == "Barber" ? "Set Aas Background Image" : ""],
             			            "Modify Image",
             			            "Delete Image",
             			            deleteImageHandler,
@@ -4823,7 +4843,7 @@ angular.module('mbs.controllers', [])
                     var image = $scope.imageInfo[$scope.currentImageIndex];
                     var oldProfileImageID, newProfileImageID;
 
-                    toggleIonicLoading($ionicLoading, "Updating profile image...", true, false, "positive");
+                    toggleIonicLoading($ionicLoading, "Updating profile image...", true, false, "assertive");
 
                     if (type == "BarberShop") {
                         MbsAPI.updateBarberShopProfileImage({
@@ -4878,13 +4898,42 @@ angular.module('mbs.controllers', [])
                     }
 
                     return true;
-                }
+                }else
+                    if(index == 3)
+                    {
+                        var image = $scope.imageInfo[$scope.currentImageIndex];
+                        var oldProfileImageID, newProfileImageID;
+
+                        oldProfileImageID = $scope.currentBarber.backgroundImage.imageID;
+
+                        MbsAPI.updateUserProfileImage({
+                            call: "images/update/user/background/image", values: $scope.mbsProfileID,
+                            oldProfileImageID: oldProfileImageID, newProfileImageID: image.imageID, profileID: $scope.mbsProfileID
+                        },
+                        function (data) {
+                            if (data && data.response.success) {
+                                $scope.currentBarber.backgroundImage.imageID = image.imageID;
+                                $scope.currentBarber.backgroundImage.fileName = image.fileName;
+                                $scope.currentBarber.backgroundImage.fileLocation = image.fileLocation;
+
+                                toggleIonicLoading($ionicLoading, "Updating background image succeeded!", true, true, "balanced");
+                            } else
+                                toggleIonicLoading($ionicLoading, "Could not update background image", true, true, "assertive");
+
+                        }, function error(e) {
+                            if (e.status == 500 || e.status == 404) {
+                                toggleIonicLoading($ionicLoading, null, false);
+                            }
+                        });
+
+                        return true;
+                    }
             }
 
             function deleteImageHandler() {
                 var image = $scope.imageInfo[$scope.currentImageIndex];
 
-                toggleIonicLoading($ionicLoading, "Deleting image...", true, false, "positive");
+                toggleIonicLoading($ionicLoading, "Deleting image...", true, false, "assertive");
 
                 if (type == "BarberShop") {
                     MbsAPI.deleteBarberShopImage({
@@ -5089,7 +5138,7 @@ angular.module('mbs.controllers', [])
                 params.Connection = "close";
                 params.caption = $scope.imageCaption != null || $scope.imageCaption != undefined ? $scope.imageCaption : $("#captionText").val();
 
-                //toggleIonicLoading($ionicLoading, "Uploading image...", true, false, "positive");
+                //toggleIonicLoading($ionicLoading, "Uploading image...", true, false, "assertive");
                 uploadButton.ladda("start");
 
                 window.resolveLocalFileSystemURL($scope.selectedImage, function (fileEntry) {
@@ -5169,7 +5218,7 @@ angular.module('mbs.controllers', [])
             $scope.getUser = function () {
 
                 //showLoadingBar("Loading Profile...");
-                toggleIonicLoading($ionicLoading, "Loading notifications...", true, false, "positive");
+                toggleIonicLoading($ionicLoading, "Loading notifications...", true, false, "assertive");
 
                 $scope.profileInfo = MbsAPI.getUserProfile({
                     call: "profile/gather/details", profileID: $scope.mbsProfileID
@@ -5230,7 +5279,7 @@ angular.module('mbs.controllers', [])
 	       $scope.getUser = function () {
 
 	           //showLoadingBar("Loading Profile...");
-	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "positive");
+	           toggleIonicLoading($ionicLoading, "Loading profile...", true, false, "assertive");
 
 	           $scope.profileInfo = MbsAPI.getUserProfile({
 	               call: "profile/gather/details", profileID: profileID
